@@ -1,4 +1,4 @@
-# PrimeIt UI/UX Prototype
+# PrimeIt 
 
 A UI/UX-only prototype for the PrimeIt public website, office member system, and admin system.
 
