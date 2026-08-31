@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Leave Management</title><link rel="stylesheet" href="../css/admin-leave-management.css"></head>
+<body class="app-body"><div class="app-shell">
+<aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
+<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Admin Panel</div>
+<nav class="side-nav"><a class="nav-link " href="admin-dashboard.html">Dashboard</a>
+<a class="nav-link " href="member-management.html">Members</a>
+<a class="nav-link active" href="leave-management.html">Leave Management</a>
+<a class="nav-link " href="holiday-management.html">Holidays</a>
+<a class="nav-link " href="admin-announcements.html">Announcements</a>
+<a class="nav-link " href="admin-office-information.html">Office Information</a>
+<a class="nav-link " href="admin-gallery.html">Gallery</a>
+<a class="nav-link " href="role-permissions.html">Roles & Permissions</a>
+<a class="nav-link " href="admin-profile.html">Admin Profile</a></nav>
+<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span class="side-label">Logout</span></a></div>
+</aside>
+<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div></header><section class="content"><div class="breadcrumb">Admin Panel / Leave Management</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Leave Management</h1><p>Review and process office leave requests.</p></div></div><div class="toolbar"><select><option>Pending</option><option>All</option><option>Approved</option><option>Rejected</option></select><select><option>All Leave Types</option><option>Casual</option><option>Sick</option></select><input placeholder="Search member..." style="max-width:240px"></div><div class="table-wrap"><table><thead><tr><th>Member</th><th>Type</th><th>Dates</th><th>Days</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead><tbody><tr><td>Sarah Khan</td><td>Casual</td><td>Sep 03</td><td>1</td><td>Personal</td><td><span class="badge warning">Pending</span></td><td class="actions"><button class="btn btn-sm btn-primary" data-toast="Leave approved">Approve</button><button class="btn btn-sm btn-danger" data-toast="Leave rejected">Reject</button></td></tr><tr><td>Tanvir Ahmed</td><td>Sick</td><td>Sep 04–05</td><td>2</td><td>Illness</td><td><span class="badge warning">Pending</span></td><td class="actions"><button class="btn btn-sm btn-primary" data-toast="Leave approved">Approve</button><button class="btn btn-sm btn-danger" data-toast="Leave rejected">Reject</button></td></tr></tbody></table></div></section></main></div><script src="../js/admin-leave-management.js"></script></body></html>
