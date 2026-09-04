@@ -108,7 +108,11 @@ app.get("/api/health", async (req, res) => {
    Added in a later step
 ========================================================= */
 
-// app.use("/api/auth", authLimiter, require("./routes/auth"));
+app.use(
+    "/api/auth",
+    authLimiter,
+    require("./routes/auth")
+);
 
 /* =========================================================
    404 API HANDLER
