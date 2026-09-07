@@ -15,7 +15,7 @@ const router = express.Router();
 router.get(
     "/permission",
     requireAuth,
-    requirePermission("view_dashboard"),
+    requirePermission("manage_members"),
     (req, res) => {
 
         return res.json({
