@@ -1,16 +1,607 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Member Management</title><link rel="stylesheet" href="../css/member-management.css"></head>
-<body class="app-body"><div class="app-shell">
-<aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Admin Panel</div>
-<nav class="side-nav"><a class="nav-link " href="admin-dashboard.html">Dashboard</a>
-<a class="nav-link active" href="member-management.html">Members</a>
-<a class="nav-link " href="leave-management.html">Leave Management</a>
-<a class="nav-link " href="holiday-management.html">Holidays</a>
-<a class="nav-link " href="admin-announcements.html">Announcements</a>
-<a class="nav-link " href="admin-office-information.html">Office Information</a>
-<a class="nav-link " href="admin-gallery.html">Gallery</a>
-<a class="nav-link " href="role-permissions.html">Roles & Permissions</a>
-<a class="nav-link " href="admin-profile.html">Admin Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div></header><section class="content"><div class="breadcrumb">Admin Panel / Member Management</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Member Management</h1><p>Create, edit, activate, deactivate, and view member accounts.</p></div></div><div class="toolbar"><input placeholder="Search members..." style="max-width:280px"><select><option>All Departments</option></select><select><option>All Status</option></select><button class="btn btn-primary" data-toast="Create member dialog opened">+ Add Member</button></div><div class="table-wrap"><table><thead><tr><th>Member</th><th>Position</th><th>Department</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody><tr><td><div style="display:flex;gap:10px;align-items:center"><span class="user-avatar">AS</span><b>Alex Smith</b></div></td><td>CEO</td><td>Leadership</td><td><span class="badge success">Active</span></td><td>Jan 2023</td><td class="actions"><button class="btn btn-sm btn-secondary" data-toast="Profile opened">View</button><button class="btn btn-sm btn-secondary" data-toast="Edit form opened">Edit</button></td></tr><tr><td><div style="display:flex;gap:10px;align-items:center"><span class="user-avatar">SK</span><b>Sarah Khan</b></div></td><td>Developer</td><td>Engineering</td><td><span class="badge success">Active</span></td><td>Mar 2024</td><td class="actions"><button class="btn btn-sm btn-secondary" data-toast="Profile opened">View</button><button class="btn btn-sm btn-secondary" data-toast="Edit form opened">Edit</button></td></tr><tr><td><div style="display:flex;gap:10px;align-items:center"><span class="user-avatar">MN</span><b>Mina Noor</b></div></td><td>HR Manager</td><td>HR</td><td><span class="badge success">Active</span></td><td>Jun 2024</td><td class="actions"><button class="btn btn-sm btn-secondary" data-toast="Profile opened">View</button><button class="btn btn-sm btn-secondary" data-toast="Edit form opened">Edit</button></td></tr><tr><td><div style="display:flex;gap:10px;align-items:center"><span class="user-avatar">TA</span><b>Tanvir Ahmed</b></div></td><td>Developer</td><td>Engineering</td><td><span class="badge danger">Inactive</span></td><td>Aug 2025</td><td class="actions"><button class="btn btn-sm btn-secondary" data-toast="Profile opened">View</button><button class="btn btn-sm btn-secondary" data-toast="Edit form opened">Edit</button></td></tr><tr><td><div style="display:flex;gap:10px;align-items:center"><span class="user-avatar">AR</span><b>Arif Rahman</b></div></td><td>Designer</td><td>Design</td><td><span class="badge success">Active</span></td><td>Nov 2025</td><td class="actions"><button class="btn btn-sm btn-secondary" data-toast="Profile opened">View</button><button class="btn btn-sm btn-secondary" data-toast="Edit form opened">Edit</button></td></tr></tbody></table></div></section></main></div><script src="../js/member-management.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PrimeIt — Member Management</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/member-management.css"
+    >
+</head>
+
+<body class="app-body">
+
+<div class="app-shell">
+
+    <!-- ==========================================
+         Sidebar
+    =========================================== -->
+
+    <aside class="sidebar">
+
+        <a class="logo" href="admin-dashboard.html">
+            <span class="logo-mark">
+                <span>P</span>
+            </span>
+
+            <span class="logo-text">
+                PrimeIt
+            </span>
+        </a>
+
+        <div
+            class="side-label"
+            style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em"
+        >
+            Admin Panel
+        </div>
+
+        <nav class="side-nav">
+
+            <a
+                class="nav-link"
+                href="admin-dashboard.html"
+            >
+                Dashboard
+            </a>
+
+            <a
+                class="nav-link active"
+                href="member-management.html"
+            >
+                Members
+            </a>
+
+            <a
+                class="nav-link"
+                href="leave-management.html"
+            >
+                Leave Management
+            </a>
+
+            <a
+                class="nav-link"
+                href="holiday-management.html"
+            >
+                Holidays
+            </a>
+
+            <a
+                class="nav-link"
+                href="admin-announcements.html"
+            >
+                Announcements
+            </a>
+
+            <a
+                class="nav-link"
+                href="admin-office-information.html"
+            >
+                Office Information
+            </a>
+
+            <a
+                class="nav-link"
+                href="admin-gallery.html"
+            >
+                Gallery
+            </a>
+
+            <a
+                class="nav-link"
+                href="role-permissions.html"
+            >
+                Roles & Permissions
+            </a>
+
+            <a
+                class="nav-link"
+                href="admin-profile.html"
+            >
+                Admin Profile
+            </a>
+
+        </nav>
+
+        <div class="side-bottom">
+
+            <a
+                class="nav-link"
+                href="../public/index.html"
+            >
+                ↩
+                <span class="side-label">
+                    Back to Website
+                </span>
+            </a>
+
+            <a
+                class="nav-link"
+                href="admin-login.html"
+            >
+                ⇥
+                <span class="side-label">
+                    Logout
+                </span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ==========================================
+         Main
+    =========================================== -->
+
+    <main class="main">
+
+        <!-- ======================================
+             Topbar
+        ======================================= -->
+
+        <header class="app-topbar">
+
+            <button
+                class="mobile-toggle"
+                type="button"
+                aria-label="Toggle navigation"
+            >
+                ☰
+            </button>
+
+            <div class="search">
+
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    aria-label="Search"
+                >
+
+            </div>
+
+            <div class="user-chip">
+
+                <span>
+                    Administrator
+                </span>
+
+                <span class="user-avatar">
+                    AD
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- ======================================
+             Content
+        ======================================= -->
+
+        <section class="content">
+
+            <div class="breadcrumb">
+                Admin Panel / Member Management
+            </div>
+
+
+            <!-- Page Header -->
+
+            <div class="content-header">
+
+                <div>
+
+                    <h1
+                        style="font-size:34px;margin:0"
+                    >
+                        Member Management
+                    </h1>
+
+                    <p>
+                        Create, edit, activate, deactivate, and view member accounts.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================
+                 Toolbar
+            =================================== -->
+
+            <div class="toolbar">
+
+                <input
+                    type="text"
+                    placeholder="Search members..."
+                    style="max-width:280px"
+                >
+
+                <select>
+                    <option>
+                        All Departments
+                    </option>
+                </select>
+
+                <select>
+                    <option>
+                        All Status
+                    </option>
+
+                    <option value="active">
+                        Active
+                    </option>
+
+                    <option value="inactive">
+                        Inactive
+                    </option>
+                </select>
+
+                <button
+                    class="btn btn-primary"
+                    id="add-member-btn"
+                    type="button"
+                >
+                    + Add Member
+                </button>
+
+            </div>
+
+
+            <!-- ==================================
+                 Add Member Modal
+            =================================== -->
+
+            <div
+                id="add-member-modal"
+                class="member-modal"
+                hidden
+            >
+
+                <div class="member-modal-content">
+
+                    <div class="member-modal-header">
+
+                        <div>
+
+                            <h2>
+                                Add Member
+                            </h2>
+
+                            <p>
+                                Create a new PrimeIt member account.
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            id="close-add-member"
+                            class="member-modal-close"
+                            aria-label="Close"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+
+                    <!-- Add Member Form -->
+
+                    <form id="add-member-form">
+
+                        <div class="form-grid">
+
+
+                            <!-- Full Name -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="member-full-name"
+                                >
+                                    Full Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="member-full-name"
+                                    name="full_name"
+                                    required
+                                    minlength="2"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <!-- Email -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="member-email"
+                                >
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="member-email"
+                                    name="email"
+                                    required
+                                    maxlength="150"
+                                >
+
+                            </div>
+
+
+                            <!-- Password -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="member-password"
+                                >
+                                    Password
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="member-password"
+                                    name="password"
+                                    required
+                                    minlength="8"
+                                    maxlength="128"
+                                    autocomplete="new-password"
+                                >
+
+                            </div>
+
+
+                            <!-- Phone -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="member-phone"
+                                >
+                                    Phone
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="member-phone"
+                                    name="phone"
+                                    maxlength="30"
+                                >
+
+                            </div>
+
+
+                            <!-- Department -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="member-department"
+                                >
+                                    Department
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="member-department"
+                                    name="department"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <!-- Position -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="member-position"
+                                >
+                                    Position
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="member-position"
+                                    name="position"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
+
+                            <!-- Role -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="member-role"
+                                >
+                                    Role
+                                </label>
+
+                                <select
+                                    id="member-role"
+                                    name="role"
+                                >
+
+                                    <option value="member">
+                                        Member
+                                    </option>
+
+                                    <option value="admin">
+                                        Admin
+                                    </option>
+
+                                    <option value="hr">
+                                        HR
+                                    </option>
+
+                                    <option value="ceo">
+                                        CEO
+                                    </option>
+
+                                    <option value="developer">
+                                        Developer
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Status -->
+
+                            <div class="form-group">
+
+                                <label
+                                    for="member-status"
+                                >
+                                    Status
+                                </label>
+
+                                <select
+                                    id="member-status"
+                                    name="status"
+                                >
+
+                                    <option value="active">
+                                        Active
+                                    </option>
+
+                                    <option value="inactive">
+                                        Inactive
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Form Actions -->
+
+                        <div class="member-modal-actions">
+
+                            <button
+                                type="button"
+                                id="cancel-add-member"
+                                class="btn btn-secondary"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Create Member
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================
+                 Members Table
+            =================================== -->
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Member
+                            </th>
+
+                            <th>
+                                Position
+                            </th>
+
+                            <th>
+                                Department
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Joined
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <!--
+                            Real members are loaded
+                            from /api/members
+                            by member-management.js
+                        -->
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                style="text-align:center;padding:30px;"
+                            >
+                                Loading members...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ==========================================
+     JavaScript
+=========================================== -->
+
+<script src="../js/member-management.js"></script>
+
+</body>
+
+</html>

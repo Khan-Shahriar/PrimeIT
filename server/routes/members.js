@@ -577,4 +577,55 @@ router.get(
     }
 );
 
+/* =========================================================
+   DELETE MEMBER
+========================================================= */
+
+router.delete("/:id", requireAuth, requirePermission("manage_members"), async (req, res) => {
+    try {
+        const memberId = Number(req.params.id);
+
+        if (!Number.isInteger(memberId) || memberId <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid member ID"
+            });
+        }
+
+        const [members] = await pool.query(
+            `SELECT id
+             FROM users
+             WHERE id = ?
+             LIMIT 1`,
+            [memberId]
+        );
+
+        if (members.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Member not found"
+            });
+        }
+
+        await pool.query(
+            `DELETE FROM users
+             WHERE id = ?`,
+            [memberId]
+        );
+
+        return res.json({
+            success: true,
+            message: "Member deleted successfully"
+        });
+
+    } catch (error) {
+        console.error("Delete member error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Unable to delete member"
+        });
+    }
+});
+
 module.exports = router;
