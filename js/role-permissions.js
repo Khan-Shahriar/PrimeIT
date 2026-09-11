@@ -74,6 +74,8 @@ function renderRoles(roles) {
 
     item.dataset.roleId = role.id;
 
+    item.dataset.roleName = role.name;
+
     item.textContent =
       formatRoleName(role.name);
 
@@ -170,36 +172,91 @@ async function loadRolePermissions(roleId) {
 
   try {
 
-    const response = await fetch(
+    /*
+     * Load the selected role's currently assigned permissions.
+     */
+
+    const roleResponse = await fetch(
       `${API_URL}/${roleId}/permissions`,
       {
         credentials: "include"
       }
     );
 
-    const data = await response.json();
 
-    if (!response.ok) {
+    const roleData =
+      await roleResponse.json();
+
+
+    if (!roleResponse.ok) {
+
       throw new Error(
-        data.message ||
+        roleData.message ||
         "Failed to load role permissions"
       );
     }
 
-    console.log(
-      "Role:",
-      data.role
-    );
 
-    console.log(
-      "Permissions:",
-      data.permissions
-    );
+    /*
+     * Load all available permissions.
+     */
+
+    const permissionsResponse =
+      await fetch(
+        `${API_URL}/permissions/all`,
+        {
+          credentials: "include"
+        }
+      );
+
+
+    const permissionsData =
+      await permissionsResponse.json();
+
+
+    if (!permissionsResponse.ok) {
+
+      throw new Error(
+        permissionsData.message ||
+        "Failed to load permissions"
+      );
+    }
+
+
+    /*
+     * Store all permissions globally so
+     * renderRolePermissions() can use them.
+     */
+
+    window.allPrimeItPermissions =
+      permissionsData.permissions || [];
+
+
+    /*
+     * Render the selected role.
+     */
 
     renderRolePermissions(
-      data.role,
-      data.permissions
+      roleData.role,
+      roleData.permissions || []
     );
+
+
+    console.log(
+      "Selected role:",
+      roleData.role
+    );
+
+    console.log(
+      "Assigned permissions:",
+      roleData.permissions || []
+    );
+
+    console.log(
+      "All permissions:",
+      window.allPrimeItPermissions
+    );
+
 
   } catch (error) {
 
@@ -219,116 +276,201 @@ async function loadRolePermissions(roleId) {
    Render Role Permissions
 ========================================== */
 
-function renderRolePermissions(
-    role,
-    permissions
-) {
+function renderRolePermissions(role, permissions) {
 
-    const roleName =
-        document.querySelector(
-            "#selected-role-name"
-        );
+  const roleNameElement =
+    document.getElementById("selected-role-name");
 
-    const roleDescription =
-        document.querySelector(
-            "#selected-role-description"
-        );
+  const roleDescriptionElement =
+    document.getElementById("selected-role-description");
 
-    const permissionGrid =
-        document.querySelector(
-            "#permission-grid"
-        );
+  const permissionGrid =
+    document.getElementById("permission-grid");
+
+  const saveButton =
+    document.getElementById("save-permissions-btn");
 
 
-    if (!roleName || !roleDescription || !permissionGrid) {
-        return;
-    }
+  if (!roleNameElement || !roleDescriptionElement || !permissionGrid) {
+    return;
+  }
 
 
-    roleName.textContent =
-        formatRoleName(role.name);
+  roleNameElement.textContent =
+    formatRoleName(role.name);
 
-    roleDescription.textContent =
-        role.description ||
-        "Assigned permissions";
-
-
-    permissionGrid.innerHTML = "";
+  roleDescriptionElement.textContent =
+    role.description || "Role permissions";
 
 
-    const permissionHeader =
-        document.createElement("div");
+  /*
+   * CEO and Developer have automatic full access.
+   */
 
-    permissionHeader.className = "head";
-
-    permissionHeader.textContent =
-        "Permission";
-
-
-    const statusHeader =
-        document.createElement("div");
-
-    statusHeader.className = "head";
-
-    statusHeader.textContent =
-        "Status";
+  const fullAccess =
+    role.name === "ceo" ||
+    role.name === "developer";
 
 
-    permissionGrid.appendChild(
-        permissionHeader
-    );
+  /*
+   * Convert assigned permissions into a Set
+   * for quick checkbox lookup.
+   */
 
-    permissionGrid.appendChild(
-        statusHeader
+  const assignedPermissionIds =
+    new Set(
+      permissions.map(
+        permission => Number(permission.id)
+      )
     );
 
 
-    permissions.forEach(permission => {
+  /*
+   * Clear existing permission rows.
+   */
 
-        const name =
-            document.createElement("div");
-
-        name.textContent =
-            formatPermissionName(
-                permission.name
-            );
+  permissionGrid.innerHTML = "";
 
 
-        const status =
-            document.createElement("div");
+  /*
+   * Header
+   */
 
-        status.textContent =
-            "✓ Assigned";
+  const permissionHeader =
+    document.createElement("div");
 
-        status.className =
-            "permission-status";
-
-
-        permissionGrid.appendChild(name);
-
-        permissionGrid.appendChild(status);
-
-    });
+  permissionHeader.className = "head";
+  permissionHeader.textContent = "Permission";
 
 
-    if (permissions.length === 0) {
+  const statusHeader =
+    document.createElement("div");
 
-        const message =
-            document.createElement("div");
+  statusHeader.className = "head";
+  statusHeader.textContent = "Assigned";
 
-        message.textContent =
-            role.name === "ceo" ||
-            role.name === "developer"
-                ? "Full access"
-                : "No permissions assigned";
 
-        message.style.gridColumn =
-            "1 / -1";
+  permissionGrid.appendChild(permissionHeader);
+  permissionGrid.appendChild(statusHeader);
 
-        permissionGrid.appendChild(
-            message
-        );
+
+  /*
+   * Full-access roles
+   */
+
+  if (fullAccess) {
+
+    const message =
+      document.createElement("div");
+
+    message.className = "permission-full-access";
+    message.style.gridColumn = "1 / -1";
+    message.textContent =
+      "✓ Full access — automatically granted";
+
+    permissionGrid.appendChild(message);
+
+
+    if (saveButton) {
+      saveButton.disabled = true;
+      saveButton.style.display = "none";
     }
+
+    return;
+  }
+
+
+  /*
+   * Normal roles.
+   */
+
+  if (saveButton) {
+    saveButton.disabled = false;
+    saveButton.style.display = "";
+  }
+
+
+  /*
+   * All permissions must be loaded before
+   * this function is called.
+   */
+
+  if (!window.allPrimeItPermissions) {
+
+    const message =
+      document.createElement("div");
+
+    message.style.gridColumn = "1 / -1";
+    message.textContent =
+      "Unable to load permission definitions.";
+
+    permissionGrid.appendChild(message);
+
+    return;
+  }
+
+
+  window.allPrimeItPermissions.forEach(
+    permission => {
+
+      const permissionCell =
+        document.createElement("div");
+
+      permissionCell.className =
+        "permission-name";
+
+
+      const name =
+        document.createElement("strong");
+
+      name.textContent =
+        formatPermissionName(
+          permission.name
+        );
+
+
+      const description =
+        document.createElement("small");
+
+      description.textContent =
+        permission.description || "";
+
+
+      permissionCell.appendChild(name);
+      permissionCell.appendChild(description);
+
+
+      const statusCell =
+        document.createElement("div");
+
+      statusCell.className =
+        "permission-status";
+
+
+      const checkbox =
+        document.createElement("input");
+
+      checkbox.type = "checkbox";
+
+      checkbox.className =
+        "permission-checkbox";
+
+      checkbox.dataset.permissionId =
+        permission.id;
+
+      checkbox.checked =
+        assignedPermissionIds.has(
+          Number(permission.id)
+        );
+
+
+      statusCell.appendChild(checkbox);
+
+
+      permissionGrid.appendChild(permissionCell);
+      permissionGrid.appendChild(statusCell);
+    }
+  );
 }
 
 
@@ -337,16 +479,16 @@ function renderRolePermissions(
 ========================================== */
 
 function formatPermissionName(
-    permissionName
+  permissionName
 ) {
 
-    return permissionName
-        .split("_")
-        .map(word =>
-            word.charAt(0).toUpperCase() +
-            word.slice(1)
-        )
-        .join(" ");
+  return permissionName
+    .split("_")
+    .map(word =>
+      word.charAt(0).toUpperCase() +
+      word.slice(1)
+    )
+    .join(" ");
 
 }
 
@@ -450,6 +592,160 @@ document
 document.addEventListener(
   "DOMContentLoaded",
   () => {
+
+
+    const savePermissionsButton =
+      document.getElementById("save-permissions-btn");
+
+    if (savePermissionsButton) {
+
+      savePermissionsButton.addEventListener(
+        "click",
+        async () => {
+
+          const activeRole =
+            document.querySelector(
+              ".role-item.active"
+            );
+
+          if (!activeRole) {
+            showToast("Please select a role first.");
+            return;
+          }
+
+
+          const roleId =
+            activeRole.dataset.roleId;
+
+
+          const roleName =
+            activeRole.dataset.roleName;
+
+
+          /*
+           * CEO and Developer cannot have their
+           * permissions manually changed.
+           */
+
+          if (
+            roleName === "ceo" ||
+            roleName === "developer"
+          ) {
+            showToast(
+              "CEO and Developer already have full access."
+            );
+
+            return;
+          }
+
+
+          /*
+           * Collect checked permissions.
+           */
+
+          const checkedPermissions =
+            Array.from(
+              document.querySelectorAll(
+                ".permission-checkbox:checked"
+              )
+            ).map(
+              checkbox =>
+                Number(
+                  checkbox.dataset.permissionId
+                )
+            );
+
+
+          console.log(
+            "Saving permissions:",
+            checkedPermissions
+          );
+
+
+          try {
+
+            savePermissionsButton.disabled = true;
+
+            savePermissionsButton.textContent =
+              "Saving...";
+
+
+            const response =
+              await fetch(
+                `${API_URL}/${roleId}/permissions`,
+                {
+                  method: "PUT",
+
+                  credentials: "include",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json"
+                  },
+
+                  body: JSON.stringify({
+                    permissions:
+                      checkedPermissions
+                  })
+                }
+              );
+
+
+            const data =
+              await response.json();
+
+
+            if (!response.ok) {
+
+              throw new Error(
+                data.message ||
+                "Failed to save permissions"
+              );
+            }
+
+
+            showToast(
+              data.message ||
+              "Permissions saved successfully"
+            );
+
+
+            /*
+             * Reload the role permissions so
+             * the UI reflects the database.
+             */
+
+            await loadRolePermissions(
+              roleId
+            );
+
+
+          } catch (error) {
+
+            console.error(
+              "Save permissions error:",
+              error
+            );
+
+            showToast(
+              error.message ||
+              "Failed to save permissions"
+            );
+
+          } finally {
+
+            savePermissionsButton.disabled =
+              false;
+
+            savePermissionsButton.textContent =
+              "Save Changes";
+          }
+        }
+      );
+    }
+
+
+
 
     loadRoles();
 
