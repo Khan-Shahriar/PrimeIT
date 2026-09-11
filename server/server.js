@@ -119,6 +119,11 @@ app.use(
     require("./routes/members")
 );
 
+app.use(
+    "/api/roles",
+    require("./routes/roles")
+);
+
 
 
 /* =========================================================
