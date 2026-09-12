@@ -98,7 +98,7 @@ function renderRoles(roles) {
   createButton.textContent =
     "+ Create Role";
 
-  
+
   roleList.appendChild(createButton);
 
 
@@ -815,12 +815,12 @@ function openCreateRoleDialog() {
 
   const roleNameInput =
     document.getElementById(
-        "create-role-name"
+      "create-role-name"
     );
 
-if (roleNameInput) {
+  if (roleNameInput) {
     roleNameInput.focus();
-}
+  }
 
 }
 
