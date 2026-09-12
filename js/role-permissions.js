@@ -98,9 +98,7 @@ function renderRoles(roles) {
   createButton.textContent =
     "+ Create Role";
 
-  createButton.dataset.toast =
-    "Create role dialog opened";
-
+  
   roleList.appendChild(createButton);
 
 
@@ -523,6 +521,309 @@ function showToast(message) {
   }, 2200);
 }
 
+/* ==========================================
+   CREATE ROLE DIALOG
+========================================== */
+
+function openCreateRoleDialog() {
+
+  if (document.getElementById("create-role-modal")) {
+    return;
+  }
+
+
+  const modal =
+    document.createElement("div");
+
+  modal.id =
+    "create-role-modal";
+
+  modal.className =
+    "role-modal";
+
+
+  modal.innerHTML = `
+        <div class="role-modal-backdrop"></div>
+
+        <div class="role-modal-card">
+
+            <div class="role-modal-header">
+
+                <div>
+                    <h2>Create Role</h2>
+                    <p>
+                        Create a custom role for PrimeIt.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="role-modal-close"
+                    id="close-create-role"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="create-role-form">
+
+                <div class="form-group">
+
+                    <label for="create-role-name">
+                        Role Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="create-role-name"
+                        name="name"
+                        placeholder="Marketing Manager"
+                        maxlength="50"
+                        required
+                    >
+
+                    <small>
+                        Example: Marketing Manager
+                    </small>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="create-role-description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="create-role-description"
+                        name="description"
+                        placeholder="Manages marketing activities and campaigns"
+                        maxlength="255"
+                        rows="4"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="role-modal-actions">
+
+                    <button
+                        type="button"
+                        class="btn"
+                        id="cancel-create-role"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="submit-create-role"
+                    >
+                        Create Role
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    `;
+
+
+  document.body.appendChild(modal);
+
+
+  const closeButton =
+    document.getElementById(
+      "close-create-role"
+    );
+
+  const cancelButton =
+    document.getElementById(
+      "cancel-create-role"
+    );
+
+  const backdrop =
+    modal.querySelector(
+      ".role-modal-backdrop"
+    );
+
+
+  function closeModal() {
+
+    modal.remove();
+
+  }
+
+
+  closeButton.addEventListener(
+    "click",
+    closeModal
+  );
+
+  cancelButton.addEventListener(
+    "click",
+    closeModal
+  );
+
+  backdrop.addEventListener(
+    "click",
+    closeModal
+  );
+
+
+  const form =
+    document.getElementById(
+      "create-role-form"
+    );
+
+
+  form.addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+
+      const nameInput =
+        document.getElementById(
+          "create-role-name"
+        );
+
+      const descriptionInput =
+        document.getElementById(
+          "create-role-description"
+        );
+
+      const submitButton =
+        document.getElementById(
+          "submit-create-role"
+        );
+
+
+      const name =
+        nameInput.value.trim();
+
+      const description =
+        descriptionInput.value.trim();
+
+
+      if (!name) {
+
+        showToast(
+          "Role name is required."
+        );
+
+        nameInput.focus();
+
+        return;
+      }
+
+
+      try {
+
+        submitButton.disabled =
+          true;
+
+        submitButton.textContent =
+          "Creating...";
+
+
+        const response =
+          await fetch(
+            API_URL,
+            {
+              method: "POST",
+
+              credentials: "include",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                name,
+                description
+              })
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.message ||
+            "Failed to create role"
+          );
+        }
+
+
+        showToast(
+          data.message ||
+          "Role created successfully"
+        );
+
+
+        closeModal();
+
+
+        await loadRoles();
+
+
+      } catch (error) {
+
+        console.error(
+          "Create role error:",
+          error
+        );
+
+        showToast(
+          error.message ||
+          "Failed to create role"
+        );
+
+
+      } finally {
+
+        if (
+          document.body.contains(
+            submitButton
+          )
+        ) {
+
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            "Create Role";
+        }
+
+      }
+
+    }
+  );
+
+
+  const roleNameInput =
+    document.getElementById(
+        "create-role-name"
+    );
+
+if (roleNameInput) {
+    roleNameInput.focus();
+}
+
+}
+
 
 function attachToastButtons() {
 
@@ -543,8 +844,28 @@ function attachToastButtons() {
       );
 
     });
-}
 
+
+  const createRoleButton =
+    document.querySelector(
+      ".role-list .btn-primary"
+    );
+
+
+  if (createRoleButton) {
+
+    createRoleButton.addEventListener(
+      "click",
+      () => {
+
+        openCreateRoleDialog();
+
+      }
+    );
+
+  }
+
+}
 
 /* ==========================================
    Mobile Sidebar

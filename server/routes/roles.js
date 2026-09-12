@@ -439,4 +439,135 @@ router.put(
 );
 
 
+
+/* ==========================================
+   CREATE CUSTOM ROLE
+========================================== */
+
+router.post(
+    "/",
+    requireAuth,
+    requireFullAccess,
+    async (req, res) => {
+
+        try {
+
+            const name =
+                String(req.body.name || "")
+                    .trim()
+                    .toLowerCase()
+                    .replace(/\s+/g, "_");
+
+            const description =
+                String(req.body.description || "")
+                    .trim();
+
+            if (!name) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Role name is required"
+                });
+            }
+
+            if (!/^[a-z][a-z0-9_]{2,49}$/.test(name)) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Role name must contain 3–50 lowercase letters, numbers, or underscores"
+                });
+            }
+
+            if (
+                [
+                    "ceo",
+                    "developer",
+                    "admin",
+                    "hr",
+                    "member"
+                ].includes(name)
+            ) {
+                return res.status(409).json({
+                    success: false,
+                    message: "This role is reserved or already exists"
+                });
+            }
+
+            if (description.length > 255) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Description cannot exceed 255 characters"
+                });
+            }
+
+            const [existingRoles] =
+                await pool.query(
+                    `
+                    SELECT id
+                    FROM roles
+                    WHERE name = ?
+                    LIMIT 1
+                    `,
+                    [name]
+                );
+
+            if (existingRoles.length > 0) {
+                return res.status(409).json({
+                    success: false,
+                    message: "A role with this name already exists"
+                });
+            }
+
+            const [result] =
+                await pool.query(
+                    `
+                    INSERT INTO roles
+                        (name, description)
+                    VALUES
+                        (?, ?)
+                    `,
+                    [
+                        name,
+                        description || null
+                    ]
+                );
+
+            const [createdRoles] =
+                await pool.query(
+                    `
+                    SELECT
+                        id,
+                        name,
+                        description,
+                        created_at
+                    FROM roles
+                    WHERE id = ?
+                    LIMIT 1
+                    `,
+                    [result.insertId]
+                );
+
+            return res.status(201).json({
+                success: true,
+                message: "Custom role created successfully",
+                role: createdRoles[0]
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Create role error:",
+                error
+            );
+
+            return res.status(500).json({
+                success: false,
+                message: "Failed to create role"
+            });
+
+        }
+    }
+);
+
+
 module.exports = router;
