@@ -207,6 +207,8 @@ router.put(
         const connection =
             await pool.getConnection();
 
+        let transactionStarted = false;
+
         try {
 
             const roleId =
@@ -363,6 +365,8 @@ router.put(
 
             await connection.beginTransaction();
 
+            transactionStarted = true;
+
 
             /*
              * Remove existing permissions.
@@ -417,7 +421,9 @@ router.put(
 
         } catch (error) {
 
-            await connection.rollback();
+            if (transactionStarted) {
+                await connection.rollback();
+            }
 
             console.error(
                 "Update role permissions error:",

@@ -62,6 +62,10 @@ function renderRoles(roles) {
 
   roleList.innerHTML = "";
 
+  if (!Array.isArray(roles)) {
+    roles = [];
+  }
+
 
   roles.forEach((role, index) => {
 
@@ -104,6 +108,15 @@ function renderRoles(roles) {
 
   attachRoleSelection();
   attachToastButtons();
+
+
+  if (roles.length > 0) {
+
+    loadRolePermissions(
+      roles[0].id
+    );
+
+  }
 }
 
 
