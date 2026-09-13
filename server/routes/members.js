@@ -229,6 +229,13 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
             });
         }
 
+        if (memberId === Number(req.user.id)) {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot delete your own account."
+            });
+        }
+
         const {
             full_name,
             email,
@@ -291,7 +298,7 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
             errors.role =
                 "Only CEO and Developer can assign CEO or Developer roles.";
         }
-        
+
 
 
         const allowedStatuses = [
@@ -338,6 +345,33 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
             });
         }
 
+        const currentMember = existingMembers[0];
+
+        if (
+            isFullAccessRole(currentMember.role) &&
+            !isFullAccessRole(req.user.role)
+        ) {
+            return res.status(403).json({
+                success: false,
+                message:
+                    "Only CEO and Developer can modify CEO or Developer accounts."
+            });
+        }
+
+
+        if (
+            isFullAccessRole(currentMember.role) &&
+            !isFullAccessRole(req.user.role)
+        ) {
+            return res.status(403).json({
+                success: false,
+                message:
+                    "Only CEO and Developer can modify CEO or Developer accounts."
+            });
+        }
+
+
+
         if (email !== undefined) {
             const normalizedEmail = email.trim().toLowerCase();
 
@@ -361,7 +395,6 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
             }
         }
 
-        const currentMember = existingMembers[0];
 
         const updatedFullName =
             full_name !== undefined
@@ -621,11 +654,15 @@ router.delete("/:id", requireAuth, requirePermission("manage_members"), async (r
             });
         }
 
+        if (memberId === Number(req.user.id)) {
+            return res.status(403).json({
+                success: false,
+                message: "You cannot delete your own account."
+            });
+        }
+
         const [members] = await pool.query(
-            `SELECT id
-             FROM users
-             WHERE id = ?
-             LIMIT 1`,
+            `SELECT id, role FROM users WHERE id = ? LIMIT 1`,
             [memberId]
         );
 
@@ -633,6 +670,19 @@ router.delete("/:id", requireAuth, requirePermission("manage_members"), async (r
             return res.status(404).json({
                 success: false,
                 message: "Member not found"
+            });
+        }
+
+        const currentMember = members[0];
+
+        if (
+            isFullAccessRole(currentMember.role) &&
+            !isFullAccessRole(req.user.role)
+        ) {
+            return res.status(403).json({
+                success: false,
+                message:
+                    "Only CEO and Developer can delete CEO or Developer accounts."
             });
         }
 
