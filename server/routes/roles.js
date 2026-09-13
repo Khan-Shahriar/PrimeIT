@@ -506,37 +506,53 @@ router.post(
                 });
             }
 
-            const [existingRoles] =
-                await pool.query(
-                    `
-                    SELECT id
-                    FROM roles
-                    WHERE name = ?
-                    LIMIT 1
-                    `,
-                    [name]
-                );
+            try {
+                const [result] =
+                    await pool.query(
+                        `
+            INSERT INTO roles
+                (name, description)
+            VALUES
+                (?, ?)
+            `,
+                        [
+                            name,
+                            description || null
+                        ]
+                    );
 
-            if (existingRoles.length > 0) {
-                return res.status(409).json({
-                    success: false,
-                    message: "A role with this name already exists"
+                const [createdRoles] =
+                    await pool.query(
+                        `
+                        SELECT
+                            id,
+                            name,
+                            description,
+                            created_at
+                        FROM roles
+                        WHERE id = ?
+                        LIMIT 1
+                        `,
+                        [result.insertId]
+                    );
+
+                return res.status(201).json({
+                    success: true,
+                    message: "Custom role created successfully",
+                    role: createdRoles[0]
                 });
-            }
 
-            const [result] =
-                await pool.query(
-                    `
-                    INSERT INTO roles
-                        (name, description)
-                    VALUES
-                        (?, ?)
-                    `,
-                    [
-                        name,
-                        description || null
-                    ]
-                );
+            } catch (error) {
+
+                if (error.code === "ER_DUP_ENTRY") {
+                    return res.status(409).json({
+                        success: false,
+                        message: "A role with this name already exists"
+                    });
+                }
+
+                throw error;
+            }
 
             const [createdRoles] =
                 await pool.query(

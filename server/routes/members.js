@@ -10,6 +10,13 @@ const {
 
 const router = express.Router();
 
+function isFullAccessRole(role) {
+    return [
+        "ceo",
+        "developer"
+    ].includes(role);
+}
+
 
 
 
@@ -81,6 +88,14 @@ router.post(
 
             if (!allowedRoles.includes(normalizedRole)) {
                 errors.role = "Invalid role.";
+            }
+
+            if (
+                isFullAccessRole(normalizedRole) &&
+                !isFullAccessRole(req.user.role)
+            ) {
+                errors.role =
+                    "Only CEO and Developer can assign CEO or Developer roles.";
             }
 
             const allowedStatuses = [
@@ -258,12 +273,26 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
             "admin",
             "hr",
             "ceo",
-            "developer"
+            "developer",
+            "office_manager",
+            "marketing_manager",
+            "marketing_assistant"
         ];
 
         if (role !== undefined && !allowedRoles.includes(String(role).trim().toLowerCase())) {
             errors.role = "Invalid role.";
         }
+
+        if (
+            role !== undefined &&
+            isFullAccessRole(String(role).trim().toLowerCase()) &&
+            !isFullAccessRole(req.user.role)
+        ) {
+            errors.role =
+                "Only CEO and Developer can assign CEO or Developer roles.";
+        }
+        
+
 
         const allowedStatuses = [
             "active",
