@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const { pool } = require("../db");
 const { requireAuth } = require("../middleware/auth");
+const profileUpload = require("../middleware/profileUpload");
 
 const {
     validateSignup,
@@ -270,6 +271,318 @@ router.get("/me", requireAuth, async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Unable to retrieve user"
+        });
+    }
+});
+
+/* =========================================================
+   UPDATE CURRENT USER PROFILE
+========================================================= */
+
+router.put("/me", requireAuth, async (req, res) => {
+    try {
+        const {
+            full_name,
+            phone,
+            bio
+        } = req.body;
+
+        const normalizedName =
+            typeof full_name === "string"
+                ? full_name.trim()
+                : "";
+
+        const normalizedPhone =
+            typeof phone === "string"
+                ? phone.trim()
+                : "";
+
+        const normalizedBio =
+            typeof bio === "string"
+                ? bio.trim()
+                : "";
+
+        const errors = {};
+
+        if (
+            normalizedName.length < 2 ||
+            normalizedName.length > 100
+        ) {
+            errors.full_name =
+                "Full name must be between 2 and 100 characters.";
+        }
+
+        if (normalizedPhone.length > 30) {
+            errors.phone =
+                "Phone number must not exceed 30 characters.";
+        }
+
+        if (normalizedBio.length > 1000) {
+            errors.bio =
+                "Bio must not exceed 1000 characters.";
+        }
+
+        if (Object.keys(errors).length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Please correct the validation errors",
+                errors
+            });
+        }
+
+        const [result] = await pool.query(
+            `UPDATE users
+             SET
+                full_name = ?,
+                phone = ?,
+                bio = ?
+             WHERE id = ?`,
+            [
+                normalizedName,
+                normalizedPhone || null,
+                normalizedBio || null,
+                req.user.id
+            ]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const [users] = await pool.query(
+            `SELECT
+                id,
+                full_name,
+                email,
+                phone,
+                bio,
+                profile_photo,
+                department,
+                position,
+                role,
+                status,
+                created_at
+             FROM users
+             WHERE id = ?
+             LIMIT 1`,
+            [req.user.id]
+        );
+
+        return res.json({
+            success: true,
+            message: "Profile updated successfully",
+            user: users[0]
+        });
+
+    } catch (error) {
+        console.error("Update current user profile error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Unable to update profile"
+        });
+    }
+});
+
+/* =========================================================
+   UPLOAD CURRENT USER PROFILE PHOTO
+========================================================= */
+
+router.post(
+    "/me/photo",
+    requireAuth,
+    (req, res, next) => {
+        profileUpload.single("profile_photo")(
+            req,
+            res,
+            (error) => {
+                if (error) {
+                    if (error.code === "LIMIT_FILE_SIZE") {
+                        return res.status(400).json({
+                            success: false,
+                            message: "Profile photo must be 2 MB or smaller."
+                        });
+                    }
+
+                    return res.status(400).json({
+                        success: false,
+                        message: error.message ||
+                            "Invalid profile photo."
+                    });
+                }
+
+                next();
+            }
+        );
+    },
+    async (req, res) => {
+        try {
+            if (!req.file) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Profile photo is required"
+                });
+            }
+
+            const photoPath =
+                `/uploads/profiles/${req.file.filename}`;
+
+            const [users] = await pool.query(
+                `SELECT profile_photo
+                 FROM users
+                 WHERE id = ?
+                 LIMIT 1`,
+                [req.user.id]
+            );
+
+            if (users.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found"
+                });
+            }
+
+            
+            await pool.query(
+                `UPDATE users
+                 SET profile_photo = ?
+                 WHERE id = ?`,
+                [
+                    photoPath,
+                    req.user.id
+                ]
+            );
+
+            return res.json({
+                success: true,
+                message: "Profile photo uploaded successfully",
+                profile_photo: photoPath
+            });
+
+        } catch (error) {
+            console.error(
+                "Profile photo upload error:",
+                error
+            );
+
+            return res.status(500).json({
+                success: false,
+                message: "Unable to upload profile photo"
+            });
+        }
+    }
+);
+
+/* =========================================================
+   CHANGE CURRENT USER PASSWORD
+========================================================= */
+
+router.put("/me/password", requireAuth, async (req, res) => {
+    try {
+        const {
+            current_password,
+            new_password
+        } = req.body;
+
+        if (
+            typeof current_password !== "string" ||
+            typeof new_password !== "string"
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Current password and new password are required"
+            });
+        }
+
+        if (new_password.length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: "New password must be at least 8 characters"
+            });
+        }
+
+        if (new_password.length > 128) {
+            return res.status(400).json({
+                success: false,
+                message: "New password must not exceed 128 characters"
+            });
+        }
+
+        if (current_password === new_password) {
+            return res.status(400).json({
+                success: false,
+                message: "New password must be different from current password"
+            });
+        }
+
+        const [users] = await pool.query(
+            `SELECT
+                id,
+                password_hash,
+                status
+             FROM users
+             WHERE id = ?
+             LIMIT 1`,
+            [req.user.id]
+        );
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const user = users[0];
+
+        if (user.status !== "active") {
+            return res.status(403).json({
+                success: false,
+                message: "Your account is inactive"
+            });
+        }
+
+        const passwordMatches = await bcrypt.compare(
+            current_password,
+            user.password_hash
+        );
+
+        if (!passwordMatches) {
+            return res.status(401).json({
+                success: false,
+                message: "Current password is incorrect"
+            });
+        }
+
+        const newPasswordHash = await bcrypt.hash(
+            new_password,
+            12
+        );
+
+        await pool.query(
+            `UPDATE users
+             SET password_hash = ?
+             WHERE id = ?`,
+            [
+                newPasswordHash,
+                req.user.id
+            ]
+        );
+
+        return res.json({
+            success: true,
+            message: "Password changed successfully"
+        });
+
+    } catch (error) {
+        console.error("Change password error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Unable to change password"
         });
     }
 });
