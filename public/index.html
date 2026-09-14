@@ -1,33 +1,977 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PrimeIt UI/UX prototype"><title>PrimeIt — Home</title><link rel="stylesheet" href="../css/home.css"></head><body><header class="public-header"><div class="container public-nav">
-      <a class="logo" href="index.html"><span class="logo-mark"><span>P</span></span><span>PrimeIt</span></a>
-      <nav class="public-links"><a class="nav-link active" href="index.html">Home</a>
-<a class="nav-link " href="about.html">About</a>
-<a class="nav-link " href="team.html">Team</a>
-<a class="nav-link " href="gallery.html">Gallery</a>
-<a class="nav-link " href="contact.html">Contact</a></nav>
-      <div class="top-actions"><a class="btn btn-secondary" href="../member/member-login.html">Member Login</a><a class="btn btn-primary" href="../admin/admin-login.html">Admin</a></div>
-    </div></header><main>
-<section class="hero"><div class="container hero-grid"><div class="reveal"><span class="eyebrow">Technology · People · Progress</span><h1>Build better. <span style="color:var(--blue)">Move smarter.</span></h1><p class="lead">PrimeIt is a modern technology company focused on creating reliable digital products, strong teams, and meaningful business outcomes.</p><div class="hero-actions"><a class="btn btn-primary" href="contact.html">Work With Us →</a><a class="btn btn-secondary" href="about.html">Explore PrimeIt</a></div></div><div class="hero-card float"><div class="orb1 hero-orb"></div><div class="orb2 hero-orb"></div><div class="hero-panel"><div style="font-size:12px;color:#AEB7D2">PRIMEIT / 2026</div><h3 style="font-size:25px;margin:7px 0">Ideas into dependable digital experiences.</h3><p style="color:#C7CDE0;margin:0">A clean, human-centered approach to technology.</p></div></div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">Why PrimeIt</span><h2>Designed around people and performance.</h2></div><p>Our visual language combines confident blue and purple accents with a calm light interface.</p></div><div class="grid-3">
-<div class="card feature-card reveal"><div class="icon-box">01</div><h3>Reliable Engineering</h3><p class="muted">Clear architecture, thoughtful development, and quality-focused delivery.</p></div>
-<div class="card feature-card reveal"><div class="icon-box">02</div><h3>Human Experience</h3><p class="muted">Simple interfaces and useful products that feel natural to use.</p></div>
-<div class="card feature-card reveal"><div class="icon-box">03</div><h3>Long-Term Thinking</h3><p class="muted">Systems and relationships built to improve over time.</p></div>
-</div></div></section>
-<section class="section" style="background:#fff"><div class="container"><div class="section-head"><div><span class="eyebrow">Technology</span><h2>Modern tools. Practical outcomes.</h2></div></div><div class="grid-4">
-<div class="stat"><strong>Node.js</strong><span>Backend</span></div><div class="stat"><strong>MySQL</strong><span>Data</span></div><div class="stat"><strong>JavaScript</strong><span>Frontend</span></div><div class="stat"><strong>REST</strong><span>API</span></div>
-</div></div></section>
-<section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">Team</span><h2>Meet the people behind PrimeIt.</h2></div><a class="btn btn-secondary" href="team.html">View Team</a></div><div class="grid-3">
-<div class="card team-card"><div class="avatar-photo">AS</div><div class="body"><h3>Alex Smith</h3><span class="tag">CEO</span><p class="muted">Strategy, leadership, and company growth.</p></div></div>
-<div class="card team-card"><div class="avatar-photo">SK</div><div class="body"><h3>Sarah Khan</h3><span class="tag">Developer</span><p class="muted">Product engineering and platform development.</p></div></div>
-<div class="card team-card"><div class="avatar-photo">AR</div><div class="body"><h3>Arif Rahman</h3><span class="tag">Designer</span><p class="muted">Experience, brand, and visual systems.</p></div></div>
-</div></div></section>
-<section class="cta"><div class="container"><div class="cta-box"><div><span class="eyebrow" style="background:rgba(255,255,255,.1);color:#fff">Let's connect</span><h2 style="margin-top:15px">Have an idea worth building?</h2><p>Tell us what you are working on and start a conversation with PrimeIt.</p></div><a class="btn btn-primary" style="background:#fff;color:var(--blue2)" href="contact.html">Contact PrimeIt →</a></div></div></section>
-</main><footer class="public-footer"><div class="container">
-      <div class="footer-grid">
-        <div><div class="logo"><span class="logo-mark"><span>P</span></span><span>PrimeIt</span></div><p>Professional technology, thoughtful products, and a people-first workplace.</p></div>
-        <div><h3>Company</h3><p><a href="about.html">About</a></p><p><a href="team.html">Team</a></p><p><a href="gallery.html">Gallery</a></p></div>
-        <div><h3>Office</h3><p>Working Hours</p><p>Mon–Fri · 9:00–18:00</p><p>Dhaka, Bangladesh</p></div>
-        <div><h3>Contact</h3><p>hello@primeit.example</p><p>+880 1XXX-XXXXXX</p><p><a href="contact.html">Send a message →</a></p></div>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="PrimeIt — technology, people, and digital solutions.">
+
+  <title>PrimeIt — Home</title>
+
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+
+<body>
+
+  <!-- ==================================================
+       HEADER / NAVIGATION
+  =================================================== -->
+  <header class="public-header">
+
+    <div class="container public-nav">
+
+      <!-- Logo -->
+      <a class="logo" href="index.html" aria-label="PrimeIt Home">
+        <span class="logo-mark" aria-hidden="true">
+          <span>P</span>
+        </span>
+        <span>PrimeIt</span>
+      </a>
+
+      <!-- Mobile navigation toggle -->
+      <button class="mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
+        aria-controls="public-navigation">
+        <span aria-hidden="true">☰</span>
+      </button>
+
+      <!-- Public navigation -->
+      <nav id="public-navigation" class="public-links" aria-label="Primary navigation">
+        <a class="nav-link active" href="index.html" aria-current="page">
+          Home
+        </a>
+
+        <a class="nav-link" href="about.html">
+          About
+        </a>
+
+        <a class="nav-link" href="team.html">
+          Team
+        </a>
+
+        <a class="nav-link" href="gallery.html">
+          Gallery
+        </a>
+
+        <a class="nav-link" href="contact.html">
+          Contact
+        </a>
+      </nav>
+
+      <!-- Authentication links -->
+      <div class="top-actions">
+
+        <a class="btn btn-secondary" href="../member/member-login.html">
+          Office Member Login
+        </a>
+
+        <a class="btn btn-primary" href="../admin/admin-login.html">
+          Admin Login
+        </a>
+
       </div>
-      <div class="footer-bottom">© 2026 PrimeIt. UI/UX prototype only — backend and production functionality will be added later.</div>
-    </div></footer><script src="../js/home.js"></script></body></html>
+
+    </div>
+
+  </header>
+
+
+  <main>
+
+    <!-- ==================================================
+         HERO SECTION
+    =================================================== -->
+    <section class="hero" aria-labelledby="hero-heading">
+
+      <div class="container hero-grid">
+
+        <div class="hero-content">
+
+          <span class="eyebrow">
+            Technology · People · Progress
+          </span>
+
+          <h1 id="hero-heading">
+            Building better digital solutions with technology and people.
+          </h1>
+
+          <p class="lead">
+            PrimeIt brings together technology, people, and practical
+            digital capabilities to create solutions that support modern
+            work and continuous growth.
+          </p>
+
+          <div class="hero-actions">
+
+            <a class="btn btn-primary" href="about.html">
+              Explore PrimeIt
+            </a>
+
+            <a class="btn btn-secondary" href="team.html">
+              Meet Our Team
+            </a>
+
+          </div>
+
+        </div>
+
+
+        <!-- Hero visual / future design area -->
+        <div class="hero-card">
+
+          <div class="hero-visual-placeholder" role="img" aria-label="PrimeIt technology visual placeholder">
+            <span aria-hidden="true">PrimeIt</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         PRIMEIT INTRODUCTION
+    =================================================== -->
+    <section class="section introduction" aria-labelledby="introduction-heading">
+
+      <div class="container">
+
+        <div class="section-head">
+
+          <div>
+
+            <span class="eyebrow">
+              About PrimeIt
+            </span>
+
+            <h2 id="introduction-heading">
+              Technology built around people and purposeful work.
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="introduction-content">
+
+          <div class="introduction-text">
+
+            <p>
+              PrimeIt brings together technology, software development,
+              professional collaboration, and continuous growth to support
+              purposeful digital work.
+            </p>
+
+            <p>
+              This space provides a foundation for introducing PrimeIt's
+              work, capabilities, people, and company direction. More
+              detailed company information can be maintained through the
+              dedicated About page.
+            </p>
+
+            <a class="btn btn-secondary" href="about.html">
+              Learn More About PrimeIt
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         WHY PRIMEIT
+    =================================================== -->
+    <section class="section why-primeit" aria-labelledby="why-primeit-heading">
+
+      <div class="container">
+
+        <div class="section-head">
+
+          <div>
+
+            <span class="eyebrow">
+              Why PrimeIt
+            </span>
+
+            <h2 id="why-primeit-heading">
+              A foundation for professional technology work.
+            </h2>
+
+          </div>
+
+          <p>
+            A practical approach to technology, collaboration, and continuous
+            improvement.
+          </p>
+
+        </div>
+
+
+        <div class="grid-3">
+
+          <article class="card feature-card">
+
+            <div class="icon-box" aria-hidden="true">
+              01
+            </div>
+
+            <h3>
+              Professional Team
+            </h3>
+
+            <p class="muted">
+              A collaborative environment for people working across
+              technology and professional responsibilities.
+            </p>
+
+          </article>
+
+
+          <article class="card feature-card">
+
+            <div class="icon-box" aria-hidden="true">
+              02
+            </div>
+
+            <h3>
+              Modern Technology
+            </h3>
+
+            <p class="muted">
+              Technology-focused development using practical and
+              maintainable tools.
+            </p>
+
+          </article>
+
+
+          <article class="card feature-card">
+
+            <div class="icon-box" aria-hidden="true">
+              03
+            </div>
+
+            <h3>
+              Reliable Solutions
+            </h3>
+
+            <p class="muted">
+              Structured development with attention to reliability,
+              maintainability, and useful outcomes.
+            </p>
+
+          </article>
+
+
+          <article class="card feature-card">
+
+            <div class="icon-box" aria-hidden="true">
+              04
+            </div>
+
+            <h3>
+              Team Collaboration
+            </h3>
+
+            <p class="muted">
+              Supporting communication and collaboration across the
+              organization.
+            </p>
+
+          </article>
+
+
+          <article class="card feature-card">
+
+            <div class="icon-box" aria-hidden="true">
+              05
+            </div>
+
+            <h3>
+              Continuous Growth
+            </h3>
+
+            <p class="muted">
+              A foundation designed to support learning, improvement,
+              and future development.
+            </p>
+
+          </article>
+
+
+          <article class="card feature-card">
+
+            <div class="icon-box" aria-hidden="true">
+              06
+            </div>
+
+            <h3>
+              Client Focus
+            </h3>
+
+            <p class="muted">
+              Keeping technology work focused on practical needs and
+              meaningful results.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         TECHNOLOGY / CAPABILITY
+    =================================================== -->
+    <section class="section technology" aria-labelledby="technology-heading">
+
+      <div class="container">
+
+        <div class="section-head">
+
+          <div>
+
+            <span class="eyebrow">
+              Technology & Capability
+            </span>
+
+            <h2 id="technology-heading">
+              Technology capabilities for modern development.
+            </h2>
+
+          </div>
+
+          <p>
+            Practical technologies and development capabilities that support
+            reliable digital solutions and professional workflows.
+          </p>
+
+        </div>
+
+
+        <div class="grid-4">
+
+          <article class="card capability-card">
+
+            <h3>
+              Frontend Development
+            </h3>
+
+            <p class="muted">
+              Modern web interfaces built with structured HTML, CSS,
+              and JavaScript.
+            </p>
+
+          </article>
+
+
+          <article class="card capability-card">
+
+            <h3>
+              Backend Development
+            </h3>
+
+            <p class="muted">
+              Server-side applications and REST APIs using
+              Node.js and Express.js.
+            </p>
+
+          </article>
+
+
+          <article class="card capability-card">
+
+            <h3>
+              Database
+            </h3>
+
+            <p class="muted">
+              Structured data management using MySQL and maintainable
+              database design.
+            </p>
+
+          </article>
+
+
+          <article class="card capability-card">
+
+            <h3>
+              API & Integration
+            </h3>
+
+            <p class="muted">
+              REST-based application communication and integration
+              foundations.
+            </p>
+
+          </article>
+
+        </div>
+
+        <div class="workflow">
+
+          <div class="section-head">
+
+            <div>
+              <span class="eyebrow">
+                Professional Workflow
+              </span>
+
+              <h3>
+                A clear approach from idea to improvement.
+              </h3>
+            </div>
+
+          </div>
+
+
+          <div class="grid-4">
+
+            <article class="card workflow-card">
+
+              <span class="workflow-number" aria-hidden="true">
+                01
+              </span>
+
+              <h4>
+                Plan
+              </h4>
+
+              <p class="muted">
+                Understand the goal, requirements, and practical direction
+                before development begins.
+              </p>
+
+            </article>
+
+
+            <article class="card workflow-card">
+
+              <span class="workflow-number" aria-hidden="true">
+                02
+              </span>
+
+              <h4>
+                Build
+              </h4>
+
+              <p class="muted">
+                Develop structured solutions using appropriate technologies
+                and maintainable practices.
+              </p>
+
+            </article>
+
+
+            <article class="card workflow-card">
+
+              <span class="workflow-number" aria-hidden="true">
+                03
+              </span>
+
+              <h4>
+                Test
+              </h4>
+
+              <p class="muted">
+                Review functionality, usability, and reliability throughout
+                the development process.
+              </p>
+
+            </article>
+
+
+            <article class="card workflow-card">
+
+              <span class="workflow-number" aria-hidden="true">
+                04
+              </span>
+
+              <h4>
+                Improve
+              </h4>
+
+              <p class="muted">
+                Learn from results and continuously refine technology,
+                processes, and solutions.
+              </p>
+
+            </article>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         COMPANY STATISTICS
+    =================================================== -->
+    <section class="section statistics" aria-labelledby="statistics-heading">
+
+      <div class="container">
+
+        <div class="section-head">
+
+          <div>
+
+            <span class="eyebrow">
+              PrimeIt At a Glance
+            </span>
+
+            <h2 id="statistics-heading">
+              Company information at a glance.
+            </h2>
+
+          </div>
+
+          <p>
+            A simple overview of the people, work, technologies, and experience
+            that shape PrimeIt.
+          </p>
+
+        </div>
+
+
+        <div class="grid-4">
+
+          <article class="stat">
+
+            <strong data-stat="team-members">
+              —
+            </strong>
+
+            <span>
+              Team Members
+            </span>
+
+          </article>
+
+
+          <article class="stat">
+
+            <strong data-stat="projects">
+              —
+            </strong>
+
+            <span>
+              Projects
+            </span>
+
+          </article>
+
+
+          <article class="stat">
+
+            <strong data-stat="technologies">
+              —
+            </strong>
+
+            <span>
+              Technologies
+            </span>
+
+          </article>
+
+
+          <article class="stat">
+
+            <strong data-stat="experience">
+              —
+            </strong>
+
+            <span>
+              Experience
+            </span>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         TEAM PREVIEW
+    =================================================== -->
+    <section class="section team-preview" aria-labelledby="team-preview-heading">
+
+      <div class="container">
+
+        <div class="section-head">
+
+          <div>
+
+            <span class="eyebrow">
+              Our Team
+            </span>
+
+            <h2 id="team-preview-heading">
+              Meet the people behind PrimeIt.
+            </h2>
+
+          </div>
+
+          <a class="btn btn-secondary" href="team.html">
+            View Team
+          </a>
+
+        </div>
+
+        <div class="grid-3 team-preview-grid" data-team-preview>
+
+          <article class="card team-card">
+
+            <div class="avatar-photo">
+
+              <span aria-hidden="true">
+                +
+              </span>
+
+            </div>
+
+            <div class="body">
+
+              <h3>
+                Team Member
+              </h3>
+
+              <span class="tag">
+                Position
+              </span>
+
+              <p class="muted">
+                Team member information will be displayed here.
+              </p>
+
+            </div>
+
+          </article>
+
+
+          <article class="card team-card">
+
+            <div class="avatar-photo">
+
+              <span aria-hidden="true">
+                +
+              </span>
+
+            </div>
+
+            <div class="body">
+
+              <h3>
+                Team Member
+              </h3>
+
+              <span class="tag">
+                Position
+              </span>
+
+              <p class="muted">
+                Team member information will be displayed here.
+              </p>
+
+            </div>
+
+          </article>
+
+
+          <article class="card team-card">
+
+            <div class="avatar-photo">
+
+              <span aria-hidden="true">
+                +
+              </span>
+
+            </div>
+
+            <div class="body">
+
+              <h3>
+                Team Member
+              </h3>
+
+              <span class="tag">
+                Position
+              </span>
+
+              <p class="muted">
+                Team member information will be displayed here.
+              </p>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         GALLERY PREVIEW
+    =================================================== -->
+    <section class="section gallery-preview" aria-labelledby="gallery-preview-heading">
+
+      <div class="container">
+
+        <div class="section-head">
+
+          <div>
+
+            <span class="eyebrow">
+              Gallery
+            </span>
+
+            <h2 id="gallery-preview-heading">
+              A glimpse into PrimeIt.
+            </h2>
+
+          </div>
+
+          <a class="btn btn-secondary" href="gallery.html">
+            View Gallery
+          </a>
+
+        </div>
+
+        <div class="gallery-grid gallery-preview-grid" data-gallery-preview>
+
+          <article class="card gallery-card">
+
+            <div class="gallery-photo" role="img" aria-label="PrimeIt gallery placeholder">
+              <span aria-hidden="true">
+                Gallery
+              </span>
+            </div>
+
+          </article>
+
+
+          <article class="card gallery-card">
+
+            <div class="gallery-photo" role="img" aria-label="PrimeIt gallery placeholder">
+              <span aria-hidden="true">
+                Gallery
+              </span>
+            </div>
+
+          </article>
+
+
+          <article class="card gallery-card">
+
+            <div class="gallery-photo" role="img" aria-label="PrimeIt gallery placeholder">
+              <span aria-hidden="true">
+                Gallery
+              </span>
+            </div>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         FINAL CALL TO ACTION
+    =================================================== -->
+    <section class="cta" aria-labelledby="cta-heading">
+
+      <div class="container">
+
+        <div class="cta-box">
+
+          <div>
+
+            <span class="eyebrow">
+              Let's Connect
+            </span>
+
+            <h2 id="cta-heading">
+              Interested in learning more about PrimeIt?
+            </h2>
+
+            <p>
+              Learn more about PrimeIt, explore our capabilities, or connect
+              with us to start a conversation.
+            </p>
+
+          </div>
+
+
+          <div class="cta-actions">
+
+            <a class="btn btn-primary" href="contact.html">
+              Contact Us
+            </a>
+
+            <a class="btn btn-secondary" href="about.html">
+              About PrimeIt
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ==================================================
+       FOOTER
+  =================================================== -->
+  <footer class="public-footer">
+
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <!-- Brand -->
+        <div class="footer-brand">
+
+          <a class="logo" href="index.html" aria-label="PrimeIt Home">
+            <span class="logo-mark" aria-hidden="true">
+              <span>P</span>
+            </span>
+
+            <span>
+              PrimeIt
+            </span>
+          </a>
+
+          <p>
+            Technology, people, and professional digital development.
+          </p>
+
+        </div>
+
+
+        <!-- Company navigation -->
+        <div>
+
+          <h3>
+            Company
+          </h3>
+
+          <p>
+            <a href="index.html">
+              Home
+            </a>
+          </p>
+
+          <p>
+            <a href="about.html">
+              About
+            </a>
+          </p>
+
+          <p>
+            <a href="team.html">
+              Team
+            </a>
+          </p>
+
+          <p>
+            <a href="gallery.html">
+              Gallery
+            </a>
+          </p>
+
+          <p>
+            <a href="contact.html">
+              Contact
+            </a>
+          </p>
+
+        </div>
+
+
+        <!-- Office navigation -->
+        <div>
+
+          <h3>
+            Office
+          </h3>
+
+          <p>
+            <a href="../member/member-login.html">
+              Office Member Login
+            </a>
+          </p>
+
+          <p>
+            <a href="../admin/admin-login.html">
+              Admin Login
+            </a>
+          </p>
+
+        </div>
+
+
+        <!-- Social placeholders -->
+        <div>
+
+          <h3>
+            Connect
+          </h3>
+
+          <p>
+            Social links can be added here when PrimeIt's official
+            social profiles are finalized.
+          </p>
+
+          <div class="footer-social-links">
+            <span>
+              Social profiles coming soon.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer-bottom">
+
+        <span>
+          © 2026 PrimeIt. All rights reserved.
+        </span>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <script src="../js/home.js"></script>
+
+</body>
+
+</html>
