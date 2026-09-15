@@ -1,119 +1,235 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="PrimeIt UI/UX prototype">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Meet the PrimeIt team and learn how different roles contribute to technology, operations, and collaboration.">
   <title>PrimeIt — Team</title>
   <link rel="stylesheet" href="../css/team.css">
 </head>
-
 <body>
   <header class="public-header">
     <div class="container public-nav">
-      <a class="logo" href="index.html"><span class="logo-mark"><span>P</span></span><span>PrimeIt</span></a>
-      <nav class="public-links"><a class="nav-link " href="index.html">Home</a>
-        <a class="nav-link " href="about.html">About</a>
-        <a class="nav-link active" href="team.html">Team</a>
-        <a class="nav-link " href="gallery.html">Gallery</a>
-        <a class="nav-link " href="contact.html">Contact</a>
+      <a class="logo" href="index.html" aria-label="PrimeIt Home">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span>PrimeIt</span>
+      </a>
+
+      <button class="mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="public-navigation">
+        <span aria-hidden="true">☰</span>
+      </button>
+
+      <nav id="public-navigation" class="public-links" aria-label="Primary navigation">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link active" href="team.html" aria-current="page">Team</a>
+        <a class="nav-link" href="gallery.html">Gallery</a>
+        <a class="nav-link" href="contact.html">Contact</a>
       </nav>
-      <div class="top-actions"><a class="btn btn-secondary" href="../member/member-login.html">Member Login</a><a
-          class="btn btn-primary" href="../admin/admin-login.html">Admin</a></div>
+
+      <div class="top-actions">
+        <a class="btn btn-secondary" href="../member/member-login.html">Office Member Login</a>
+        <a class="btn btn-primary" href="../admin/admin-login.html">Admin Login</a>
+      </div>
     </div>
   </header>
+
   <main>
-    <section class="page-hero">
-      <div class="container reveal"><span class="eyebrow">Our Team</span>
-        <h1 style="font-size:54px;max-width:800px">People make the product.</h1>
-        <p class="lead">Meet the people bringing PrimeIt's ideas, systems, and experiences to life.</p>
+    <section class="page-hero" aria-labelledby="team-hero-title">
+      <div class="container hero-content">
+        <span class="eyebrow">Our Team</span>
+        <h1 id="team-hero-title">Meet the people behind PrimeIt.</h1>
+        <p class="lead">Explore the roles, responsibilities, and capabilities that support PrimeIt's technology-focused work.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#team-directory">Meet the Team</a>
+          <a class="btn btn-secondary" href="contact.html">Contact PrimeIt</a>
+        </div>
       </div>
     </section>
-    <section class="section">
-      <div class="container grid-3">
-        <div class="card team-card reveal">
-          <div class="avatar-photo">AS</div>
-          <div class="body">
-            <h3>Alex Smith</h3><span class="tag">CEO</span>
-            <p class="muted">Company strategy, leadership, partnerships, and growth.</p>
-            <p><a href="#" style="color:var(--blue);font-weight:750">LinkedIn ↗</a></p>
+
+    <section class="section" aria-labelledby="team-introduction-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Team Structure</span>
+            <h2 id="team-introduction-title">People, skills, and responsibilities working together.</h2>
           </div>
+          <p>Team information can be updated as real PrimeIt member profiles become available. This page intentionally avoids unverified employee details.</p>
         </div>
-        <div class="card team-card reveal">
-          <div class="avatar-photo">SK</div>
-          <div class="body">
-            <h3>Sarah Khan</h3><span class="tag">Developer</span>
-            <p class="muted">Backend architecture, APIs, and platform engineering.</p>
-            <p><a href="#" style="color:var(--blue);font-weight:750">LinkedIn ↗</a></p>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="team-directory" aria-labelledby="leadership-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Leadership &amp; Core Team</span>
+            <h2 id="leadership-title">A flexible structure ready for real team data.</h2>
           </div>
+          <p>Use the structured cards below to introduce confirmed PrimeIt team members without changing the page layout.</p>
         </div>
-        <div class="card team-card reveal">
-          <div class="avatar-photo">AR</div>
-          <div class="body">
-            <h3>Arif Rahman</h3><span class="tag">Designer</span>
-            <p class="muted">Product experience, visual identity, and design systems.</p>
-            <p><a href="#" style="color:var(--blue);font-weight:750">LinkedIn ↗</a></p>
+
+        <div class="team-grid">
+          <article class="team-card">
+            <div class="avatar-photo" aria-hidden="true">+</div>
+            <div class="team-body">
+              <span class="tag">Leadership</span>
+              <h3>Team Member</h3>
+              <p class="role">Position / Role</p>
+              <p class="muted">Professional introduction and responsibilities can be added here when verified team information is available.</p>
+              <div class="expertise" aria-label="Areas of expertise">
+                <span>Leadership</span>
+                <span>Strategy</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="team-card">
+            <div class="avatar-photo" aria-hidden="true">+</div>
+            <div class="team-body">
+              <span class="tag">Development</span>
+              <h3>Team Member</h3>
+              <p class="role">Position / Role</p>
+              <p class="muted">Professional introduction and responsibilities can be added here when verified team information is available.</p>
+              <div class="expertise" aria-label="Areas of expertise">
+                <span>Development</span>
+                <span>Technology</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="team-card">
+            <div class="avatar-photo" aria-hidden="true">+</div>
+            <div class="team-body">
+              <span class="tag">Operations</span>
+              <h3>Team Member</h3>
+              <p class="role">Position / Role</p>
+              <p class="muted">Professional introduction and responsibilities can be added here when verified team information is available.</p>
+              <div class="expertise" aria-label="Areas of expertise">
+                <span>Operations</span>
+                <span>Coordination</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="team-groups-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Team Groups</span>
+            <h2 id="team-groups-title">Organize the team by responsibility.</h2>
           </div>
+          <p>These groups are structural categories, not claims about current staffing. They can be expanded or removed as real team data is added.</p>
         </div>
-        <div class="card team-card reveal">
-          <div class="avatar-photo">MN</div>
-          <div class="body">
-            <h3>Mina Noor</h3><span class="tag">HR Manager</span>
-            <p class="muted">People operations, culture, and employee experience.</p>
-            <p><a href="#" style="color:var(--blue);font-weight:750">LinkedIn ↗</a></p>
+
+        <div class="grid-4">
+          <article class="card feature-card">
+            <div class="icon-box" aria-hidden="true">01</div>
+            <h3>Leadership</h3>
+            <p class="muted">Direction, priorities, decision-making, and long-term company development.</p>
+          </article>
+          <article class="card feature-card">
+            <div class="icon-box" aria-hidden="true">02</div>
+            <h3>Development</h3>
+            <p class="muted">Software, applications, APIs, databases, and technology implementation.</p>
+          </article>
+          <article class="card feature-card">
+            <div class="icon-box" aria-hidden="true">03</div>
+            <h3>Operations</h3>
+            <p class="muted">Organizational coordination, administration, and day-to-day operational support.</p>
+          </article>
+          <article class="card feature-card">
+            <div class="icon-box" aria-hidden="true">04</div>
+            <h3>People &amp; Support</h3>
+            <p class="muted">People-focused responsibilities, communication, collaboration, and workplace support.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" aria-labelledby="team-values-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">How We Work</span>
+            <h2 id="team-values-title">A professional approach to working together.</h2>
           </div>
+          <p>These principles describe a general working approach for the page and do not represent unverified internal claims.</p>
         </div>
-        <div class="card team-card reveal">
-          <div class="avatar-photo">TA</div>
-          <div class="body">
-            <h3>Tanvir Ahmed</h3><span class="tag">Developer</span>
-            <p class="muted">Frontend engineering and application interfaces.</p>
-            <p><a href="#" style="color:var(--blue);font-weight:750">LinkedIn ↗</a></p>
+
+        <div class="grid-4">
+          <article class="card feature-card"><div class="icon-box" aria-hidden="true">01</div><h3>Collaboration</h3><p class="muted">Share ideas clearly, communicate responsibilities, and work toward common outcomes.</p></article>
+          <article class="card feature-card"><div class="icon-box" aria-hidden="true">02</div><h3>Innovation</h3><p class="muted">Explore practical improvements and use technology thoughtfully to solve problems.</p></article>
+          <article class="card feature-card"><div class="icon-box" aria-hidden="true">03</div><h3>Professionalism</h3><p class="muted">Approach responsibilities with clarity, accountability, respect, and attention to quality.</p></article>
+          <article class="card feature-card"><div class="icon-box" aria-hidden="true">04</div><h3>Continuous Learning</h3><p class="muted">Keep improving skills, processes, and solutions as requirements and technology evolve.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="team-cta-title">
+      <div class="container">
+        <div class="cta-box">
+          <div>
+            <span class="eyebrow">Let's Connect</span>
+            <h2 id="team-cta-title">Have a project or technology challenge?</h2>
+            <p>Tell PrimeIt what you are trying to build, improve, or solve and start a conversation.</p>
           </div>
-        </div>
-        <div class="card team-card reveal">
-          <div class="avatar-photo">RS</div>
-          <div class="body">
-            <h3>Rafi Sultana</h3><span class="tag">Project Manager</span>
-            <p class="muted">Delivery planning, communication, and team coordination.</p>
-            <p><a href="#" style="color:var(--blue);font-weight:750">LinkedIn ↗</a></p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="contact.html">Contact Us</a>
+            <a class="btn btn-secondary" href="about.html">About PrimeIt</a>
           </div>
         </div>
       </div>
     </section>
   </main>
+
   <footer class="public-footer">
     <div class="container">
       <div class="footer-grid">
-        <div>
-          <div class="logo"><span class="logo-mark"><span>P</span></span><span>PrimeIt</span></div>
-          <p>Professional technology, thoughtful products, and a people-first workplace.</p>
+        <div class="footer-brand">
+          <a class="logo" href="index.html" aria-label="PrimeIt Home">
+            <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+            <span>PrimeIt</span>
+          </a>
+          <p>Practical technology, thoughtful solutions, and dependable digital experiences.</p>
         </div>
+
         <div>
-          <h3>Company</h3>
-          <p><a href="about.html">About</a></p>
-          <p><a href="team.html">Team</a></p>
-          <p><a href="gallery.html">Gallery</a></p>
+          <h3>Quick Links</h3>
+          <nav class="footer-links" aria-label="Footer navigation">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="team.html">Team</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="contact.html">Contact</a>
+          </nav>
         </div>
+
         <div>
-          <h3>Office</h3>
-          <p>Working Hours</p>
-          <p>Mon–Fri · 9:00–18:00</p>
-          <p>Dhaka, Bangladesh</p>
+          <h3>Office Access</h3>
+          <nav class="footer-links" aria-label="Office access">
+            <a href="../member/member-login.html">Office Member Login</a>
+            <a href="../admin/admin-login.html">Admin Login</a>
+          </nav>
         </div>
+
         <div>
           <h3>Contact</h3>
-          <p>hello@primeit.example</p>
-          <p>+880 1XXX-XXXXXX</p>
-          <p><a href="contact.html">Send a message →</a></p>
+          <p>PrimeIt contact information can be added here when official details are available.</p>
+          <a href="contact.html">Send a message →</a>
         </div>
       </div>
-      <div class="footer-bottom">© 2026 PrimeIt. UI/UX prototype only — backend and production functionality will be
-        added later.</div>
+
+      <div class="footer-bottom">
+        <p>© 2026 PrimeIt. All rights reserved.</p>
+        <p>Built with purpose.</p>
+      </div>
     </div>
   </footer>
+
   <script src="../js/team.js"></script>
 </body>
-
 </html>
