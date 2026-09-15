@@ -1,17 +1,26 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.querySelector('.mobile-toggle');
+  const navigation = document.querySelector('#public-navigation');
 
-document.querySelectorAll('[data-toast]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const text=btn.dataset.toast||'Action completed';
-    let t=document.querySelector('.toast');
-    if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}
-    t.textContent=text;t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2200);
+  if (!toggle || !navigation) return;
+
+  const closeMenu = () => {
+    navigation.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open navigation menu');
+  };
+
+  toggle.addEventListener('click', () => {
+    const isOpen = navigation.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
   });
-});
-document.querySelectorAll('form[data-demo]').forEach(form=>{
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const btn=form.querySelector('button[type="submit"]');
-    if(btn){const old=btn.textContent;btn.textContent='Saved ✓';setTimeout(()=>btn.textContent=old,1300);}
+
+  navigation.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1000) closeMenu();
   });
 });
