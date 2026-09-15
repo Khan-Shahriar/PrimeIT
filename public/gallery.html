@@ -1,17 +1,215 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PrimeIt UI/UX prototype"><title>PrimeIt — Gallery</title><link rel="stylesheet" href="../css/gallery.css"></head><body><header class="public-header"><div class="container public-nav">
-      <a class="logo" href="index.html"><span class="logo-mark"><span>P</span></span><span>PrimeIt</span></a>
-      <nav class="public-links"><a class="nav-link " href="index.html">Home</a>
-<a class="nav-link " href="about.html">About</a>
-<a class="nav-link " href="team.html">Team</a>
-<a class="nav-link active" href="gallery.html">Gallery</a>
-<a class="nav-link " href="contact.html">Contact</a></nav>
-      <div class="top-actions"><a class="btn btn-secondary" href="../member/member-login.html">Member Login</a><a class="btn btn-primary" href="../admin/admin-login.html">Admin</a></div>
-    </div></header><main><section class="page-hero"><div class="container reveal"><span class="eyebrow">PrimeIt Gallery</span><h1 style="font-size:54px;max-width:800px">A look inside PrimeIt.</h1><p class="lead">Company moments, office life, team activities, and events.</p></div></section><section class="section"><div class="container"><div class="toolbar"><button class="btn btn-secondary" data-toast="Showing all images">All</button><button class="btn btn-secondary" data-toast="Category: Team">Team</button><button class="btn btn-secondary" data-toast="Category: Office">Office</button><button class="btn btn-secondary" data-toast="Category: Events">Events</button></div><div class="grid-3"><div class="card gallery-card reveal"><div class="gallery-photo">01</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Team Workshop</h3><span class="tag">Team</span></div><p class="muted">Collaborative planning session.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">02</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>PrimeIt Office</h3><span class="tag">Office</span></div><p class="muted">A glimpse of our workspace.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">03</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Annual Meetup</h3><span class="tag">Event</span></div><p class="muted">People, ideas, and celebration.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">04</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Project Day</h3><span class="tag">Projects</span></div><p class="muted">Building together with focus.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">05</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Community Event</h3><span class="tag">Event</span></div><p class="muted">Connecting beyond the office.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">06</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Team Celebration</h3><span class="tag">Team</span></div><p class="muted">Celebrating shared wins.</p></div></div></div></div></section></main><footer class="public-footer"><div class="container">
-      <div class="footer-grid">
-        <div><div class="logo"><span class="logo-mark"><span>P</span></span><span>PrimeIt</span></div><p>Professional technology, thoughtful products, and a people-first workplace.</p></div>
-        <div><h3>Company</h3><p><a href="about.html">About</a></p><p><a href="team.html">Team</a></p><p><a href="gallery.html">Gallery</a></p></div>
-        <div><h3>Office</h3><p>Working Hours</p><p>Mon–Fri · 9:00–18:00</p><p>Dhaka, Bangladesh</p></div>
-        <div><h3>Contact</h3><p>hello@primeit.example</p><p>+880 1XXX-XXXXXX</p><p><a href="contact.html">Send a message →</a></p></div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore PrimeIt through workplace, team, event, and technology-focused gallery highlights.">
+  <title>PrimeIt — Gallery</title>
+  <link rel="stylesheet" href="../css/gallery.css">
+</head>
+<body>
+  <header class="public-header">
+    <div class="container public-nav">
+      <a class="logo" href="index.html" aria-label="PrimeIt Home">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span>PrimeIt</span>
+      </a>
+
+      <nav id="public-navigation" class="public-links" aria-label="Primary navigation">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="team.html">Team</a>
+        <a class="nav-link active" href="gallery.html" aria-current="page">Gallery</a>
+        <a class="nav-link" href="contact.html">Contact</a>
+      </nav>
+
+      <div class="top-actions">
+        <a class="btn btn-secondary" href="../member/member-login.html">Office Member Login</a>
+        <a class="btn btn-primary" href="../admin/admin-login.html">Admin Login</a>
       </div>
-      <div class="footer-bottom">© 2026 PrimeIt. UI/UX prototype only — backend and production functionality will be added later.</div>
-    </div></footer><script src="../js/gallery.js"></script></body></html>
+
+      <button class="mobile-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="public-navigation">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero" aria-labelledby="gallery-hero-title">
+      <div class="container hero-content">
+        <span class="eyebrow">PrimeIt Gallery</span>
+        <h1 id="gallery-hero-title">Explore the PrimeIt experience.</h1>
+        <p class="lead">A curated visual space for workplace, team, event, and technology-focused moments. Real company imagery can be connected here as the gallery grows.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#gallery-grid">Explore Gallery</a>
+          <a class="btn btn-secondary" href="team.html">Meet Our Team</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="gallery-introduction-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Visual Highlights</span>
+            <h2 id="gallery-introduction-title">A closer look at the spaces and moments around our work.</h2>
+          </div>
+          <p>Browse the current visual placeholders by category. The page is structured so verified PrimeIt images can be connected later without changing the public gallery experience.</p>
+        </div>
+
+        <div class="gallery-toolbar" aria-label="Gallery filters">
+          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-button" type="button" data-filter="team" aria-pressed="false">Team</button>
+          <button class="filter-button" type="button" data-filter="office" aria-pressed="false">Office</button>
+          <button class="filter-button" type="button" data-filter="events" aria-pressed="false">Events</button>
+          <button class="filter-button" type="button" data-filter="workspace" aria-pressed="false">Workspace</button>
+          <button class="filter-button" type="button" data-filter="technology" aria-pressed="false">Technology</button>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid" aria-live="polite">
+          <article class="gallery-item" data-category="team" data-index="0">
+            <button class="gallery-trigger" type="button" aria-label="Open Team collaboration visual">
+              <span class="gallery-image-wrap">
+                <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=85" alt="People collaborating around a table in a professional workspace" loading="lazy" decoding="async">
+                <span class="gallery-overlay" aria-hidden="true"><span>View image</span></span>
+              </span>
+              <span class="gallery-copy"><span class="gallery-meta"><span class="tag">Team</span></span><strong>Team Collaboration</strong><span>Working together around shared ideas and goals.</span></span>
+            </button>
+          </article>
+
+          <article class="gallery-item" data-category="office" data-index="1">
+            <button class="gallery-trigger" type="button" aria-label="Open Professional workspace visual">
+              <span class="gallery-image-wrap">
+                <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=85" alt="Modern open professional office workspace" loading="lazy" decoding="async">
+                <span class="gallery-overlay" aria-hidden="true"><span>View image</span></span>
+              </span>
+              <span class="gallery-copy"><span class="gallery-meta"><span class="tag">Office</span></span><strong>Professional Workspace</strong><span>A clean environment designed for focused work.</span></span>
+            </button>
+          </article>
+
+          <article class="gallery-item" data-category="events" data-index="2">
+            <button class="gallery-trigger" type="button" aria-label="Open Company event visual">
+              <span class="gallery-image-wrap">
+                <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1200&q=85" alt="Audience attending a professional company event" loading="lazy" decoding="async">
+                <span class="gallery-overlay" aria-hidden="true"><span>View image</span></span>
+              </span>
+              <span class="gallery-copy"><span class="gallery-meta"><span class="tag">Events</span></span><strong>Company Event</strong><span>A visual placeholder for future verified event photography.</span></span>
+            </button>
+          </article>
+
+          <article class="gallery-item" data-category="workspace" data-index="3">
+            <button class="gallery-trigger" type="button" aria-label="Open Focused workspace visual">
+              <span class="gallery-image-wrap">
+                <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=85" alt="Bright modern workspace with desks and natural light" loading="lazy" decoding="async">
+                <span class="gallery-overlay" aria-hidden="true"><span>View image</span></span>
+              </span>
+              <span class="gallery-copy"><span class="gallery-meta"><span class="tag">Workspace</span></span><strong>Focused Work</strong><span>A flexible visual placeholder for workplace photography.</span></span>
+            </button>
+          </article>
+
+          <article class="gallery-item" data-category="technology" data-index="4">
+            <button class="gallery-trigger" type="button" aria-label="Open Technology workspace visual">
+              <span class="gallery-image-wrap">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=85" alt="Computer workstation used for software development" loading="lazy" decoding="async">
+                <span class="gallery-overlay" aria-hidden="true"><span>View image</span></span>
+              </span>
+              <span class="gallery-copy"><span class="gallery-meta"><span class="tag">Technology</span></span><strong>Technology at Work</strong><span>A development-focused visual for the public gallery.</span></span>
+            </button>
+          </article>
+
+          <article class="gallery-item" data-category="team" data-index="5">
+            <button class="gallery-trigger" type="button" aria-label="Open Team discussion visual">
+              <span class="gallery-image-wrap">
+                <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=85" alt="Team members having a discussion in a meeting" loading="lazy" decoding="async">
+                <span class="gallery-overlay" aria-hidden="true"><span>View image</span></span>
+              </span>
+              <span class="gallery-copy"><span class="gallery-meta"><span class="tag">Team</span></span><strong>Team Discussion</strong><span>Sharing perspectives and shaping practical ideas.</span></span>
+            </button>
+          </article>
+        </div>
+
+        <p class="empty-state" id="gallery-empty" hidden>No images are available in this category yet.</p>
+      </div>
+    </section>
+
+    <section class="section gallery-cta-section" aria-labelledby="gallery-cta-title">
+      <div class="container">
+        <div class="cta-box">
+          <div>
+            <span class="eyebrow">Let's Connect</span>
+            <h2 id="gallery-cta-title">Want to know more about PrimeIt?</h2>
+            <p>Explore the people behind the work or start a conversation about your next technology challenge.</p>
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="team.html">Meet Our Team</a>
+            <a class="btn btn-secondary" href="contact.html">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="public-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="logo" href="index.html" aria-label="PrimeIt Home">
+            <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+            <span>PrimeIt</span>
+          </a>
+          <p>Practical technology, thoughtful solutions, and dependable digital experiences.</p>
+        </div>
+
+        <div>
+          <h3>Quick Links</h3>
+          <nav class="footer-links" aria-label="Footer navigation">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="team.html">Team</a>
+            <a href="gallery.html" aria-current="page">Gallery</a>
+            <a href="contact.html">Contact</a>
+          </nav>
+        </div>
+
+        <div>
+          <h3>Office Access</h3>
+          <nav class="footer-links" aria-label="Office access">
+            <a href="../member/member-login.html">Office Member Login</a>
+            <a href="../admin/admin-login.html">Admin Login</a>
+          </nav>
+        </div>
+
+        <div>
+          <h3>Contact</h3>
+          <p>PrimeIt contact information can be added here when official details are available.</p>
+          <a href="contact.html">Send a message →</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 PrimeIt. All rights reserved.</p>
+        <p>Built with purpose.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="gallery-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <div class="lightbox-dialog">
+      <button class="lightbox-close" type="button" aria-label="Close image viewer" data-lightbox-close>×</button>
+      <button class="lightbox-control lightbox-prev" type="button" aria-label="Previous image">‹</button>
+      <figure class="lightbox-figure">
+        <img id="lightbox-image" src="" alt="">
+        <figcaption>
+          <span class="tag" id="lightbox-category"></span>
+          <strong id="lightbox-title"></strong>
+          <span id="lightbox-description"></span>
+        </figcaption>
+      </figure>
+      <button class="lightbox-control lightbox-next" type="button" aria-label="Next image">›</button>
+    </div>
+  </div>
+
+  <script src="../js/gallery.js"></script>
+</body>
+</html>
