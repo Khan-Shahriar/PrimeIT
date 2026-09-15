@@ -284,6 +284,36 @@ h3 {
   margin: 0
 }
 
+/* ==========================================
+   Introduction
+========================================== */
+
+.introduction {
+  background: var(--bg);
+}
+
+.introduction-content {
+  max-width: 820px;
+}
+
+.introduction-text {
+  max-width: 760px;
+}
+
+.introduction-text p {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.introduction-text p:last-of-type {
+  margin-bottom: 26px;
+}
+
+.introduction-text .btn {
+  margin-top: 2px;
+}
+
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -939,7 +969,8 @@ tr:last-child td {
 }
 
 .float {
-  animation: float 5s ease-in-out infinite
+  animation: float 4s linear infinite;
+  will-change: transform;
 }
 
 @keyframes rise {
@@ -956,14 +987,42 @@ tr:last-child td {
 
 @keyframes float {
 
-  0%,
-  100% {
-    transform: translateY(0)
+  0% {
+    transform: translate(0, 0);
+  }
+
+  12.5% {
+    transform: translate(3px, -4px);
+  }
+
+  25% {
+    transform: translate(8px, -8px);
+  }
+
+  37.5% {
+    transform: translate(4px, -12px);
   }
 
   50% {
-    transform: translateY(-10px)
+    transform: translate(0, -14px);
   }
+
+  62.5% {
+    transform: translate(-4px, -12px);
+  }
+
+  75% {
+    transform: translate(-8px, -8px);
+  }
+
+  87.5% {
+    transform: translate(-3px, -4px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+
 }
 
 @media(max-width:1000px) {
@@ -1120,6 +1179,287 @@ tr:last-child td {
 .toast.show {
   opacity: 1;
   transform: none
+}
+
+/* ==========================================
+   Why PrimeIt
+========================================== */
+
+.why-primeit {
+  background: #fff;
+}
+
+.why-primeit .feature-card {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.why-primeit .feature-card h3 {
+  font-size: 20px;
+}
+
+.why-primeit .feature-card p {
+  margin: 0;
+}
+
+.why-primeit .icon-box {
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   Technology & Capability
+========================================== */
+
+.technology {
+  background: var(--bg);
+}
+
+.technology .capability-card {
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.technology .capability-card h3 {
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+
+.technology .capability-card p {
+  margin: 0;
+}
+
+.workflow {
+  margin-top: 70px;
+}
+
+.workflow>.section-head {
+  margin-bottom: 24px;
+}
+
+.workflow>.section-head h3 {
+  font-size: clamp(24px, 3vw, 32px);
+  margin: 12px 0 0;
+}
+
+.workflow-card {
+  position: relative;
+  min-height: 220px;
+  overflow: hidden;
+}
+
+.workflow-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: var(--soft);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.workflow-card h4 {
+  margin: 0 0 10px;
+  font-size: 19px;
+}
+
+.workflow-card p {
+  margin: 0;
+}
+
+/* ==========================================
+   Company Statistics
+========================================== */
+
+.statistics {
+  background: #fff;
+}
+
+.statistics .stat {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: .3s ease;
+}
+
+.statistics .stat:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.statistics .stat strong {
+  margin-bottom: 6px;
+}
+
+.statistics .stat span {
+  font-weight: 650;
+}
+
+/* ==========================================
+   Team Preview
+========================================== */
+
+.team-preview {
+  background: var(--bg);
+}
+
+.team-preview-grid {
+  align-items: stretch;
+}
+
+.team-preview .team-card {
+  height: 100%;
+  transition: .3s ease;
+}
+
+.team-preview .team-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+}
+
+.team-preview .avatar-photo {
+  height: 230px;
+  background: linear-gradient(135deg, #DCE6FF, #EEE5FF);
+}
+
+.team-preview .team-card .body {
+  min-height: 175px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.team-preview .team-card .tag {
+  margin-bottom: 12px;
+}
+
+.team-preview .team-card p {
+  margin: 0;
+}
+
+/* ==========================================
+   Gallery Preview
+========================================== */
+
+.gallery-preview {
+  background: #fff;
+}
+
+.gallery-preview-grid {
+  align-items: stretch;
+}
+
+.gallery-preview .gallery-card {
+  height: 100%;
+  transition: .3s ease;
+}
+
+.gallery-preview .gallery-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+
+.gallery-preview .gallery-photo {
+  height: 240px;
+  background: linear-gradient(135deg, #DCE6FF, #EEE5FF);
+  transition: .3s ease;
+}
+
+.gallery-preview .gallery-card:hover .gallery-photo {
+  transform: scale(1.02);
+}
+
+/* ==========================================
+   CTA
+========================================== */
+
+.cta {
+  background: var(--bg);
+}
+
+.cta-box {
+  min-height: 250px;
+}
+
+.cta-box .eyebrow {
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+}
+
+.cta-box h2 {
+  max-width: 650px;
+}
+
+.cta-box p {
+  margin-bottom: 0;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.cta-actions .btn-secondary {
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(255, 255, 255, .2);
+  color: #fff;
+}
+
+.cta-actions .btn-secondary:hover {
+  background: rgba(255, 255, 255, .14);
+  border-color: rgba(255, 255, 255, .3);
+}
+
+/* ==========================================
+   Footer
+========================================== */
+
+.public-footer {
+  margin-top: 0;
+}
+
+.public-footer .footer-brand p {
+  max-width: 300px;
+}
+
+.public-footer h3 {
+  margin-bottom: 16px;
+}
+
+.public-footer p {
+  margin-bottom: 10px;
+}
+
+.public-footer a {
+  transition: .25s ease;
+}
+
+.public-footer a:hover {
+  transform: translateX(3px);
+}
+
+.footer-social-links {
+  margin-top: 14px;
+}
+
+.footer-social-links span {
+  display: inline-block;
+  color: rgba(255, 255, 255, .55);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.footer-bottom {
+  margin-top: 42px;
 }
 
 /* ==========================================
