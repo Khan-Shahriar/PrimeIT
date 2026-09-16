@@ -1,0 +1,89 @@
+/* PrimeIt Member Login page-specific layout fixes */
+
+.auth-card > .logo {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.auth-card > header {
+  text-align: center;
+}
+
+.auth-card > header h1 {
+  text-align: center;
+}
+
+.auth-card > header .sub {
+  text-align: center;
+}
+
+.auth-card .login-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 2px;
+  margin-bottom: 22px;
+}
+
+.auth-card .remember-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.auth-card .remember-option input[type="checkbox"] {
+  appearance: auto;
+  -webkit-appearance: auto;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  margin: 0;
+  padding: 0;
+  border: initial;
+  border-radius: 0;
+  background: initial;
+  box-shadow: none;
+  accent-color: var(--blue);
+  cursor: pointer;
+  flex: 0 0 16px;
+}
+
+.auth-card .remember-option span,
+.auth-card .login-options > a {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.auth-card .login-options > a {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.auth-card #member-login-submit {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+@media (max-width: 420px) {
+  .auth-card .login-options {
+    gap: 10px;
+  }
+
+  .auth-card .remember-option,
+  .auth-card .login-options > a {
+    font-size: 12px;
+  }
+}
