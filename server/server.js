@@ -7,32 +7,23 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
 const { testDatabaseConnection } = require("./db");
+const { assertAuthenticationConfiguration } = require("./utils/authConfig");
 
 const app = express();
 const PORT = Number(process.env.PORT || 8080);
 
-/* =========================================================
-   PRODUCTION CONFIGURATION VALIDATION
-========================================================= */
-
-if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
-    console.error("❌ JWT_SECRET must be configured with at least 32 characters.");
+try {
+    assertAuthenticationConfiguration();
+} catch (error) {
+    console.error(`❌ ${error.message}`);
     process.exit(1);
 }
-
-/* =========================================================
-   SECURITY
-========================================================= */
 
 app.use(
     helmet({
         crossOriginResourcePolicy: false
     })
 );
-
-/* =========================================================
-   CORS
-========================================================= */
 
 const configuredOrigin = process.env.CLIENT_ORIGIN?.trim();
 
@@ -43,22 +34,9 @@ app.use(
     })
 );
 
-/* =========================================================
-   BODY PARSING
-========================================================= */
-
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true, limit: "5mb" }));
-
-/* =========================================================
-   COOKIES
-========================================================= */
-
 app.use(cookieParser());
-
-/* =========================================================
-   RATE LIMITING
-========================================================= */
 
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -71,10 +49,6 @@ const authLimiter = rateLimit({
     }
 });
 
-/* =========================================================
-   STATIC FILES
-========================================================= */
-
 app.use("/uploads", express.static("uploads"));
 app.use("/assets", express.static("assets"));
 app.use("/css", express.static("css"));
@@ -82,10 +56,6 @@ app.use("/js", express.static("js"));
 app.use("/public", express.static("public"));
 app.use("/member", express.static("member"));
 app.use("/admin", express.static("admin"));
-
-/* =========================================================
-   HEALTH CHECK
-========================================================= */
 
 app.get("/api/health", async (req, res) => {
     res.json({
@@ -95,17 +65,9 @@ app.get("/api/health", async (req, res) => {
     });
 });
 
-/* =========================================================
-   API ROUTES
-========================================================= */
-
 app.use("/api/auth", authLimiter, require("./routes/auth"));
 app.use("/api/members", require("./routes/members"));
 app.use("/api/roles", require("./routes/roles"));
-
-/* =========================================================
-   404 API HANDLER
-========================================================= */
 
 app.use("/api", (req, res) => {
     res.status(404).json({
@@ -114,10 +76,6 @@ app.use("/api", (req, res) => {
     });
 });
 
-/* =========================================================
-   GLOBAL ERROR HANDLER
-========================================================= */
-
 app.use((err, req, res, next) => {
     console.error("❌ Server error:", err);
     res.status(500).json({
@@ -125,10 +83,6 @@ app.use((err, req, res, next) => {
         message: "Internal server error"
     });
 });
-
-/* =========================================================
-   START SERVER
-========================================================= */
 
 async function startServer() {
     try {
