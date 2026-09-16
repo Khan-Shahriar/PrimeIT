@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const token = new URLSearchParams(window.location.search).get("token")?.trim() || "";
     const tokenIsValid = /^[a-fA-F0-9]{64}$/.test(token);
+    let resetCompleted = false;
 
     if (!tokenIsValid) {
         showMessage("This password reset link is invalid or expired. Please request a new reset link.", true);
@@ -65,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-Type": "application/json",
                     "Accept": "application/json"
                 },
-                credentials: "include",
                 body: JSON.stringify({
                     token,
                     new_password: password
@@ -92,20 +92,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            resetCompleted = true;
             showMessage("Your password has been reset successfully. You can now sign in with your new password.");
             passwordInput.disabled = true;
             confirmInput.disabled = true;
             submitButton.disabled = true;
+            submitButton.setAttribute("aria-busy", "false");
+            submitButton.textContent = "Password Reset Complete";
 
             window.history.replaceState({}, document.title, "reset-password.html");
         } catch {
             showMessage("Unable to connect to the server. Please try again.", true);
         } finally {
-            if (!form.querySelector("input:disabled")) {
+            if (!resetCompleted) {
                 setLoading(false);
-            } else {
-                submitButton.setAttribute("aria-busy", "false");
-                submitButton.textContent = "Password Reset Complete";
             }
         }
     });
