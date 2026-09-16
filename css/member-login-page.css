@@ -1,9 +1,8 @@
-/* PrimeIt Member Login page-specific layout fixes */
+/* PrimeIt Member Login page-specific layout and UX */
 
 .auth-card > .logo {
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 30px;
 }
 
 .auth-card > header {
@@ -18,13 +17,41 @@
   text-align: center;
 }
 
+.auth-card .login-message {
+  min-height: 0;
+  margin: 0 0 16px;
+  padding: 0;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.auth-card .login-message[hidden] {
+  display: none;
+}
+
+.auth-card .login-message.is-error,
+.auth-card .login-message.is-success {
+  padding: 10px 12px;
+}
+
+.auth-card .login-message.is-error {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.auth-card .login-message.is-success {
+  color: #166534;
+  background: #dcfce7;
+}
+
 .auth-card .login-options {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 2px;
-  margin-bottom: 22px;
+  margin-top: 3px;
+  margin-bottom: 28px;
 }
 
 .auth-card .remember-option {
@@ -58,10 +85,22 @@
   flex: 0 0 16px;
 }
 
+.auth-card .remember-option input[type="checkbox"]:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, .25);
+  outline-offset: 2px;
+}
+
 .auth-card .remember-option span,
 .auth-card .login-options > a {
   font-size: 13px;
   line-height: 1.4;
+}
+
+.auth-card .remember-option span {
+  display: inline-block;
+  width: auto;
+  margin: 0;
+  padding: 0;
 }
 
 .auth-card .login-options > a {
@@ -69,21 +108,58 @@
   white-space: nowrap;
 }
 
+.auth-card .login-options > a:focus-visible,
+.auth-card .auth-foot a:focus-visible,
+.auth-card > .logo:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, .22);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .auth-card #member-login-submit {
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
+  min-height: 46px;
   margin: 0 auto;
 }
 
-@media (max-width: 420px) {
+.auth-card #member-login-submit:disabled {
+  cursor: wait;
+  opacity: .72;
+  transform: none;
+}
+
+@media (max-width: 520px) {
+  .auth {
+    padding: 16px;
+  }
+
+  .auth-card {
+    padding: 28px 22px;
+    border-radius: 20px;
+  }
+
   .auth-card .login-options {
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+}
+
+@media (max-width: 380px) {
+  .auth-card .login-options {
+    align-items: flex-start;
   }
 
   .auth-card .remember-option,
   .auth-card .login-options > a {
     font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-card.reveal {
+    animation: none;
   }
 }
