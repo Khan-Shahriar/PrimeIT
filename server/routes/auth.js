@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const { pool } = require("../db");
 const { requireAuth } = require("../middleware/auth");
@@ -17,12 +18,23 @@ const {
 
 const router = express.Router();
 
+const PASSWORD_RESET_EXPIRY_MINUTES = 15;
+const PASSWORD_RESET_RESPONSE = "If an account exists for that email, password reset instructions have been sent.";
+
 function getJwtExpiresIn(rememberMe) {
     return rememberMe ? "30d" : "1d";
 }
 
 function isJwtSecretConfigured() {
     return typeof process.env.JWT_SECRET === "string" && process.env.JWT_SECRET.length >= 32;
+}
+
+function normalizeEmail(email) {
+    return typeof email === "string" ? email.trim().toLowerCase() : "";
+}
+
+function hashResetToken(token) {
+    return crypto.createHash("sha256").update(token).digest("hex");
 }
 
 router.post("/signup", async (req, res) => {
@@ -138,6 +150,56 @@ router.post("/login", async (req, res) => {
     } catch (error) {
         console.error("Login error:", error);
         return res.status(500).json({ success: false, message: "Unable to login" });
+    }
+});
+
+router.post("/forgot-password", async (req, res) => {
+    const genericResponse = () => res.status(200).json({
+        success: true,
+        message: PASSWORD_RESET_RESPONSE
+    });
+
+    try {
+        const email = normalizeEmail(req.body?.email);
+
+        if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return genericResponse();
+        }
+
+        const [users] = await pool.query(
+            "SELECT id, status FROM users WHERE email = ? LIMIT 1",
+            [email]
+        );
+
+        if (users.length === 0 || users[0].status !== "active") {
+            return genericResponse();
+        }
+
+        const user = users[0];
+        const rawToken = crypto.randomBytes(32).toString("hex");
+        const tokenHash = hashResetToken(rawToken);
+        const expiresAt = new Date(Date.now() + PASSWORD_RESET_EXPIRY_MINUTES * 60 * 1000);
+
+        await pool.query(
+            "UPDATE password_reset_tokens SET used_at = NOW() WHERE user_id = ? AND used_at IS NULL",
+            [user.id]
+        );
+
+        await pool.query(
+            `INSERT INTO password_reset_tokens
+                (user_id, token_hash, expires_at)
+             VALUES (?, ?, ?)`,
+            [user.id, tokenHash, expiresAt]
+        );
+
+        // Email delivery is intentionally added in the email-integration part of Step 3.
+        // The raw reset token is never stored in the database or returned by this API.
+        void rawToken;
+
+        return genericResponse();
+    } catch (error) {
+        console.error("Forgot password error:", error);
+        return genericResponse();
     }
 });
 
