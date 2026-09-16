@@ -8,6 +8,7 @@ const { requireAuth } = require("../middleware/auth");
 const profileUpload = require("../middleware/profileUpload");
 const { COOKIE_NAME, getAuthCookieOptions } = require("../utils/authCookie");
 const { validateSignup, validateLogin } = require("../utils/validation");
+const { sendPasswordResetEmail } = require("../utils/email");
 
 const router = express.Router();
 
@@ -75,22 +76,46 @@ router.post("/login", async (req, res) => {
 
 router.post("/forgot-password", async (req, res) => {
     const genericResponse = () => res.status(200).json({ success: true, message: PASSWORD_RESET_RESPONSE });
+    let userId = null;
+    let tokenHash = null;
+
     try {
         const email = normalizeEmail(req.body?.email);
         if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return genericResponse();
-        const [users] = await pool.query("SELECT id, status FROM users WHERE email = ? LIMIT 1", [email]);
+
+        const [users] = await pool.query("SELECT id, full_name, email, status FROM users WHERE email = ? LIMIT 1", [email]);
         if (users.length === 0 || users[0].status !== "active") return genericResponse();
+
         const user = users[0];
+        userId = user.id;
         const rawToken = crypto.randomBytes(32).toString("hex");
-        const tokenHash = hashResetToken(rawToken);
+        tokenHash = hashResetToken(rawToken);
         const expiresAt = new Date(Date.now() + PASSWORD_RESET_EXPIRY_MINUTES * 60 * 1000);
+
         await pool.query("UPDATE password_reset_tokens SET used_at = NOW() WHERE user_id = ? AND used_at IS NULL", [user.id]);
         await pool.query(`INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)`, [user.id, tokenHash, expiresAt]);
-        // Email delivery is intentionally added in the email-integration part of Step 3.
-        // The raw reset token is never stored in the database or returned by this API.
-        void rawToken;
+
+        try {
+            await sendPasswordResetEmail({
+                to: user.email,
+                fullName: user.full_name,
+                token: rawToken
+            });
+        } catch (emailError) {
+            await pool.query("UPDATE password_reset_tokens SET used_at = NOW() WHERE token_hash = ? AND used_at IS NULL", [tokenHash]);
+            console.error("Password reset email delivery error:", emailError);
+            return genericResponse();
+        }
+
         return genericResponse();
     } catch (error) {
+        if (userId && tokenHash) {
+            try {
+                await pool.query("UPDATE password_reset_tokens SET used_at = NOW() WHERE token_hash = ? AND used_at IS NULL", [tokenHash]);
+            } catch (cleanupError) {
+                console.error("Password reset token cleanup error:", cleanupError);
+            }
+        }
         console.error("Forgot password error:", error);
         return genericResponse();
     }
