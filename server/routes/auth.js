@@ -20,6 +20,7 @@ const router = express.Router();
 
 const PASSWORD_RESET_EXPIRY_MINUTES = 15;
 const PASSWORD_RESET_RESPONSE = "If an account exists for that email, password reset instructions have been sent.";
+const PASSWORD_RESET_ERROR = "This password reset link is invalid or has expired. Please request a new one.";
 
 function getJwtExpiresIn(rememberMe) {
     return rememberMe ? "30d" : "1d";
@@ -203,6 +204,90 @@ router.post("/forgot-password", async (req, res) => {
     }
 });
 
+router.post("/reset-password", async (req, res) => {
+    const invalidResponse = () => res.status(400).json({
+        success: false,
+        message: PASSWORD_RESET_ERROR
+    });
+
+    try {
+        const token = typeof req.body?.token === "string" ? req.body.token.trim() : "";
+        const newPassword = typeof req.body?.new_password === "string" ? req.body.new_password : "";
+
+        if (!token || token.length !== 64 || !/^[a-f0-9]{64}$/i.test(token)) {
+            return invalidResponse();
+        }
+
+        if (newPassword.length < 8 || newPassword.length > 128) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be between 8 and 128 characters."
+            });
+        }
+
+        const tokenHash = hashResetToken(token);
+        const connection = await pool.getConnection();
+
+        try {
+            await connection.beginTransaction();
+
+            const [tokens] = await connection.query(
+                `SELECT id, user_id
+                 FROM password_reset_tokens
+                 WHERE token_hash = ?
+                   AND used_at IS NULL
+                   AND expires_at > NOW()
+                 LIMIT 1
+                 FOR UPDATE`,
+                [tokenHash]
+            );
+
+            if (tokens.length === 0) {
+                await connection.rollback();
+                return invalidResponse();
+            }
+
+            const resetToken = tokens[0];
+            const [users] = await connection.query(
+                "SELECT id, password_hash, status FROM users WHERE id = ? LIMIT 1 FOR UPDATE",
+                [resetToken.user_id]
+            );
+
+            if (users.length === 0 || users[0].status !== "active") {
+                await connection.rollback();
+                return invalidResponse();
+            }
+
+            const newPasswordHash = await bcrypt.hash(newPassword, 12);
+
+            await connection.query(
+                "UPDATE users SET password_hash = ? WHERE id = ?",
+                [newPasswordHash, resetToken.user_id]
+            );
+
+            await connection.query(
+                "UPDATE password_reset_tokens SET used_at = NOW() WHERE user_id = ? AND used_at IS NULL",
+                [resetToken.user_id]
+            );
+
+            await connection.commit();
+
+            return res.json({
+                success: true,
+                message: "Password reset successfully. Please sign in with your new password."
+            });
+        } catch (error) {
+            await connection.rollback();
+            throw error;
+        } finally {
+            connection.release();
+        }
+    } catch (error) {
+        console.error("Reset password error:", error);
+        return res.status(500).json({ success: false, message: "Unable to reset password. Please try again." });
+    }
+});
+
 router.get("/me", requireAuth, async (req, res) => {
     try {
         const [users] = await pool.query(
@@ -275,6 +360,20 @@ router.post("/me/photo", requireAuth, (req, res, next) => {
         }
         next();
     });
+}, async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ success: false, message: "Profile photo is required" });
+
+        const photoPath = `/uploads/profiles/${req.file.filename}`;
+        const [users] = await pool.query("SELECT id FROM users WHERE id = ? LIMIT 1", [req.user.id]);
+        if (users.length === 0) return res.status(404).json({ success: false, message: "User not found" });
+
+        await pool.query("UPDATE users SET profile_photo = ? WHERE id = ?", [photoPath, req.user.id]);
+        return res.json({ success: true, message: "Profile photo uploaded successfully", profile_photo: photoPath });
+    } catch (error) {
+        console.error("Profile photo upload error:", error);
+        return res.status(500).json({ success: false, message: "Unable to upload profile photo" });
+    }
 }, async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ success: false, message: "Profile photo is required" });
