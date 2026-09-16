@@ -49,6 +49,17 @@ const authLimiter = rateLimit({
     }
 });
 
+const passwordRecoveryLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+        success: false,
+        message: "Too many password recovery requests. Please try again later."
+    }
+});
+
 app.use("/uploads", express.static("uploads"));
 app.use("/assets", express.static("assets"));
 app.use("/css", express.static("css"));
@@ -65,6 +76,8 @@ app.get("/api/health", async (req, res) => {
     });
 });
 
+app.use("/api/auth/forgot-password", passwordRecoveryLimiter);
+app.use("/api/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/auth", authLimiter, require("./routes/auth"));
 app.use("/api/members", require("./routes/members"));
 app.use("/api/roles", require("./routes/roles"));
