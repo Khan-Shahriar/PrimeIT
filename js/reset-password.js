@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 credentials: "include",
                 body: JSON.stringify({
                     token,
-                    newPassword: password
+                    new_password: password
                 })
             });
 
