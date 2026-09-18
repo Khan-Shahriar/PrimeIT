@@ -2,15 +2,36 @@ const changePhotoButton=document.querySelector('#change-photo-btn');
 const profilePhotoInput=document.querySelector('#profile-photo-input');
 const profilePhotoPreview=document.querySelector('#profile-photo-preview');
 const userAvatarPreview=document.querySelector('#user-avatar-preview');
+const PROFILE_PHOTO_KEY='primeit_member_profile_photo';
 
-if(changePhotoButton&&profilePhotoInput&&profilePhotoPreview){
+function showProfilePhoto(imageSrc){
+  if(!imageSrc) return;
+
+  if(profilePhotoPreview){
+    profilePhotoPreview.innerHTML='';
+    const profileImage=document.createElement('img');
+    profileImage.src=imageSrc;
+    profileImage.alt='Profile photo';
+    profilePhotoPreview.appendChild(profileImage);
+  }
+
+  if(userAvatarPreview){
+    userAvatarPreview.innerHTML='';
+    const userImage=document.createElement('img');
+    userImage.src=imageSrc;
+    userImage.alt='Profile photo';
+    userAvatarPreview.appendChild(userImage);
+  }
+}
+
+if(changePhotoButton&&profilePhotoInput){
   changePhotoButton.addEventListener('click',()=>profilePhotoInput.click());
 
   profilePhotoInput.addEventListener('change',()=>{
     const file=profilePhotoInput.files?.[0];
     if(!file) return;
 
-    if(!file.type.startsWith('image/')){
+    if(!['image/jpeg','image/png','image/webp'].includes(file.type)){
       profilePhotoInput.value='';
       return;
     }
@@ -18,24 +39,25 @@ if(changePhotoButton&&profilePhotoInput&&profilePhotoPreview){
     const reader=new FileReader();
     reader.addEventListener('load',()=>{
       const imageSrc=reader.result;
-
-      profilePhotoPreview.innerHTML='';
-      const profileImage=document.createElement('img');
-      profileImage.src=imageSrc;
-      profileImage.alt='Profile photo preview';
-      profilePhotoPreview.appendChild(profileImage);
-
-      if(userAvatarPreview){
-        userAvatarPreview.innerHTML='';
-        const userImage=document.createElement('img');
-        userImage.src=imageSrc;
-        userImage.alt='Profile photo';
-        userAvatarPreview.appendChild(userImage);
+      try{
+        localStorage.setItem(PROFILE_PHOTO_KEY,imageSrc);
+        showProfilePhoto(imageSrc);
+      }catch(error){
+        console.error('Unable to save profile photo locally.',error);
+        showProfilePhoto(imageSrc);
       }
     });
     reader.readAsDataURL(file);
   });
 }
+
+try{
+  const savedPhoto=localStorage.getItem(PROFILE_PHOTO_KEY);
+  if(savedPhoto) showProfilePhoto(savedPhoto);
+}catch(error){
+  console.error('Unable to restore profile photo.',error);
+}
+
 
 
 document.querySelectorAll('[data-toast]').forEach(btn=>{
