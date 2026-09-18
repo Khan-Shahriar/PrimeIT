@@ -1,3 +1,31 @@
+const changePhotoButton=document.querySelector('#change-photo-btn');
+const profilePhotoInput=document.querySelector('#profile-photo-input');
+const profilePhotoPreview=document.querySelector('#profile-photo-preview');
+
+if(changePhotoButton&&profilePhotoInput&&profilePhotoPreview){
+  changePhotoButton.addEventListener('click',()=>profilePhotoInput.click());
+
+  profilePhotoInput.addEventListener('change',()=>{
+    const file=profilePhotoInput.files?.[0];
+    if(!file) return;
+
+    if(!file.type.startsWith('image/')){
+      profilePhotoInput.value='';
+      return;
+    }
+
+    const reader=new FileReader();
+    reader.addEventListener('load',()=>{
+      profilePhotoPreview.innerHTML='';
+      const image=document.createElement('img');
+      image.src=reader.result;
+      image.alt='Profile photo preview';
+      profilePhotoPreview.appendChild(image);
+    });
+    reader.readAsDataURL(file);
+  });
+}
+
 
 document.querySelectorAll('[data-toast]').forEach(btn=>{
   btn.addEventListener('click',()=>{
