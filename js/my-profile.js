@@ -1,6 +1,7 @@
 const changePhotoButton=document.querySelector('#change-photo-btn');
 const profilePhotoInput=document.querySelector('#profile-photo-input');
 const profilePhotoPreview=document.querySelector('#profile-photo-preview');
+const userAvatarPreview=document.querySelector('#user-avatar-preview');
 
 if(changePhotoButton&&profilePhotoInput&&profilePhotoPreview){
   changePhotoButton.addEventListener('click',()=>profilePhotoInput.click());
@@ -16,11 +17,21 @@ if(changePhotoButton&&profilePhotoInput&&profilePhotoPreview){
 
     const reader=new FileReader();
     reader.addEventListener('load',()=>{
+      const imageSrc=reader.result;
+
       profilePhotoPreview.innerHTML='';
-      const image=document.createElement('img');
-      image.src=reader.result;
-      image.alt='Profile photo preview';
-      profilePhotoPreview.appendChild(image);
+      const profileImage=document.createElement('img');
+      profileImage.src=imageSrc;
+      profileImage.alt='Profile photo preview';
+      profilePhotoPreview.appendChild(profileImage);
+
+      if(userAvatarPreview){
+        userAvatarPreview.innerHTML='';
+        const userImage=document.createElement('img');
+        userImage.src=imageSrc;
+        userImage.alt='Profile photo';
+        userAvatarPreview.appendChild(userImage);
+      }
     });
     reader.readAsDataURL(file);
   });
