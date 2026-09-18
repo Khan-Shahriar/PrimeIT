@@ -1,3 +1,14 @@
+const savedProfilePhoto=localStorage.getItem('primeit_member_profile_photo');
+const dashboardUserAvatar=document.querySelector('#user-avatar-preview');
+
+if(savedProfilePhoto&&dashboardUserAvatar){
+  dashboardUserAvatar.innerHTML='';
+  const image=document.createElement('img');
+  image.src=savedProfilePhoto;
+  image.alt='Profile photo';
+  dashboardUserAvatar.appendChild(image);
+}
+
 
 document.querySelectorAll('[data-toast]').forEach(btn=>{
   btn.addEventListener('click',()=>{
