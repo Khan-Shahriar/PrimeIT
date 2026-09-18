@@ -1,5 +1,7 @@
 const savedProfilePhoto=localStorage.getItem('primeit_member_profile_photo');
 const dashboardUserAvatar=document.querySelector('#user-avatar-preview');
+const welcomeMemberName=document.querySelector('#welcome-member-name');
+const dashboardDate=document.querySelector('#dashboard-date');
 
 if(savedProfilePhoto&&dashboardUserAvatar){
   dashboardUserAvatar.innerHTML='';
@@ -9,6 +11,19 @@ if(savedProfilePhoto&&dashboardUserAvatar){
   dashboardUserAvatar.appendChild(image);
 }
 
+if(welcomeMemberName){
+  const userName=dashboardUserAvatar?.previousElementSibling?.textContent?.trim();
+  if(userName) welcomeMemberName.textContent=userName;
+}
+
+if(dashboardDate){
+  const now=new Date();
+  dashboardDate.textContent=new Intl.DateTimeFormat('en-US',{
+    month:'short',
+    day:'2-digit',
+    year:'numeric'
+  }).format(now);
+}
 
 document.querySelectorAll('[data-toast]').forEach(btn=>{
   btn.addEventListener('click',()=>{
@@ -29,5 +44,13 @@ document.querySelectorAll('form[data-demo]').forEach(form=>{
 
 const toggle=document.querySelector('.mobile-toggle');
 const sidebar=document.querySelector('.sidebar');
-if(toggle&&sidebar) toggle.addEventListener('click',()=>sidebar.classList.toggle('open'));
-document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()=>sidebar?.classList.remove('open')));
+if(toggle&&sidebar) toggle.addEventListener('click',()=>{
+  const isOpen=sidebar.classList.toggle('open');
+  toggle.setAttribute('aria-expanded',String(isOpen));
+  toggle.setAttribute('aria-label',isOpen?'Close navigation menu':'Open navigation menu');
+});
+document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()=>{
+  sidebar?.classList.remove('open');
+  toggle?.setAttribute('aria-expanded','false');
+  toggle?.setAttribute('aria-label','Open navigation menu');
+}));
