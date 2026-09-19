@@ -1,7 +1,10 @@
-const savedProfilePhoto=localStorage.getItem('primeit_member_profile_photo');
 const dashboardUserAvatar=document.querySelector('#user-avatar-preview');
 const welcomeMemberName=document.querySelector('#welcome-member-name');
 const dashboardDate=document.querySelector('#dashboard-date');
+const memberNameElement=document.querySelector('.user-chip > span:first-child');
+const mobileToggle=document.querySelector('.mobile-toggle');
+const sidebar=document.querySelector('.sidebar');
+const logoutLink=document.querySelector('#member-logout-link');
 
 const quickStatElements={
   casualLeave:{
@@ -22,28 +25,6 @@ const quickStatElements={
   }
 };
 
-if(savedProfilePhoto&&dashboardUserAvatar){
-  dashboardUserAvatar.innerHTML='';
-  const image=document.createElement('img');
-  image.src=savedProfilePhoto;
-  image.alt='Profile photo';
-  dashboardUserAvatar.appendChild(image);
-}
-
-if(welcomeMemberName){
-  const userName=dashboardUserAvatar?.previousElementSibling?.textContent?.trim();
-  if(userName) welcomeMemberName.textContent=userName;
-}
-
-if(dashboardDate){
-  const now=new Date();
-  dashboardDate.textContent=new Intl.DateTimeFormat('en-US',{
-    month:'short',
-    day:'2-digit',
-    year:'numeric'
-  }).format(now);
-}
-
 const leaveSummaryElements={
   casual:{
     balance:document.querySelector('#casual-leave-balance'),
@@ -57,13 +38,50 @@ const leaveSummaryElements={
   }
 };
 
+function renderProfilePhoto(){
+  const savedProfilePhoto=localStorage.getItem('primeit_member_profile_photo');
+  if(!savedProfilePhoto||!dashboardUserAvatar) return;
+
+  dashboardUserAvatar.innerHTML='';
+  const image=document.createElement('img');
+  image.src=savedProfilePhoto;
+  image.alt='Profile photo';
+  dashboardUserAvatar.appendChild(image);
+}
+
+function renderMemberName(){
+  const userName=memberNameElement?.textContent?.trim();
+  if(userName&&welcomeMemberName){
+    welcomeMemberName.textContent=userName;
+  }
+}
+
+function renderDashboardDate(){
+  if(!dashboardDate) return;
+
+  dashboardDate.textContent=new Intl.DateTimeFormat('en-US',{
+    month:'short',
+    day:'2-digit',
+    year:'numeric'
+  }).format(new Date());
+}
+
 function updateLeaveSummary(type,used,total){
   const elements=leaveSummaryElements[type];
   if(!elements||!Number.isFinite(used)||!Number.isFinite(total)||total<=0) return;
-  const remaining=Math.max(total-used,0);
-  const percentage=Math.min(Math.max((used/total)*100,0),100);
-  if(elements.balance) elements.balance.textContent=`${used} used / ${total}`;
-  if(elements.remaining) elements.remaining.textContent=`${remaining} day${remaining===1?'':'s'} remaining`;
+
+  const safeUsed=Math.max(0,Math.min(used,total));
+  const remaining=total-safeUsed;
+  const percentage=Math.min(Math.max((safeUsed/total)*100,0),100);
+
+  if(elements.balance){
+    elements.balance.textContent=`${safeUsed} used / ${total}`;
+  }
+
+  if(elements.remaining){
+    elements.remaining.textContent=`${remaining} day${remaining===1?'':'s'} remaining`;
+  }
+
   if(elements.progress){
     elements.progress.style.width=`${percentage}%`;
     elements.progress.setAttribute('aria-valuenow',String(Math.round(percentage)));
@@ -72,44 +90,48 @@ function updateLeaveSummary(type,used,total){
   }
 }
 
-// Future authenticated API integration point:
+function closeMobileSidebar(){
+  if(!sidebar) return;
+
+  sidebar.classList.remove('open');
+  mobileToggle?.setAttribute('aria-expanded','false');
+  mobileToggle?.setAttribute('aria-label','Open navigation menu');
+}
+
+function setupMobileNavigation(){
+  if(mobileToggle&&sidebar){
+    mobileToggle.addEventListener('click',()=>{
+      const isOpen=sidebar.classList.toggle('open');
+      mobileToggle.setAttribute('aria-expanded',String(isOpen));
+      mobileToggle.setAttribute('aria-label',isOpen?'Close navigation menu':'Open navigation menu');
+    });
+  }
+
+  document.querySelectorAll('.sidebar a').forEach(link=>{
+    link.addEventListener('click',closeMobileSidebar);
+  });
+}
+
+function setupLogoutIntegration(){
+  if(!logoutLink) return;
+
+  logoutLink.dataset.logoutReady='true';
+
+  // Future authenticated integration:
+  // connect this action to the server-side logout endpoint.
+  // Do not remove JWT cookies from client-side JavaScript.
+}
+
+function initializeDashboard(){
+  renderProfilePhoto();
+  renderMemberName();
+  renderDashboardDate();
+  setupMobileNavigation();
+  setupLogoutIntegration();
+}
+
+initializeDashboard();
+
+// Future authenticated API integration:
 // updateLeaveSummary('casual', used, total);
 // updateLeaveSummary('sick', used, total);
-
-document.querySelectorAll('[data-toast]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const text=btn.dataset.toast||'Action completed';
-    let t=document.querySelector('.toast');
-    if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}
-    t.textContent=text;t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2200);
-  });
-});
-document.querySelectorAll('form[data-demo]').forEach(form=>{
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const btn=form.querySelector('button[type="submit"]');
-    if(btn){const old=btn.textContent;btn.textContent='Saved ✓';setTimeout(()=>btn.textContent=old,1300);}
-  });
-});
-
-const toggle=document.querySelector('.mobile-toggle');
-const sidebar=document.querySelector('.sidebar');
-if(toggle&&sidebar) toggle.addEventListener('click',()=>{
-  const isOpen=sidebar.classList.toggle('open');
-  toggle.setAttribute('aria-expanded',String(isOpen));
-  toggle.setAttribute('aria-label',isOpen?'Close navigation menu':'Open navigation menu');
-});
-document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()=>{
-  sidebar?.classList.remove('open');
-  toggle?.setAttribute('aria-expanded','false');
-  toggle?.setAttribute('aria-label','Open navigation menu');
-}));
-
-// Future authenticated logout integration point:
-// The logout link remains a normal navigation target until the server-side
-// logout endpoint is implemented. No client-side token deletion is performed here.
-const logoutLink=document.querySelector('#member-logout-link');
-if(logoutLink){
-  logoutLink.dataset.logoutReady='true';
-}
