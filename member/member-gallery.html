@@ -1,14 +1,164 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Gallery</title><link rel="stylesheet" href="../css/member-gallery.css"></head>
-<body class="app-body"><div class="app-shell">
-<aside class="sidebar"><a class="logo" href="member-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Member Panel</div>
-<nav class="side-nav"><a class="nav-link " href="member-dashboard.html">Dashboard</a>
-<a class="nav-link " href="members.html">Members</a>
-<a class="nav-link " href="announcements.html">Announcements</a>
-<a class="nav-link " href="office-information.html">Office Information</a>
-<a class="nav-link " href="leave-management.html">Leave Management</a>
-<a class="nav-link active" href="member-gallery.html">Gallery</a>
-<a class="nav-link " href="my-profile.html">My Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="member-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Shahriar</span><span class="user-avatar">SH</span></div></header><section class="content"><div class="breadcrumb">Member Panel / Gallery</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Gallery</h1><p>Browse company images shared with office members.</p></div></div><div class="grid-3"><div class="card gallery-card reveal"><div class="gallery-photo">01</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Team Workshop</h3><span class="tag">Team</span></div><p class="muted">Collaborative planning session.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">02</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>PrimeIt Office</h3><span class="tag">Office</span></div><p class="muted">A glimpse of our workspace.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">03</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Annual Meetup</h3><span class="tag">Event</span></div><p class="muted">People, ideas, and celebration.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">04</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Project Day</h3><span class="tag">Projects</span></div><p class="muted">Building together with focus.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">05</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Community Event</h3><span class="tag">Event</span></div><p class="muted">Connecting beyond the office.</p></div></div><div class="card gallery-card reveal"><div class="gallery-photo">06</div><div class="body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Team Celebration</h3><span class="tag">Team</span></div><p class="muted">Celebrating shared wins.</p></div></div></div></section></main></div><script src="../js/member-gallery.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PrimeIt member gallery">
+  <title>PrimeIt — Gallery</title>
+  <link rel="stylesheet" href="../css/member-gallery.css">
+</head>
+<body class="app-body">
+  <a class="skip-link" href="#member-main-content">Skip to main content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="member-sidebar" aria-label="Member panel">
+      <a class="logo" href="member-dashboard.html" aria-label="PrimeIt Member Dashboard">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
+
+      <div class="side-label">Member Panel</div>
+
+      <nav class="side-nav" aria-label="Member panel navigation">
+        <a class="nav-link" href="member-dashboard.html">Dashboard</a>
+        <a class="nav-link" href="members.html">Members</a>
+        <a class="nav-link" href="announcements.html">Announcements</a>
+        <a class="nav-link" href="office-information.html">Office Information</a>
+        <a class="nav-link" href="leave-management.html">Leave Management</a>
+        <a class="nav-link active" href="member-gallery.html" aria-current="page">Gallery</a>
+        <a class="nav-link" href="my-profile.html">My Profile</a>
+      </nav>
+
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a>
+        <a class="nav-link" href="member-login.html" data-action="logout">⇥ <span class="side-label">Logout</span></a>
+      </div>
+    </aside>
+
+    <main class="main" id="member-main-content">
+      <header class="app-topbar">
+        <button class="mobile-toggle" id="member-mobile-toggle" type="button" aria-label="Open navigation menu" aria-controls="member-sidebar" aria-expanded="false">
+          <span aria-hidden="true">☰</span>
+        </button>
+        <div class="topbar-title">Member Panel</div>
+        <div class="user-chip" aria-label="Signed-in member">
+          <span>Member</span>
+          <span class="user-avatar" aria-hidden="true">M</span>
+        </div>
+      </header>
+
+      <section class="content" aria-labelledby="gallery-page-title">
+        <div class="breadcrumb" aria-label="Breadcrumb">Member Panel / Gallery</div>
+
+        <div class="content-header">
+          <div>
+            <span class="section-label">Office Moments</span>
+            <h1 id="gallery-page-title">Gallery</h1>
+            <p>Browse company images shared with office members.</p>
+          </div>
+        </div>
+
+        <section class="gallery-controls card" aria-labelledby="gallery-controls-title">
+          <div class="controls-heading">
+            <div>
+              <h2 id="gallery-controls-title">Browse Gallery</h2>
+              <p>Search available gallery content and narrow results when supported by the published data.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="gallery-reset" type="button" hidden>Reset</button>
+          </div>
+
+          <div class="controls-grid">
+            <div class="field">
+              <label for="gallery-search">Search gallery</label>
+              <div class="search-field">
+                <span aria-hidden="true">⌕</span>
+                <input id="gallery-search" type="search" autocomplete="off" placeholder="Search title, description, category, or album">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="gallery-category">Category</label>
+              <select id="gallery-category" disabled>
+                <option value="">All categories</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="gallery-section" aria-labelledby="gallery-results-title" aria-describedby="gallery-status">
+          <div class="section-heading">
+            <div>
+              <span class="section-label">Shared Images</span>
+              <h2 id="gallery-results-title">Gallery</h2>
+            </div>
+            <span class="result-count" id="gallery-result-count" aria-live="polite">0 images</span>
+          </div>
+
+          <div class="gallery-status" id="gallery-status" role="status" aria-live="polite"></div>
+
+          <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
+
+          <div class="gallery-state gallery-loading" id="gallery-loading" hidden>
+            <div class="state-spinner" aria-hidden="true"></div>
+            <h3>Loading gallery…</h3>
+            <p>Please wait while available images are loaded.</p>
+          </div>
+
+          <div class="gallery-state" id="gallery-empty" hidden>
+            <div class="state-icon" aria-hidden="true">▧</div>
+            <h3>No gallery images available</h3>
+            <p>There are currently no gallery images available to members.</p>
+          </div>
+
+          <div class="gallery-state" id="gallery-no-results" hidden>
+            <div class="state-icon" aria-hidden="true">⌕</div>
+            <h3>No images match your search</h3>
+            <p>Try a different search term or reset the gallery controls.</p>
+            <button class="btn btn-secondary btn-sm" id="gallery-no-results-reset" type="button">Reset filters</button>
+          </div>
+
+          <div class="gallery-state gallery-error" id="gallery-error" hidden>
+            <div class="state-icon" aria-hidden="true">!</div>
+            <h3>Unable to load gallery</h3>
+            <p>We could not load the gallery right now. Please try again.</p>
+            <button class="btn btn-primary btn-sm" id="gallery-retry" type="button">Try again</button>
+          </div>
+        </section>
+
+        <nav class="pagination" id="gallery-pagination" aria-label="Gallery pagination" hidden></nav>
+      </section>
+    </main>
+  </div>
+
+  <div class="lightbox" id="gallery-lightbox" hidden>
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <section class="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-describedby="lightbox-description">
+      <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close image preview">×</button>
+      <div class="lightbox-media-wrap">
+        <div class="lightbox-loading" id="lightbox-loading" hidden aria-live="polite">Loading image…</div>
+        <img id="lightbox-image" class="lightbox-image" src="" alt="">
+        <div class="lightbox-fallback" id="lightbox-fallback" hidden>
+          <strong>Image unavailable</strong>
+          <span>The selected image could not be displayed.</span>
+        </div>
+      </div>
+      <div class="lightbox-details">
+        <div>
+          <span class="section-label">Image Details</span>
+          <h2 id="lightbox-title">Gallery image</h2>
+          <p id="lightbox-description"></p>
+        </div>
+        <dl class="lightbox-meta" id="lightbox-meta"></dl>
+      </div>
+      <div class="lightbox-actions">
+        <button class="btn btn-secondary" id="lightbox-prev" type="button">← Previous</button>
+        <button class="btn btn-secondary" id="lightbox-next" type="button">Next →</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="gallery-toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="../js/member-gallery.js"></script>
+</body>
+</html>
