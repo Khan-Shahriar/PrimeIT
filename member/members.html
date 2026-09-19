@@ -1,14 +1,168 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Members</title><link rel="stylesheet" href="../css/members.css"></head>
-<body class="app-body"><a class="skip-link" href="#member-main-content">Skip to main content</a><div class="app-shell">
-<aside class="sidebar" id="member-sidebar"><a class="logo" href="member-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Member Panel</div>
-<nav class="side-nav" aria-label="Member panel navigation"><a class="nav-link" href="member-dashboard.html">Dashboard</a>
-<a class="nav-link active" href="members.html" aria-current="page">Members</a>
-<a class="nav-link" href="announcements.html">Announcements</a>
-<a class="nav-link" href="office-information.html">Office Information</a>
-<a class="nav-link" href="leave-management.html">Leave Management</a>
-<a class="nav-link" href="member-gallery.html">Gallery</a>
-<a class="nav-link" href="my-profile.html">My Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" id="member-logout-link" href="member-login.html" data-action="logout">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main" id="member-main-content"><header class="app-topbar"><button class="mobile-toggle" type="button" aria-label="Open navigation menu" aria-controls="member-sidebar" aria-expanded="false">☰</button><div class="search"><input type="search" placeholder="Search..." aria-label="Search"></div><div class="user-chip" aria-label="Signed-in member"><span>Shahriar</span><span class="user-avatar" id="user-avatar-preview" aria-label="Profile photo">SH</span></div></header><section class="content"><div class="breadcrumb" aria-label="Breadcrumb">Member Panel / Members</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Members</h1><p>View your colleagues and permitted contact information.</p></div></div><div class="toolbar"><input placeholder="Search members..." style="max-width:300px"><select><option>All Departments</option><option>Engineering</option><option>HR</option></select></div><div class="grid-3"><div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="user-avatar">AS</div><div><h3>Alex Smith</h3><div class="muted">CEO</div></div></div><p class="muted">Leadership</p><span class="tag">Contact permitted</span></div><div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="user-avatar">SK</div><div><h3>Sarah Khan</h3><div class="muted">Developer</div></div></div><p class="muted">Engineering</p><span class="tag">Contact permitted</span></div><div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="user-avatar">MN</div><div><h3>Mina Noor</h3><div class="muted">HR Manager</div></div></div><p class="muted">Human Resources</p><span class="tag">Contact permitted</span></div><div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="user-avatar">TA</div><div><h3>Tanvir Ahmed</h3><div class="muted">Developer</div></div></div><p class="muted">Engineering</p><span class="tag">Contact permitted</span></div><div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="user-avatar">AR</div><div><h3>Arif Rahman</h3><div class="muted">Designer</div></div></div><p class="muted">Design</p><span class="tag">Contact permitted</span></div><div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="user-avatar">RS</div><div><h3>Rafi Sultana</h3><div class="muted">Project Manager</div></div></div><p class="muted">Operations</p><span class="tag">Contact permitted</span></div></div></section></main></div><script src="../js/members.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PrimeIt — Members</title>
+  <link rel="stylesheet" href="../css/members.css">
+</head>
+<body class="app-body members-page">
+  <a class="skip-link" href="#member-main-content">Skip to main content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="member-sidebar">
+      <a class="logo" href="member-dashboard.html" aria-label="PrimeIt Member Panel">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
+
+      <div class="side-label members-panel-label">Member Panel</div>
+
+      <nav class="side-nav" aria-label="Member panel navigation">
+        <a class="nav-link" href="member-dashboard.html">Dashboard</a>
+        <a class="nav-link active" href="members.html" aria-current="page">Members</a>
+        <a class="nav-link" href="announcements.html">Announcements</a>
+        <a class="nav-link" href="office-information.html">Office Information</a>
+        <a class="nav-link" href="leave-management.html">Leave Management</a>
+        <a class="nav-link" href="member-gallery.html">Gallery</a>
+        <a class="nav-link" href="my-profile.html">My Profile</a>
+      </nav>
+
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a>
+        <a class="nav-link" id="member-logout-link" href="member-login.html" data-action="logout">⇥ <span class="side-label">Logout</span></a>
+      </div>
+    </aside>
+
+    <main class="main" id="member-main-content">
+      <header class="app-topbar">
+        <button class="mobile-toggle" type="button" aria-label="Open navigation menu" aria-controls="member-sidebar" aria-expanded="false">☰</button>
+        <div class="search">
+          <input type="search" placeholder="Search..." aria-label="Global search">
+        </div>
+        <div class="user-chip" aria-label="Signed-in member">
+          <span>Shahriar</span>
+          <span class="user-avatar" aria-hidden="true">SH</span>
+        </div>
+      </header>
+
+      <section class="content members-content">
+        <div class="breadcrumb" aria-label="Breadcrumb">Member Panel / Members</div>
+
+        <header class="members-page-header">
+          <div>
+            <span class="members-section-label">Member Directory</span>
+            <h1>Members</h1>
+            <p>Find colleagues and view only the member information permitted for your account.</p>
+          </div>
+          <div class="members-count" aria-live="polite">
+            <strong id="member-count">0</strong>
+            <span>members</span>
+          </div>
+        </header>
+
+        <section class="member-directory-controls" aria-labelledby="member-directory-controls-title">
+          <h2 id="member-directory-controls-title" class="sr-only">Search and filter members</h2>
+
+          <div class="member-search-field">
+            <label for="member-search">Search members</label>
+            <div class="member-search-input-wrap">
+              <span aria-hidden="true">⌕</span>
+              <input id="member-search" type="search" autocomplete="off" placeholder="Search by name, position, or department">
+            </div>
+          </div>
+
+          <div class="member-filter-field">
+            <label for="member-department">Department</label>
+            <select id="member-department">
+              <option value="">All Departments</option>
+            </select>
+          </div>
+
+          <div class="member-filter-field">
+            <label for="member-position">Position</label>
+            <select id="member-position">
+              <option value="">All Positions</option>
+            </select>
+          </div>
+
+          <div class="member-filter-field">
+            <label for="member-role">Role</label>
+            <select id="member-role">
+              <option value="">All Roles</option>
+            </select>
+          </div>
+
+          <button class="member-clear-filters" id="member-clear-filters" type="button">Clear filters</button>
+        </section>
+
+        <section class="member-directory-status" aria-live="polite" aria-atomic="true">
+          <div class="member-state member-loading-state" id="member-loading-state" hidden>
+            <div class="member-spinner" aria-hidden="true"></div>
+            <div>
+              <strong>Loading members...</strong>
+              <p>Please wait while the directory is loaded.</p>
+            </div>
+          </div>
+
+          <div class="member-state member-error-state" id="member-error-state" hidden>
+            <div class="member-state-icon" aria-hidden="true">!</div>
+            <div>
+              <strong>Unable to load members. Please try again.</strong>
+              <p>The member directory could not be loaded right now.</p>
+              <button class="btn btn-secondary btn-sm" id="member-retry" type="button">Try Again</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="member-results-section" aria-labelledby="member-results-title">
+          <div class="member-results-heading">
+            <div>
+              <span class="members-section-label">Directory</span>
+              <h2 id="member-results-title">Member Results</h2>
+            </div>
+            <span class="member-results-summary" id="member-results-summary" aria-live="polite">0 members</span>
+          </div>
+
+          <div class="member-empty-state" id="member-empty-state" hidden>
+            <div class="member-empty-icon" aria-hidden="true">◌</div>
+            <h3 id="member-empty-title">No members found</h3>
+            <p id="member-empty-message">No members found. Try adjusting your search or filters.</p>
+            <button class="btn btn-secondary btn-sm" id="member-empty-clear" type="button">Clear filters</button>
+          </div>
+
+          <div class="member-results-grid" id="member-results" aria-live="polite"></div>
+        </section>
+
+        <nav class="member-pagination" id="member-pagination" aria-label="Member directory pagination" hidden>
+          <button class="btn btn-secondary btn-sm" id="member-prev-page" type="button">Previous</button>
+          <span id="member-page-info">Page 1 of 1</span>
+          <button class="btn btn-secondary btn-sm" id="member-next-page" type="button">Next</button>
+        </nav>
+      </section>
+    </main>
+  </div>
+
+  <div class="member-modal" id="member-detail-modal" hidden>
+    <div class="member-modal-backdrop" data-member-modal-close></div>
+    <section class="member-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="member-detail-title" aria-describedby="member-detail-description">
+      <button class="member-modal-close" id="member-detail-close" type="button" aria-label="Close member details">×</button>
+      <div class="member-detail-header">
+        <div class="member-detail-avatar" id="member-detail-avatar" aria-hidden="true"></div>
+        <div>
+          <span class="members-section-label">Member Details</span>
+          <h2 id="member-detail-title">Member</h2>
+          <p id="member-detail-role"></p>
+        </div>
+      </div>
+      <div class="member-detail-body" id="member-detail-description">
+        <div class="member-detail-row"><span>Department</span><strong id="member-detail-department">—</strong></div>
+        <div class="member-detail-row" id="member-detail-contact-row"><span>Contact</span><strong id="member-detail-contact">—</strong></div>
+        <p class="member-detail-bio" id="member-detail-bio"></p>
+      </div>
+    </section>
+  </div>
+
+  <script src="../js/members.js"></script>
+</body>
+</html>
