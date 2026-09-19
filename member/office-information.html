@@ -1,14 +1,156 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Office Information</title><link rel="stylesheet" href="../css/office-information.css"></head>
-<body class="app-body"><div class="app-shell">
-<aside class="sidebar"><a class="logo" href="member-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Member Panel</div>
-<nav class="side-nav"><a class="nav-link " href="member-dashboard.html">Dashboard</a>
-<a class="nav-link " href="members.html">Members</a>
-<a class="nav-link " href="announcements.html">Announcements</a>
-<a class="nav-link active" href="office-information.html">Office Information</a>
-<a class="nav-link " href="leave-management.html">Leave Management</a>
-<a class="nav-link " href="member-gallery.html">Gallery</a>
-<a class="nav-link " href="my-profile.html">My Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="member-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Shahriar</span><span class="user-avatar">SH</span></div></header><section class="content"><div class="breadcrumb">Member Panel / Office Information</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Office Information</h1><p>Everything you need to know about the PrimeIt office.</p></div></div><div class="grid-3"><div class="card"><div class="icon-box">01</div><h3>Address</h3><p class="muted">PrimeIt Office<br>Dhaka, Bangladesh</p></div><div class="card"><div class="icon-box">02</div><h3>Working Hours</h3><p class="muted">Monday – Friday<br>9:00 AM – 6:00 PM</p></div><div class="card"><div class="icon-box">03</div><h3>Emergency</h3><p class="muted">Office Manager<br>+880 1XXX-XXXXXX</p></div></div><div class="card" style="margin-top:20px"><h3>Office Rules</h3><div class="list"><div class="list-item"><span>Keep shared spaces clean</span><span>01</span></div><div class="list-item"><span>Respect meeting room schedules</span><span>02</span></div><div class="list-item"><span>Follow security and access procedures</span><span>03</span></div></div></div></section></main></div><script src="../js/office-information.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="PrimeIt member office information.">
+    <title>PrimeIt — Office Information</title>
+    <link rel="stylesheet" href="../css/office-information.css">
+</head>
+<body class="app-body">
+    <a class="skip-link" href="#office-information-main">Skip to office information</a>
+
+    <div class="app-shell">
+        <aside class="sidebar" id="member-sidebar">
+            <a class="logo" href="member-dashboard.html" aria-label="PrimeIt Member Dashboard">
+                <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+                <span class="logo-text">PrimeIt</span>
+            </a>
+
+            <div class="side-label">Member Panel</div>
+
+            <nav class="side-nav" aria-label="Member panel navigation">
+                <a class="nav-link" href="member-dashboard.html">Dashboard</a>
+                <a class="nav-link" href="members.html">Members</a>
+                <a class="nav-link" href="announcements.html">Announcements</a>
+                <a class="nav-link active" href="office-information.html" aria-current="page">Office Information</a>
+                <a class="nav-link" href="leave-management.html">Leave Management</a>
+                <a class="nav-link" href="member-gallery.html">Gallery</a>
+                <a class="nav-link" href="my-profile.html">My Profile</a>
+            </nav>
+
+            <div class="side-bottom">
+                <a class="nav-link" href="../public/index.html">
+                    <span aria-hidden="true">↩</span>
+                    <span class="side-label-inline">Back to Website</span>
+                </a>
+                <a class="nav-link" href="member-login.html">
+                    <span aria-hidden="true">⇥</span>
+                    <span class="side-label-inline">Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main" id="office-information-main">
+            <header class="app-topbar">
+                <button
+                    class="mobile-toggle"
+                    type="button"
+                    aria-label="Open navigation menu"
+                    aria-controls="member-sidebar"
+                    aria-expanded="false"
+                >☰</button>
+
+                <div class="topbar-title">Member Panel</div>
+
+                <div class="user-chip" aria-label="Signed-in member">
+                    <span>Member</span>
+                    <span class="user-avatar" aria-hidden="true">M</span>
+                </div>
+            </header>
+
+            <section class="content">
+                <div class="breadcrumb" aria-label="Breadcrumb">
+                    <span>Member Panel</span>
+                    <span aria-hidden="true">/</span>
+                    <strong>Office Information</strong>
+                </div>
+
+                <header class="content-header">
+                    <div>
+                        <span class="section-label">Office Essentials</span>
+                        <h1>Office Information</h1>
+                        <p>Important office information available to PrimeIt members.</p>
+                    </div>
+                </header>
+
+                <div id="office-information-status" class="status-region" aria-live="polite"></div>
+
+                <div id="office-information-content" class="office-information-content" hidden>
+                    <section class="information-section" id="office-overview-section" aria-labelledby="office-overview-title">
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-label">Overview</span>
+                                <h2 id="office-overview-title">Office Overview</h2>
+                            </div>
+                        </div>
+                        <div id="office-overview" class="overview-card"></div>
+                    </section>
+
+                    <section class="information-section" id="office-contact-section" aria-labelledby="office-contact-title" hidden>
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-label">Contact</span>
+                                <h2 id="office-contact-title">Contact Information</h2>
+                            </div>
+                        </div>
+                        <div id="office-contact" class="information-grid"></div>
+                    </section>
+
+                    <section class="information-section" id="office-hours-section" aria-labelledby="office-hours-title" hidden>
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-label">Schedule</span>
+                                <h2 id="office-hours-title">Office Hours</h2>
+                            </div>
+                        </div>
+                        <div id="office-hours" class="hours-card"></div>
+                    </section>
+
+                    <section class="information-section" id="office-departments-section" aria-labelledby="office-departments-title" hidden>
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-label">Teams</span>
+                                <h2 id="office-departments-title">Departments</h2>
+                            </div>
+                        </div>
+                        <div id="office-departments" class="information-grid"></div>
+                    </section>
+
+                    <section class="information-section" id="office-policies-section" aria-labelledby="office-policies-title" hidden>
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-label">Guidelines</span>
+                                <h2 id="office-policies-title">Office Policies</h2>
+                            </div>
+                        </div>
+                        <div id="office-policies" class="policy-list"></div>
+                    </section>
+
+                    <section class="information-section" id="office-contacts-section" aria-labelledby="office-contacts-title" hidden>
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-label">Support</span>
+                                <h2 id="office-contacts-title">Important Contacts</h2>
+                            </div>
+                        </div>
+                        <div id="office-important-contacts" class="information-grid"></div>
+                    </section>
+
+                    <section class="information-section" id="office-resources-section" aria-labelledby="office-resources-title" hidden>
+                        <div class="section-heading">
+                            <div>
+                                <span class="section-label">Resources</span>
+                                <h2 id="office-resources-title">Useful Resources</h2>
+                            </div>
+                        </div>
+                        <div id="office-resources" class="resource-list"></div>
+                    </section>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/office-information.js"></script>
+</body>
+</html>
