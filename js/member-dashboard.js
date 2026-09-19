@@ -3,6 +3,25 @@ const dashboardUserAvatar=document.querySelector('#user-avatar-preview');
 const welcomeMemberName=document.querySelector('#welcome-member-name');
 const dashboardDate=document.querySelector('#dashboard-date');
 
+const quickStatElements={
+  casualLeave:{
+    value:document.querySelector('#stat-casual-leave'),
+    meta:document.querySelector('#stat-casual-leave-meta')
+  },
+  sickLeave:{
+    value:document.querySelector('#stat-sick-leave'),
+    meta:document.querySelector('#stat-sick-leave-meta')
+  },
+  announcements:{
+    value:document.querySelector('#stat-announcements'),
+    meta:document.querySelector('#stat-announcements-meta')
+  },
+  upcomingHolidays:{
+    value:document.querySelector('#stat-upcoming-holidays'),
+    meta:document.querySelector('#stat-upcoming-holidays-meta')
+  }
+};
+
 if(savedProfilePhoto&&dashboardUserAvatar){
   dashboardUserAvatar.innerHTML='';
   const image=document.createElement('img');
