@@ -1,14 +1,280 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — My Profile</title><link rel="stylesheet" href="../css/my-profile.css"></head>
-<body class="app-body"><div class="app-shell">
-<aside class="sidebar"><a class="logo" href="member-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Member Panel</div>
-<nav class="side-nav"><a class="nav-link " href="member-dashboard.html">Dashboard</a>
-<a class="nav-link " href="members.html">Members</a>
-<a class="nav-link " href="announcements.html">Announcements</a>
-<a class="nav-link " href="office-information.html">Office Information</a>
-<a class="nav-link " href="leave-management.html">Leave Management</a>
-<a class="nav-link " href="member-gallery.html">Gallery</a>
-<a class="nav-link active" href="my-profile.html">My Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="member-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Shahriar</span><span class="user-avatar" id="user-avatar-preview" aria-label="Profile photo">SH</span></div></header><section class="content"><div class="breadcrumb">Member Panel / My Profile</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">My Profile</h1><p>View and update your permitted profile information.</p></div></div><div class="profile-grid"><div class="card profile-card"><div class="big-avatar" id="profile-photo-preview" aria-label="Profile photo">SH</div><h2 style="font-size:25px">Shahriar Khan</h2><span class="tag">Developer</span><p class="muted">Engineering Department</p><input id="profile-photo-input" type="file" accept="image/jpeg,image/png,image/webp" hidden><button class="btn btn-secondary" id="change-photo-btn" type="button">Change Photo</button></div><div class="card"><h3>Personal Information</h3><form data-demo style="margin-top:18px"><div class="grid-3"><div class="field"><label>Full Name</label><input value="Shahriar Khan"></div><div class="field"><label>Email</label><input value="shahriar@primeit.example" disabled></div><div class="field"><label>Phone</label><input placeholder="+880 1XXX-XXXXXX"></div></div><div class="field"><label>Bio</label><textarea placeholder="Tell the team a little about yourself..."></textarea></div><h3 style="margin-top:25px">Security</h3><div class="grid-3"><div class="field"><label>Current Password</label><input type="password"></div><div class="field"><label>New Password</label><input type="password"></div><div class="field"><label>Confirm Password</label><input type="password"></div></div><button class="btn btn-primary" type="submit">Save Changes</button></form></div></div></section></main></div><script src="../js/my-profile.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PrimeIt — My Profile</title>
+  <link rel="stylesheet" href="../css/my-profile.css">
+</head>
+<body class="app-body">
+  <a class="skip-link" href="#member-main-content">Skip to main content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="member-sidebar">
+      <a class="logo" href="member-dashboard.html" aria-label="PrimeIt Member Panel">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
+
+      <div class="side-label member-panel-label">Member Panel</div>
+
+      <nav class="side-nav" aria-label="Member panel navigation">
+        <a class="nav-link" href="member-dashboard.html">Dashboard</a>
+        <a class="nav-link" href="members.html">Members</a>
+        <a class="nav-link" href="announcements.html">Announcements</a>
+        <a class="nav-link" href="office-information.html">Office Information</a>
+        <a class="nav-link" href="leave-management.html">Leave Management</a>
+        <a class="nav-link" href="member-gallery.html">Gallery</a>
+        <a class="nav-link active" href="my-profile.html" aria-current="page">My Profile</a>
+      </nav>
+
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a>
+        <a class="nav-link" id="member-logout-link" href="member-login.html" data-action="logout">⇥ <span class="side-label">Logout</span></a>
+      </div>
+    </aside>
+
+    <main class="main" id="member-main-content">
+      <header class="app-topbar">
+        <button
+          class="mobile-toggle"
+          id="member-menu-toggle"
+          type="button"
+          aria-label="Open navigation menu"
+          aria-controls="member-sidebar"
+          aria-expanded="false"
+        >☰</button>
+
+        <div class="search">
+          <input type="search" placeholder="Search..." aria-label="Search">
+        </div>
+
+        <div class="user-chip" aria-label="Signed-in member">
+          <span id="topbar-member-name">Member</span>
+          <span class="user-avatar" id="user-avatar-preview" aria-label="Profile photo">M</span>
+        </div>
+      </header>
+
+      <section class="content profile-page-content" aria-labelledby="profile-page-title">
+        <div class="breadcrumb" aria-label="Breadcrumb">Member Panel / My Profile</div>
+
+        <div class="content-header">
+          <div>
+            <span class="section-label">Account</span>
+            <h1 id="profile-page-title" class="profile-page-title">My Profile</h1>
+            <p>View your member information and update the profile details your account permits.</p>
+          </div>
+
+          <button class="btn btn-secondary" id="profile-edit-toggle" type="button" aria-pressed="false">
+            Edit Profile
+          </button>
+        </div>
+
+        <div class="profile-status-region" id="profile-status-region" aria-live="polite" aria-atomic="true"></div>
+
+        <div class="profile-loading" id="profile-loading" role="status" aria-live="polite">
+          <span class="loading-spinner" aria-hidden="true"></span>
+          <span>Preparing your profile...</span>
+        </div>
+
+        <div class="profile-empty" id="profile-empty" hidden>
+          <div class="profile-empty-icon" aria-hidden="true">i</div>
+          <h2>Profile information is unavailable</h2>
+          <p>Your profile service has not supplied member information yet. No personal information has been invented or substituted.</p>
+          <button class="btn btn-secondary" id="profile-empty-dismiss" type="button">Continue with available fields</button>
+        </div>
+
+        <div class="profile-grid" id="profile-content" hidden>
+          <aside class="card profile-card" aria-labelledby="profile-summary-title">
+            <div class="profile-avatar-wrap">
+              <div
+                class="big-avatar"
+                id="profile-photo-preview"
+                role="img"
+                aria-label="Profile photo placeholder"
+              >M</div>
+
+              <span class="profile-photo-badge">Profile photo</span>
+            </div>
+
+            <h2 id="profile-summary-title" class="profile-summary-name">Member</h2>
+            <span class="tag" id="profile-summary-role">Role unavailable</span>
+            <p class="muted profile-summary-department" id="profile-summary-department">Department unavailable</p>
+
+            <input
+              id="profile-photo-input"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              hidden
+              aria-label="Select a profile image"
+            >
+
+            <button class="btn btn-secondary profile-photo-button" id="change-photo-btn" type="button">
+              Change Photo
+            </button>
+
+            <p class="profile-photo-help" id="profile-photo-help">
+              JPG, PNG, or WebP. Preview only until the profile service is connected.
+            </p>
+
+            <div class="profile-summary-divider"></div>
+
+            <div class="profile-summary-meta">
+              <div>
+                <span>Employee ID</span>
+                <strong id="profile-summary-id">Not provided</strong>
+              </div>
+              <div>
+                <span>Joined</span>
+                <strong id="profile-summary-joined">Not provided</strong>
+              </div>
+            </div>
+          </aside>
+
+          <div class="profile-main">
+            <section class="card profile-section-card" aria-labelledby="basic-information-title">
+              <div class="profile-section-heading">
+                <div>
+                  <span class="section-label">Identity</span>
+                  <h2 id="basic-information-title">Basic Information</h2>
+                  <p>Your name and display information.</p>
+                </div>
+                <span class="readonly-badge" id="basic-section-state">View mode</span>
+              </div>
+
+              <form id="profile-form" novalidate>
+                <div class="profile-fields-grid">
+                  <div class="field">
+                    <label for="first-name">First Name</label>
+                    <input id="first-name" name="firstName" type="text" autocomplete="given-name" maxlength="80" readonly aria-describedby="first-name-error">
+                    <small class="field-error" id="first-name-error"></small>
+                  </div>
+
+                  <div class="field">
+                    <label for="last-name">Last Name</label>
+                    <input id="last-name" name="lastName" type="text" autocomplete="family-name" maxlength="80" readonly aria-describedby="last-name-error">
+                    <small class="field-error" id="last-name-error"></small>
+                  </div>
+
+                  <div class="field">
+                    <label for="display-name">Display Name</label>
+                    <input id="display-name" name="displayName" type="text" autocomplete="nickname" maxlength="80" readonly aria-describedby="display-name-help display-name-error">
+                    <small class="field-help" id="display-name-help">This is the name shown in your member experience.</small>
+                    <small class="field-error" id="display-name-error"></small>
+                  </div>
+
+                  <div class="field">
+                    <label for="work-email">Work Email</label>
+                    <input id="work-email" name="email" type="email" autocomplete="email" readonly aria-describedby="work-email-help">
+                    <small class="field-help" id="work-email-help">Managed by the company account.</small>
+                  </div>
+                </div>
+
+                <div class="profile-section-heading nested-heading">
+                  <div>
+                    <span class="section-label">Professional</span>
+                    <h2 id="professional-information-title">Professional Information</h2>
+                    <p>Company-controlled information is displayed as read-only.</p>
+                  </div>
+                </div>
+
+                <div class="profile-fields-grid">
+                  <div class="field">
+                    <label for="job-title">Job Title</label>
+                    <input id="job-title" name="jobTitle" type="text" readonly aria-describedby="job-title-help">
+                    <small class="field-help" id="job-title-help">Company-controlled.</small>
+                  </div>
+
+                  <div class="field">
+                    <label for="department">Department</label>
+                    <input id="department" name="department" type="text" readonly aria-describedby="department-help">
+                    <small class="field-help" id="department-help">Company-controlled.</small>
+                  </div>
+
+                  <div class="field">
+                    <label for="member-role">Role</label>
+                    <input id="member-role" name="role" type="text" readonly aria-describedby="member-role-help">
+                    <small class="field-help" id="member-role-help">Cannot be changed from My Profile.</small>
+                  </div>
+
+                  <div class="field">
+                    <label for="employee-id">Employee ID</label>
+                    <input id="employee-id" name="employeeId" type="text" readonly aria-describedby="employee-id-help">
+                    <small class="field-help" id="employee-id-help">Company-controlled.</small>
+                  </div>
+
+                  <div class="field">
+                    <label for="joining-date">Joining Date</label>
+                    <input id="joining-date" name="joiningDate" type="text" readonly aria-describedby="joining-date-help">
+                    <small class="field-help" id="joining-date-help">Company-controlled.</small>
+                  </div>
+                </div>
+
+                <div class="profile-section-heading nested-heading">
+                  <div>
+                    <span class="section-label">Contact</span>
+                    <h2 id="contact-information-title">Contact Information</h2>
+                    <p>Update only the contact details permitted for your account.</p>
+                  </div>
+                </div>
+
+                <div class="profile-fields-grid">
+                  <div class="field">
+                    <label for="phone">Phone</label>
+                    <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="30" readonly aria-describedby="phone-help phone-error">
+                    <small class="field-help" id="phone-help">Use a reachable work or professional number.</small>
+                    <small class="field-error" id="phone-error"></small>
+                  </div>
+
+                  <div class="field field-full">
+                    <label for="bio">Short Bio</label>
+                    <textarea id="bio" name="bio" maxlength="500" readonly aria-describedby="bio-help bio-error" placeholder="No biography available"></textarea>
+                    <div class="field-meta">
+                      <small class="field-help" id="bio-help">Keep your bio concise and professional.</small>
+                      <small id="bio-count">0 / 500</small>
+                    </div>
+                    <small class="field-error" id="bio-error"></small>
+                  </div>
+
+                  <div class="field">
+                    <label for="professional-link">Professional Link</label>
+                    <input id="professional-link" name="professionalLink" type="url" autocomplete="url" maxlength="300" readonly aria-describedby="professional-link-help professional-link-error" placeholder="https://example.com">
+                    <small class="field-help" id="professional-link-help">Optional portfolio or professional profile.</small>
+                    <small class="field-error" id="professional-link-error"></small>
+                  </div>
+                </div>
+
+                <div class="profile-actions" id="profile-actions" hidden>
+                  <button class="btn btn-secondary" id="profile-cancel" type="button">Cancel</button>
+                  <button class="btn btn-primary" id="profile-save" type="submit">Save Changes</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="card profile-section-card security-card" aria-labelledby="security-title">
+              <div class="profile-section-heading">
+                <div>
+                  <span class="section-label">Account Security</span>
+                  <h2 id="security-title">Security Settings</h2>
+                  <p>Password and authentication controls are intentionally handled outside this profile editor.</p>
+                </div>
+                <span class="readonly-badge">Protected</span>
+              </div>
+
+              <div class="security-notice" role="note">
+                <span class="security-icon" aria-hidden="true">✓</span>
+                <div>
+                  <strong>Password changes are not performed here.</strong>
+                  <p>When account security functionality is connected, it should use the authenticated security flow. This page never stores or exposes passwords.</p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/my-profile.js"></script>
+</body>
+</html>
