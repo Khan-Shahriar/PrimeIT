@@ -2,15 +2,8 @@
 <body class="app-body"><div class="app-shell">
 <aside class="sidebar"><a class="logo" href="member-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
 <div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Member Panel</div>
-<nav class="side-nav"><a class="nav-link active" href="member-dashboard.html">Dashboard</a>
-<a class="nav-link " href="members.html">Members</a>
-<a class="nav-link " href="announcements.html">Announcements</a>
-<a class="nav-link " href="office-information.html">Office Information</a>
-<a class="nav-link " href="leave-management.html">Leave Management</a>
-<a class="nav-link " href="member-gallery.html">Gallery</a>
-<a class="nav-link " href="my-profile.html">My Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="member-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
+<nav class="side-nav"><a class="nav-link active" href="member-dashboard.html">Dashboard</a><a class="nav-link " href="members.html">Members</a><a class="nav-link " href="announcements.html">Announcements</a><a class="nav-link " href="office-information.html">Office Information</a><a class="nav-link " href="leave-management.html">Leave Management</a><a class="nav-link " href="member-gallery.html">Gallery</a><a class="nav-link " href="my-profile.html">My Profile</a></nav>
+<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="member-login.html">⇥ <span class="side-label">Logout</span></a></div></aside>
 <main class="main"><header class="app-topbar"><button class="mobile-toggle" type="button" aria-label="Open navigation menu" aria-controls="member-sidebar" aria-expanded="false">☰</button><div class="search"><input type="search" placeholder="Search..." aria-label="Search"></div><div class="user-chip" aria-label="Signed-in member"><span>Shahriar</span><span class="user-avatar" id="user-avatar-preview" aria-label="Profile photo">SH</span></div></header>
 <section class="content"><div class="breadcrumb">Member Panel / Dashboard</div>
 <section class="dashboard-welcome"><div class="welcome-content"><span class="welcome-label">Member Dashboard</span><h1>Welcome back, <span id="welcome-member-name">Shahriar</span></h1><p>Here's what's happening in your office today.</p></div><div class="welcome-date"><span>Today</span><strong id="dashboard-date">--</strong></div></section>
@@ -18,8 +11,12 @@
 <article class="kpi" data-stat="casual-leave"><div class="label">Casual Leave</div><strong id="stat-casual-leave">4</strong><small id="stat-casual-leave-meta">of 6 remaining</small></article>
 <article class="kpi" data-stat="sick-leave"><div class="label">Sick Leave</div><strong id="stat-sick-leave">5</strong><small id="stat-sick-leave-meta">of 6 remaining</small></article>
 <article class="kpi" data-stat="announcements"><div class="label">Announcements</div><strong id="stat-announcements">4</strong><small id="stat-announcements-meta">2 important</small></article>
-<article class="kpi" data-stat="upcoming-holidays"><div class="label">Upcoming Holidays</div><strong id="stat-upcoming-holidays">3</strong><small id="stat-upcoming-holidays-meta">Next: Sep 07</small></article>
-</div></section>
-<div class="two-col"><div class="card"><h3>Recent Announcements</h3><div class="list"><div class="list-item"><div><b>Office meeting tomorrow</b><div class="muted">General office update</div></div><span class="badge blue">Important</span></div><div class="list-item"><div><b>New office policy</b><div class="muted">Read the updated guidelines</div></div><span class="badge warning">New</span></div><div class="list-item"><div><b>Team event this month</b><div class="muted">Event details are available</div></div><span class="badge success">Published</span></div></div></div>
-<div class="card"><h3>Upcoming Holidays</h3><div class="list"><div class="list-item"><span>Labor Day</span><b>Sep 07</b></div><div class="list-item"><span>Thanksgiving</span><b>Nov 26</b></div><div class="list-item"><span>Christmas</span><b>Dec 25</b></div></div></div></div>
+<article class="kpi" data-stat="upcoming-holidays"><div class="label">Upcoming Holidays</div><strong id="stat-upcoming-holidays">3</strong><small id="stat-upcoming-holidays-meta">Next: Sep 07</small></article></div></section>
+<section class="dashboard-announcements" aria-labelledby="dashboard-announcements-title"><div class="section-heading"><div><span class="section-label">Office Updates</span><h2 id="dashboard-announcements-title">Recent Announcements</h2><p class="section-description">The latest updates shared with members.</p></div><a class="btn btn-secondary btn-sm" href="announcements.html">View All</a></div>
+<div class="card announcement-preview-card"><div class="list announcement-list">
+<article class="list-item announcement-item"><div class="announcement-content"><div class="announcement-title-row"><b>Office meeting tomorrow</b><span class="badge blue">Important</span></div><div class="muted">General office update</div></div></article>
+<article class="list-item announcement-item"><div class="announcement-content"><div class="announcement-title-row"><b>New office policy</b><span class="badge warning">New</span></div><div class="muted">Read the updated guidelines</div></div></article>
+<article class="list-item announcement-item"><div class="announcement-content"><div class="announcement-title-row"><b>Team event this month</b><span class="badge success">Published</span></div><div class="muted">Event details are available</div></div></article>
+</div></div></section>
+<div class="two-col"><div class="card"><h3>Upcoming Holidays</h3><div class="list"><div class="list-item"><span>Labor Day</span><b>Sep 07</b></div><div class="list-item"><span>Thanksgiving</span><b>Nov 26</b></div><div class="list-item"><span>Christmas</span><b>Dec 25</b></div></div></div></div>
 <div class="card" style="margin-top:20px"><h3>My Leave Summary</h3><div style="display:grid;gap:15px;margin-top:18px"><div><div style="display:flex;justify-content:space-between"><span>Casual Leave</span><b>2 used / 6</b></div><div class="progress"><span style="width:33%"></span></div></div><div><div style="display:flex;justify-content:space-between"><span>Sick Leave</span><b>1 used / 6</b></div><div class="progress"><span style="width:17%"></span></div></div></div></div></section></main></div><script src="../js/member-dashboard.js"></script></body></html>
