@@ -1,16 +1,271 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Dashboard</title><link rel="stylesheet" href="../css/admin-dashboard.css"></head>
-<body class="app-body"><div class="app-shell">
-<aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Admin Panel</div>
-<nav class="side-nav"><a class="nav-link active" href="admin-dashboard.html">Dashboard</a>
-<a class="nav-link " href="member-management.html">Members</a>
-<a class="nav-link " href="leave-management.html">Leave Management</a>
-<a class="nav-link " href="holiday-management.html">Holidays</a>
-<a class="nav-link " href="admin-announcements.html">Announcements</a>
-<a class="nav-link " href="admin-office-information.html">Office Information</a>
-<a class="nav-link " href="admin-gallery.html">Gallery</a>
-<a class="nav-link " href="role-permissions.html">Roles & Permissions</a>
-<a class="nav-link " href="admin-profile.html">Admin Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div></header><section class="content"><div class="breadcrumb">Admin Panel / Dashboard</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Dashboard</h1><p>System overview and recent activity.</p></div></div><div class="kpi-grid"><div class="kpi"><div class="label">Total Members</div><strong>42</strong><small>+3 this month</small></div><div class="kpi"><div class="label">Active Members</div><strong>39</strong><small>92.8% active</small></div><div class="kpi"><div class="label">Pending Leave</div><strong>7</strong><small>Needs review</small></div><div class="kpi"><div class="label">Gallery Items</div><strong>128</strong><small>+12 this month</small></div></div><div class="two-col"><div class="card"><h3>Pending Leave Requests</h3><div class="list"><div class="list-item"><div><b>Sarah Khan</b><div class="muted">Casual · Sep 03</div></div><span class="badge warning">Pending</span></div><div class="list-item"><div><b>Tanvir Ahmed</b><div class="muted">Sick · Sep 04–05</div></div><span class="badge warning">Pending</span></div><div class="list-item"><div><b>Mina Noor</b><div class="muted">Casual · Sep 07</div></div><span class="badge warning">Pending</span></div></div></div><div class="card"><h3>Upcoming Holidays</h3><div class="list"><div class="list-item"><span>Labor Day</span><b>Sep 07</b></div><div class="list-item"><span>Thanksgiving</span><b>Nov 26</b></div><div class="list-item"><span>Christmas</span><b>Dec 25</b></div></div></div></div><div class="card" style="margin-top:20px"><h3>Recent Gallery Activity</h3><div class="list"><div class="list-item"><span>Alex uploaded “Team Workshop”</span><span class="muted">2h ago</span></div><div class="list-item"><span>Sarah published “Office Event”</span><span class="muted">Yesterday</span></div></div></div></section></main></div><script src="../js/admin-dashboard.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="PrimeIt administrative dashboard">
+  <title>PrimeIt — Admin Dashboard</title>
+  <link rel="stylesheet" href="../css/admin-dashboard.css">
+</head>
+<body class="app-body">
+  <div class="app-shell">
+    <aside class="sidebar" id="admin-sidebar">
+      <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
+
+      <p class="side-label">Admin Panel</p>
+
+      <nav class="side-nav" aria-label="Admin navigation">
+        <a class="nav-link active" href="admin-dashboard.html" aria-current="page">Dashboard</a>
+        <a class="nav-link" href="member-management.html">Member Management</a>
+        <a class="nav-link" href="leave-management.html">Leave Management</a>
+        <a class="nav-link" href="holiday-management.html">Holiday Management</a>
+        <a class="nav-link" href="admin-announcements.html">Announcements</a>
+        <a class="nav-link" href="admin-office-information.html">Office Information</a>
+        <a class="nav-link" href="admin-gallery.html">Gallery</a>
+        <a class="nav-link" href="role-permissions.html">Role &amp; Permissions</a>
+        <a class="nav-link" href="admin-profile.html">Admin Profile</a>
+      </nav>
+
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">Back to Website</a>
+        <button class="nav-link nav-button" type="button" data-logout>Logout</button>
+      </div>
+    </aside>
+
+    <div class="sidebar-backdrop" data-sidebar-close hidden></div>
+
+    <main class="main">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-controls="admin-sidebar" aria-expanded="false" data-sidebar-toggle>
+            <span aria-hidden="true">☰</span>
+          </button>
+          <div class="search-placeholder" aria-hidden="true">Admin Dashboard</div>
+        </div>
+
+        <div class="user-chip" aria-label="Authenticated administrator account context">
+          <span class="user-context">
+            <span class="user-name" data-admin-name>Administrator</span>
+            <span class="user-role" data-admin-role>Account context</span>
+          </span>
+          <span class="user-avatar" aria-hidden="true" data-admin-initials>AD</span>
+        </div>
+      </header>
+
+      <section class="content" aria-labelledby="dashboard-title">
+        <div class="breadcrumb" aria-label="Breadcrumb">Admin Panel <span aria-hidden="true">/</span> Dashboard</div>
+
+        <div class="content-header">
+          <div>
+            <p class="eyebrow">Administrative overview</p>
+            <h1 id="dashboard-title">Dashboard</h1>
+            <p>Monitor key office activity and move quickly to the areas that need attention.</p>
+          </div>
+          <div class="header-context">
+            <span class="context-label">Today</span>
+            <time data-current-date>—</time>
+          </div>
+        </div>
+
+        <section class="welcome-card" aria-labelledby="welcome-title">
+          <div>
+            <p class="section-kicker">PrimeIt Admin Panel</p>
+            <h2 id="welcome-title">Welcome back</h2>
+            <p>Your authenticated account details will appear here when the authentication layer is connected.</p>
+          </div>
+          <a class="btn btn-primary" href="admin-profile.html">View Admin Profile</a>
+        </section>
+
+        <section class="dashboard-section" aria-labelledby="statistics-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="statistics-title">Quick statistics</h2>
+              <p>Live administrative metrics will be supplied by the backend.</p>
+            </div>
+          </div>
+
+          <div class="kpi-grid" data-statistics>
+            <article class="kpi-card" data-stat-card="members">
+              <span class="kpi-label">Total Members</span>
+              <strong class="kpi-value" data-stat-value>—</strong>
+              <span class="kpi-meta" data-stat-meta>Data unavailable</span>
+            </article>
+            <article class="kpi-card" data-stat-card="leave">
+              <span class="kpi-label">Pending Leave</span>
+              <strong class="kpi-value" data-stat-value>—</strong>
+              <span class="kpi-meta" data-stat-meta>Data unavailable</span>
+            </article>
+            <article class="kpi-card" data-stat-card="announcements">
+              <span class="kpi-label">Announcements</span>
+              <strong class="kpi-value" data-stat-value>—</strong>
+              <span class="kpi-meta" data-stat-meta>Data unavailable</span>
+            </article>
+            <article class="kpi-card" data-stat-card="gallery">
+              <span class="kpi-label">Gallery Items</span>
+              <strong class="kpi-value" data-stat-value>—</strong>
+              <span class="kpi-meta" data-stat-meta>Data unavailable</span>
+            </article>
+            <article class="kpi-card" data-stat-card="holidays">
+              <span class="kpi-label">Upcoming Holidays</span>
+              <strong class="kpi-value" data-stat-value>—</strong>
+              <span class="kpi-meta" data-stat-meta>Data unavailable</span>
+            </article>
+          </div>
+          <p class="sr-status" role="status" aria-live="polite" data-dashboard-status>Dashboard data is ready for future API integration.</p>
+        </section>
+
+        <div class="dashboard-grid dashboard-grid-primary">
+          <section class="card" aria-labelledby="leave-title">
+            <div class="card-heading">
+              <div>
+                <p class="section-kicker">Review queue</p>
+                <h2 id="leave-title">Leave overview</h2>
+              </div>
+              <a class="text-link" href="leave-management.html">Manage leave <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="state-panel" data-state-panel="leave">
+              <div class="state-icon" aria-hidden="true">✓</div>
+              <h3>No leave data available</h3>
+              <p>Pending and recent leave requests will appear here after REST API integration.</p>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="members-title">
+            <div class="card-heading">
+              <div>
+                <p class="section-kicker">People</p>
+                <h2 id="members-title">Member overview</h2>
+              </div>
+              <a class="text-link" href="member-management.html">Manage members <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="overview-metrics">
+              <div>
+                <span>Members</span>
+                <strong data-overview-value="members">—</strong>
+              </div>
+              <div>
+                <span>Active</span>
+                <strong data-overview-value="active-members">—</strong>
+              </div>
+            </div>
+            <div class="state-note" data-state-note="members">Member data is not available yet.</div>
+          </section>
+        </div>
+
+        <div class="dashboard-grid dashboard-grid-secondary">
+          <section class="card" aria-labelledby="announcements-title">
+            <div class="card-heading">
+              <div>
+                <p class="section-kicker">Communication</p>
+                <h2 id="announcements-title">Announcements</h2>
+              </div>
+              <a class="text-link" href="admin-announcements.html">Manage <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="state-panel compact" data-state-panel="announcements">
+              <div class="state-icon" aria-hidden="true">!</div>
+              <h3>No announcements available</h3>
+              <p>Recent and pinned announcements will appear here when data is available.</p>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="gallery-title">
+            <div class="card-heading">
+              <div>
+                <p class="section-kicker">Media</p>
+                <h2 id="gallery-title">Gallery overview</h2>
+              </div>
+              <a class="text-link" href="admin-gallery.html">Manage gallery <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="gallery-summary">
+              <div class="gallery-placeholder" aria-hidden="true">IMG</div>
+              <div>
+                <strong data-gallery-count>—</strong>
+                <span>gallery items available</span>
+                <p data-gallery-state>Gallery data is not available yet.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="dashboard-grid dashboard-grid-secondary">
+          <section class="card" aria-labelledby="holiday-title">
+            <div class="card-heading">
+              <div>
+                <p class="section-kicker">Calendar</p>
+                <h2 id="holiday-title">Upcoming holidays</h2>
+              </div>
+              <a class="text-link" href="holiday-management.html">Manage holidays <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="holiday-list" data-holiday-list aria-live="polite"></div>
+          </section>
+
+          <section class="card" aria-labelledby="activity-title">
+            <div class="card-heading">
+              <div>
+                <p class="section-kicker">System activity</p>
+                <h2 id="activity-title">Recent activity</h2>
+              </div>
+            </div>
+            <div class="state-panel compact" data-state-panel="activity">
+              <div class="state-icon" aria-hidden="true">•</div>
+              <h3>No recent activity available</h3>
+              <p>Activity records will be rendered from a future backend data source.</p>
+            </div>
+          </section>
+        </div>
+
+        <section class="dashboard-section" aria-labelledby="actions-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="actions-title">Quick actions</h2>
+              <p>Shortcuts to the existing administrative sections.</p>
+            </div>
+          </div>
+
+          <div class="action-grid">
+            <a class="action-card" href="member-management.html">
+              <span class="action-icon" aria-hidden="true">M</span>
+              <span><strong>Manage Members</strong><small>Open member management</small></span>
+            </a>
+            <a class="action-card" href="leave-management.html">
+              <span class="action-icon" aria-hidden="true">L</span>
+              <span><strong>Review Leave</strong><small>Open leave management</small></span>
+            </a>
+            <a class="action-card" href="holiday-management.html">
+              <span class="action-icon" aria-hidden="true">H</span>
+              <span><strong>Manage Holidays</strong><small>Open holiday management</small></span>
+            </a>
+            <a class="action-card" href="admin-announcements.html">
+              <span class="action-icon" aria-hidden="true">A</span>
+              <span><strong>Create Announcement</strong><small>Open announcements</small></span>
+            </a>
+            <a class="action-card" href="admin-office-information.html">
+              <span class="action-icon" aria-hidden="true">O</span>
+              <span><strong>Office Information</strong><small>Open office information</small></span>
+            </a>
+            <a class="action-card" href="admin-gallery.html">
+              <span class="action-icon" aria-hidden="true">G</span>
+              <span><strong>Manage Gallery</strong><small>Open gallery management</small></span>
+            </a>
+            <a class="action-card" href="role-permissions.html">
+              <span class="action-icon" aria-hidden="true">R</span>
+              <span><strong>Roles &amp; Permissions</strong><small>Open role management</small></span>
+            </a>
+            <a class="action-card" href="admin-profile.html">
+              <span class="action-icon" aria-hidden="true">P</span>
+              <span><strong>Admin Profile</strong><small>Open account settings</small></span>
+            </a>
+          </div>
+        </section>
+
+        <div class="dashboard-message" role="status" aria-live="polite" data-dashboard-message hidden></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/admin-dashboard.js"></script>
+</body>
+</html>
