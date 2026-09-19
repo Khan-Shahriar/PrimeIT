@@ -293,3 +293,13 @@ tr:last-child td{border-bottom:0}
     grid-template-columns:1fr;
   }
 }
+
+.skip-link{position:fixed;left:16px;top:-60px;z-index:200;padding:10px 14px;border-radius:10px;background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow);font-size:13px;font-weight:800}
+.skip-link:focus{top:16px}
+.mobile-toggle:focus-visible,
+.nav-link:focus-visible,
+.logo:focus-visible,
+.btn:focus-visible{
+  outline:3px solid rgba(37,99,235,.22);
+  outline-offset:3px;
+}
