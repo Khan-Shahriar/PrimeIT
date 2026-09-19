@@ -194,11 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if (typeof data.message === "string" && data.message.trim()) {
-            showMessage(data.message.trim(), true);
-            return;
-        }
-
         showMessage("Unable to sign in. Please try again.", true);
     }
 
