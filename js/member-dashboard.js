@@ -44,6 +44,38 @@ if(dashboardDate){
   }).format(now);
 }
 
+const leaveSummaryElements={
+  casual:{
+    balance:document.querySelector('#casual-leave-balance'),
+    remaining:document.querySelector('#casual-leave-remaining'),
+    progress:document.querySelector('#casual-leave-progress')
+  },
+  sick:{
+    balance:document.querySelector('#sick-leave-balance'),
+    remaining:document.querySelector('#sick-leave-remaining'),
+    progress:document.querySelector('#sick-leave-progress')
+  }
+};
+
+function updateLeaveSummary(type,used,total){
+  const elements=leaveSummaryElements[type];
+  if(!elements||!Number.isFinite(used)||!Number.isFinite(total)||total<=0) return;
+  const remaining=Math.max(total-used,0);
+  const percentage=Math.min(Math.max((used/total)*100,0),100);
+  if(elements.balance) elements.balance.textContent=`${used} used / ${total}`;
+  if(elements.remaining) elements.remaining.textContent=`${remaining} day${remaining===1?'':'s'} remaining`;
+  if(elements.progress){
+    elements.progress.style.width=`${percentage}%`;
+    elements.progress.setAttribute('aria-valuenow',String(Math.round(percentage)));
+    elements.progress.setAttribute('aria-valuemin','0');
+    elements.progress.setAttribute('aria-valuemax','100');
+  }
+}
+
+// Future authenticated API integration point:
+// updateLeaveSummary('casual', used, total);
+// updateLeaveSummary('sick', used, total);
+
 document.querySelectorAll('[data-toast]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const text=btn.dataset.toast||'Action completed';
