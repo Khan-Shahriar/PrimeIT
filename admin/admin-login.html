@@ -1,1 +1,102 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="PrimeIt UI/UX prototype"><title>PrimeIt — Admin Login</title><link rel="stylesheet" href="../css/admin-login.css"></head><body><main class="auth"><div class="auth-card reveal"><a class="logo" href="../public/index.html"><span class="logo-mark"><span>P</span></span><span>PrimeIt</span></a><h1>Admin Login</h1><p class="sub">Sign in to your PrimeIt admin account.</p><form data-demo><div class="field"><label>Email</label><input type="email" required placeholder="name@primeit.example"></div><div class="field"><label>Password</label><input type="password" required placeholder="••••••••"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;font-size:13px"><label style="font-weight:600"><input type="checkbox" style="width:auto"> Remember me</label><a href="#" style="color:var(--blue);font-weight:700">Forgot password?</a></div><button class="btn btn-primary" style="width:100%" type="submit">Sign In →</button></form><div class="auth-foot">Member? <a href="../member/member-login.html" style="color:var(--blue);font-weight:800">Go to Member Login</a></div><div class="auth-foot"><a href="../public/index.html">← Back to website</a></div></div></main><script src="../js/admin-login.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Secure PrimeIt administrator login">
+  <title>PrimeIt — Admin Login</title>
+  <link rel="stylesheet" href="../css/admin-login.css">
+</head>
+<body>
+  <main class="auth" aria-labelledby="admin-login-title">
+    <section class="auth-card reveal" aria-describedby="admin-login-description">
+      <a class="logo" href="../public/index.html" aria-label="PrimeIt home">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span>PrimeIt</span>
+      </a>
+
+      <header>
+        <h1 id="admin-login-title">Admin Login</h1>
+        <p class="sub" id="admin-login-description">Sign in to your PrimeIt administrator account.</p>
+      </header>
+
+      <form id="admin-login-form" novalidate>
+        <div
+          id="admin-login-message"
+          class="admin-login-message"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          hidden
+        ></div>
+
+        <div class="field">
+          <label for="admin-email">Email</label>
+          <input
+            id="admin-email"
+            name="email"
+            type="email"
+            autocomplete="username"
+            inputmode="email"
+            autocapitalize="none"
+            spellcheck="false"
+            required
+            maxlength="254"
+            placeholder="name@primeit.example"
+            aria-describedby="admin-email-error"
+          >
+          <span id="admin-email-error" class="field-error" role="alert"></span>
+        </div>
+
+        <div class="field">
+          <label for="admin-password">Password</label>
+          <div class="password-field">
+            <input
+              id="admin-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              maxlength="128"
+              placeholder="••••••••"
+              aria-describedby="admin-password-error"
+            >
+            <button
+              type="button"
+              class="password-toggle"
+              id="admin-password-toggle"
+              aria-label="Show password"
+              aria-controls="admin-password"
+              aria-pressed="false"
+            >
+              Show
+            </button>
+          </div>
+          <span id="admin-password-error" class="field-error" role="alert"></span>
+        </div>
+
+        <div class="login-options">
+          <a href="#" id="admin-forgot-password" aria-label="Forgot your admin password?">
+            Forgot password?
+          </a>
+        </div>
+
+        <button class="btn btn-primary admin-login-submit" type="submit" id="admin-login-submit">
+          <span class="submit-label">Sign In →</span>
+        </button>
+      </form>
+
+      <div class="auth-foot">
+        Member?
+        <a href="../member/member-login.html">Go to Member Login</a>
+      </div>
+
+      <div class="auth-foot">
+        <a href="../public/index.html">← Back to website</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/admin-login.js"></script>
+</body>
+</html>
