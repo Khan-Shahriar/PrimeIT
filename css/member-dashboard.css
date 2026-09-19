@@ -168,6 +168,21 @@ tr:last-child td{border-bottom:0}
 .leave-summary-header > strong{color:var(--success);font-size:12px;white-space:nowrap}
 .progress{height:8px;background:#EEF0F5;border-radius:999px;overflow:hidden}
 .progress > span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:inherit}
+.dashboard-office-preview{margin-top:24px;margin-bottom:4px}
+.dashboard-office-preview .section-heading{margin-bottom:14px}
+.office-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.office-preview-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;align-items:flex-start;gap:13px;min-width:0;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.office-preview-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(11,16,32,.06);border-color:#D9DEEA}
+.office-preview-icon{width:42px;height:42px;flex:0 0 42px;border-radius:12px;background:var(--soft);color:var(--blue2);display:grid;place-items:center;font-size:11px;font-weight:900}
+.office-preview-content{min-width:0;display:grid;gap:4px}
+.office-preview-content b{font-size:14px}
+.office-preview-content small{color:var(--muted);font-size:11px;line-height:1.5}
+.office-rules-preview{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:14px}
+.office-rules-preview > div:first-child{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.office-rules-preview > div:first-child b{font-size:14px}
+.office-rules-preview > div:first-child span{color:var(--muted);font-size:11px}
+.office-rule-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.office-rule-list span{padding:11px 12px;border-radius:10px;background:#F7F8FB;color:#475467;font-size:11px;line-height:1.45}
 .dashboard-gallery-preview{margin-top:24px;margin-bottom:4px}
 .dashboard-gallery-preview .section-heading{margin-bottom:14px}
 .gallery-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -247,4 +262,7 @@ tr:last-child td{border-bottom:0}
 .quick-action-card{padding:16px}
 .gallery-preview-grid{grid-template-columns:1fr}
 .gallery-preview-image{height:170px}
+.office-preview-grid{grid-template-columns:1fr}
+.office-rules-preview > div:first-child{align-items:flex-start;flex-direction:column;gap:4px}
+.office-rule-list{grid-template-columns:1fr}
 }
