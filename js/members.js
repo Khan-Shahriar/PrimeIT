@@ -1,4 +1,3 @@
-
 document.querySelectorAll('[data-toast]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const text=btn.dataset.toast||'Action completed';
@@ -18,5 +17,15 @@ document.querySelectorAll('form[data-demo]').forEach(form=>{
 
 const toggle=document.querySelector('.mobile-toggle');
 const sidebar=document.querySelector('.sidebar');
-if(toggle&&sidebar) toggle.addEventListener('click',()=>sidebar.classList.toggle('open'));
-document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()=>sidebar?.classList.remove('open')));
+if(toggle&&sidebar){
+  toggle.addEventListener('click',()=>{
+    const isOpen=sidebar.classList.toggle('open');
+    toggle.setAttribute('aria-expanded',String(isOpen));
+    toggle.setAttribute('aria-label',isOpen?'Close navigation menu':'Open navigation menu');
+  });
+}
+document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()=>{
+  sidebar?.classList.remove('open');
+  toggle?.setAttribute('aria-expanded','false');
+  toggle?.setAttribute('aria-label','Open navigation menu');
+}));
