@@ -221,4 +221,7 @@ tr:last-child td{border-bottom:0}
   .section-heading h2{font-size:20px}
 .announcement-title-row{align-items:flex-start;flex-direction:column;gap:7px}
 .announcement-preview-card{padding:8px 18px}
+.leave-summary-card{padding:8px 18px}
+.leave-summary-header{align-items:flex-start;flex-direction:column;gap:6px}
+.leave-summary-header > div{justify-content:space-between;width:100%;gap:12px}
 }
