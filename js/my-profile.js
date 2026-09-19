@@ -1,83 +1,470 @@
-const changePhotoButton=document.querySelector('#change-photo-btn');
-const profilePhotoInput=document.querySelector('#profile-photo-input');
-const profilePhotoPreview=document.querySelector('#profile-photo-preview');
-const userAvatarPreview=document.querySelector('#user-avatar-preview');
-const PROFILE_PHOTO_KEY='primeit_member_profile_photo';
+(() => {
+  'use strict';
 
-function showProfilePhoto(imageSrc){
-  if(!imageSrc) return;
+  const state = {
+    profile: null,
+    originalForm: null,
+    editMode: false,
+    imagePreviewUrl: null,
+    saving: false
+  };
 
-  if(profilePhotoPreview){
-    profilePhotoPreview.innerHTML='';
-    const profileImage=document.createElement('img');
-    profileImage.src=imageSrc;
-    profileImage.alt='Profile photo';
-    profilePhotoPreview.appendChild(profileImage);
+  const elements = {
+    sidebar: document.querySelector('#member-sidebar'),
+    menuToggle: document.querySelector('#member-menu-toggle'),
+    form: document.querySelector('#profile-form'),
+    content: document.querySelector('#profile-content'),
+    loading: document.querySelector('#profile-loading'),
+    empty: document.querySelector('#profile-empty'),
+    emptyDismiss: document.querySelector('#profile-empty-dismiss'),
+    editToggle: document.querySelector('#profile-edit-toggle'),
+    actions: document.querySelector('#profile-actions'),
+    cancel: document.querySelector('#profile-cancel'),
+    save: document.querySelector('#profile-save'),
+    status: document.querySelector('#profile-status-region'),
+    photoInput: document.querySelector('#profile-photo-input'),
+    changePhoto: document.querySelector('#change-photo-btn'),
+    photoPreview: document.querySelector('#profile-photo-preview'),
+    userAvatar: document.querySelector('#user-avatar-preview'),
+    photoHelp: document.querySelector('#profile-photo-help'),
+    summaryName: document.querySelector('#profile-summary-name'),
+    summaryRole: document.querySelector('#profile-summary-role'),
+    summaryDepartment: document.querySelector('#profile-summary-department'),
+    summaryId: document.querySelector('#profile-summary-id'),
+    summaryJoined: document.querySelector('#profile-summary-joined'),
+    topbarName: document.querySelector('#topbar-member-name'),
+    sectionState: document.querySelector('#basic-section-state'),
+    bioCount: document.querySelector('#bio-count')
+  };
+
+  const fields = {
+    firstName: document.querySelector('#first-name'),
+    lastName: document.querySelector('#last-name'),
+    displayName: document.querySelector('#display-name'),
+    email: document.querySelector('#work-email'),
+    jobTitle: document.querySelector('#job-title'),
+    department: document.querySelector('#department'),
+    role: document.querySelector('#member-role'),
+    employeeId: document.querySelector('#employee-id'),
+    joiningDate: document.querySelector('#joining-date'),
+    phone: document.querySelector('#phone'),
+    bio: document.querySelector('#bio'),
+    professionalLink: document.querySelector('#professional-link')
+  };
+
+  const editableFields = [
+    fields.firstName,
+    fields.lastName,
+    fields.displayName,
+    fields.phone,
+    fields.bio,
+    fields.professionalLink
+  ].filter(Boolean);
+
+  const allFormFields = Object.values(fields).filter(Boolean);
+
+  function setStatus(message, type = 'info') {
+    if (!elements.status) return;
+    elements.status.textContent = '';
+    elements.status.className = `profile-status-region is-${type}`;
+    if (!message) {
+      elements.status.hidden = true;
+      return;
+    }
+    elements.status.hidden = false;
+    elements.status.textContent = message;
   }
 
-  if(userAvatarPreview){
-    userAvatarPreview.innerHTML='';
-    const userImage=document.createElement('img');
-    userImage.src=imageSrc;
-    userImage.alt='Profile photo';
-    userAvatarPreview.appendChild(userImage);
+  function setLoading(isLoading) {
+    if (elements.loading) elements.loading.hidden = !isLoading;
+    if (isLoading && elements.content) elements.content.hidden = true;
   }
-}
 
-if(changePhotoButton&&profilePhotoInput){
-  changePhotoButton.addEventListener('click',()=>profilePhotoInput.click());
+  function setEmptyState(isEmpty) {
+    if (elements.empty) elements.empty.hidden = !isEmpty;
+    if (isEmpty && elements.content) elements.content.hidden = true;
+  }
 
-  profilePhotoInput.addEventListener('change',()=>{
-    const file=profilePhotoInput.files?.[0];
-    if(!file) return;
+  function normalizeProfile(data) {
+    if (!data || typeof data !== 'object') return null;
 
-    if(!['image/jpeg','image/png','image/webp'].includes(file.type)){
-      profilePhotoInput.value='';
+    return {
+      firstName: String(data.firstName ?? ''),
+      lastName: String(data.lastName ?? ''),
+      displayName: String(data.displayName ?? ''),
+      email: String(data.email ?? ''),
+      jobTitle: String(data.jobTitle ?? ''),
+      department: String(data.department ?? ''),
+      role: String(data.role ?? ''),
+      employeeId: String(data.employeeId ?? ''),
+      joiningDate: String(data.joiningDate ?? ''),
+      phone: String(data.phone ?? ''),
+      bio: String(data.bio ?? ''),
+      professionalLink: String(data.professionalLink ?? ''),
+      profileImageUrl: typeof data.profileImageUrl === 'string' ? data.profileImageUrl : ''
+    };
+  }
+
+  function getDisplayName(profile) {
+    return profile.displayName ||
+      [profile.firstName, profile.lastName].filter(Boolean).join(' ') ||
+      'Member';
+  }
+
+  function getInitials(profile) {
+    const name = getDisplayName(profile);
+    const parts = name.split(/\s+/).filter(Boolean);
+    return (parts.length > 1
+      ? parts.slice(0, 2).map(part => part[0])
+      : [name.slice(0, 2)]
+    ).join('').toUpperCase() || 'M';
+  }
+
+  function setFieldValue(field, value, emptyText = '') {
+    if (!field) return;
+    field.value = value || '';
+    if (!value && field.tagName === 'INPUT') field.placeholder = emptyText;
+  }
+
+  function renderProfile(profile) {
+    const safeProfile = normalizeProfile(profile);
+    if (!safeProfile) {
+      setEmptyState(true);
       return;
     }
 
-    const reader=new FileReader();
-    reader.addEventListener('load',()=>{
-      const imageSrc=reader.result;
-      try{
-        localStorage.setItem(PROFILE_PHOTO_KEY,imageSrc);
-        showProfilePhoto(imageSrc);
-      }catch(error){
-        console.error('Unable to save profile photo locally.',error);
-        showProfilePhoto(imageSrc);
+    state.profile = safeProfile;
+
+    setFieldValue(fields.firstName, safeProfile.firstName, 'Not provided');
+    setFieldValue(fields.lastName, safeProfile.lastName, 'Not provided');
+    setFieldValue(fields.displayName, safeProfile.displayName, 'Not provided');
+    setFieldValue(fields.email, safeProfile.email, 'Not provided');
+    setFieldValue(fields.jobTitle, safeProfile.jobTitle, 'Not provided');
+    setFieldValue(fields.department, safeProfile.department, 'Not provided');
+    setFieldValue(fields.role, safeProfile.role, 'Not provided');
+    setFieldValue(fields.employeeId, safeProfile.employeeId, 'Not provided');
+    setFieldValue(fields.joiningDate, safeProfile.joiningDate, 'Not provided');
+    setFieldValue(fields.phone, safeProfile.phone, 'Not provided');
+    setFieldValue(fields.bio, safeProfile.bio);
+    setFieldValue(fields.professionalLink, safeProfile.professionalLink, 'No professional link');
+
+    const displayName = getDisplayName(safeProfile);
+    const initials = getInitials(safeProfile);
+
+    if (elements.summaryName) elements.summaryName.textContent = displayName;
+    if (elements.summaryRole) elements.summaryRole.textContent = safeProfile.role || safeProfile.jobTitle || 'Role unavailable';
+    if (elements.summaryDepartment) elements.summaryDepartment.textContent = safeProfile.department || 'Department unavailable';
+    if (elements.summaryId) elements.summaryId.textContent = safeProfile.employeeId || 'Not provided';
+    if (elements.summaryJoined) elements.summaryJoined.textContent = safeProfile.joiningDate || 'Not provided';
+    if (elements.topbarName) elements.topbarName.textContent = displayName;
+
+    renderAvatar(safeProfile.profileImageUrl, initials);
+    updateBioCount();
+    setEmptyState(false);
+  }
+
+  function renderAvatar(imageUrl, initials) {
+    const targets = [elements.photoPreview, elements.userAvatar].filter(Boolean);
+
+    targets.forEach(target => {
+      target.textContent = '';
+      target.classList.remove('has-image');
+
+      if (imageUrl) {
+        const image = document.createElement('img');
+        image.src = imageUrl;
+        image.alt = 'Profile photo';
+        image.addEventListener('error', () => {
+          target.textContent = initials;
+          target.classList.remove('has-image');
+        }, { once: true });
+        target.appendChild(image);
+        target.classList.add('has-image');
+      } else {
+        target.textContent = initials;
       }
     });
-    reader.readAsDataURL(file);
-  });
-}
+  }
 
-try{
-  const savedPhoto=localStorage.getItem(PROFILE_PHOTO_KEY);
-  if(savedPhoto) showProfilePhoto(savedPhoto);
-}catch(error){
-  console.error('Unable to restore profile photo.',error);
-}
+  function captureFormState() {
+    return {
+      firstName: fields.firstName?.value || '',
+      lastName: fields.lastName?.value || '',
+      displayName: fields.displayName?.value || '',
+      phone: fields.phone?.value || '',
+      bio: fields.bio?.value || '',
+      professionalLink: fields.professionalLink?.value || ''
+    };
+  }
 
+  function restoreFormState(snapshot) {
+    if (!snapshot) return;
+    Object.entries(snapshot).forEach(([key, value]) => {
+      if (fields[key]) fields[key].value = value;
+    });
+    updateBioCount();
+  }
 
+  function setEditMode(enabled) {
+    state.editMode = Boolean(enabled);
 
-document.querySelectorAll('[data-toast]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const text=btn.dataset.toast||'Action completed';
-    let t=document.querySelector('.toast');
-    if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}
-    t.textContent=text;t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2200);
-  });
-});
-document.querySelectorAll('form[data-demo]').forEach(form=>{
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const btn=form.querySelector('button[type="submit"]');
-    if(btn){const old=btn.textContent;btn.textContent='Saved ✓';setTimeout(()=>btn.textContent=old,1300);}
-  });
-});
+    editableFields.forEach(field => {
+      field.readOnly = !state.editMode;
+      field.setAttribute('aria-readonly', String(!state.editMode));
+    });
 
-const toggle=document.querySelector('.mobile-toggle');
-const sidebar=document.querySelector('.sidebar');
-if(toggle&&sidebar) toggle.addEventListener('click',()=>sidebar.classList.toggle('open'));
-document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()=>sidebar?.classList.remove('open')));
+    if (elements.editToggle) {
+      elements.editToggle.textContent = state.editMode ? 'Editing Profile' : 'Edit Profile';
+      elements.editToggle.setAttribute('aria-pressed', String(state.editMode));
+      elements.editToggle.disabled = state.saving;
+    }
+
+    if (elements.actions) elements.actions.hidden = !state.editMode;
+    if (elements.changePhoto) elements.changePhoto.disabled = state.saving;
+
+    if (elements.sectionState) {
+      elements.sectionState.textContent = state.editMode ? 'Editing' : 'View mode';
+      elements.sectionState.classList.toggle('is-editing', state.editMode);
+    }
+  }
+
+  function clearValidation() {
+    document.querySelectorAll('.field-error').forEach(error => {
+      error.textContent = '';
+    });
+
+    allFormFields.forEach(field => {
+      field.removeAttribute('aria-invalid');
+      field.classList.remove('is-invalid');
+    });
+  }
+
+  function setFieldError(field, message) {
+    if (!field) return;
+    field.classList.add('is-invalid');
+    field.setAttribute('aria-invalid', 'true');
+
+    const error = document.querySelector(`#${field.id}-error`);
+    if (error) error.textContent = message;
+  }
+
+  function validateProfile() {
+    clearValidation();
+
+    const values = captureFormState();
+    let valid = true;
+
+    if (values.firstName.trim().length > 80) {
+      setFieldError(fields.firstName, 'First name must be 80 characters or fewer.');
+      valid = false;
+    }
+
+    if (values.lastName.trim().length > 80) {
+      setFieldError(fields.lastName, 'Last name must be 80 characters or fewer.');
+      valid = false;
+    }
+
+    if (!values.displayName.trim()) {
+      setFieldError(fields.displayName, 'Display name is required.');
+      valid = false;
+    } else if (values.displayName.trim().length > 80) {
+      setFieldError(fields.displayName, 'Display name must be 80 characters or fewer.');
+      valid = false;
+    }
+
+    if (values.phone && !/^[+0-9()\-\s.]{7,30}$/.test(values.phone.trim())) {
+      setFieldError(fields.phone, 'Enter a valid phone number.');
+      valid = false;
+    }
+
+    if (values.bio.length > 500) {
+      setFieldError(fields.bio, 'Bio must be 500 characters or fewer.');
+      valid = false;
+    }
+
+    if (values.professionalLink) {
+      try {
+        const url = new URL(values.professionalLink);
+        if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Invalid protocol');
+      } catch {
+        setFieldError(fields.professionalLink, 'Enter a valid http or https URL.');
+        valid = false;
+      }
+    }
+
+    if (!valid) setStatus('Please correct the highlighted fields before continuing.', 'error');
+    return valid;
+  }
+
+  function updateBioCount() {
+    if (!elements.bioCount || !fields.bio) return;
+    elements.bioCount.textContent = `${fields.bio.value.length} / 500`;
+  }
+
+  function beginEdit() {
+    if (!state.profile || state.saving) return;
+    state.originalForm = captureFormState();
+    clearValidation();
+    setStatus('');
+    setEditMode(true);
+    fields.displayName?.focus();
+  }
+
+  function cancelEdit() {
+    if (state.saving) return;
+    restoreFormState(state.originalForm);
+    clearValidation();
+    setEditMode(false);
+    setStatus('Unsaved profile changes were discarded.', 'info');
+  }
+
+  async function handleSave(event) {
+    event.preventDefault();
+    if (!state.editMode || state.saving) return;
+
+    if (!validateProfile()) return;
+
+    /*
+     * Backend boundary:
+     * No profile endpoint is invented here. No fake request or fake success
+     * response is generated. The future authenticated REST integration should
+     * submit captureFormState() with credentials: 'include' and use the server
+     * response as the source of truth.
+     */
+    state.saving = true;
+    if (elements.save) {
+      elements.save.disabled = true;
+      elements.save.textContent = 'Checking...';
+    }
+    if (elements.cancel) elements.cancel.disabled = true;
+    if (elements.editToggle) elements.editToggle.disabled = true;
+
+    await new Promise(resolve => window.setTimeout(resolve, 250));
+
+    state.saving = false;
+    if (elements.save) {
+      elements.save.disabled = false;
+      elements.save.textContent = 'Save Changes';
+    }
+    if (elements.cancel) elements.cancel.disabled = false;
+    if (elements.editToggle) elements.editToggle.disabled = false;
+
+    setStatus(
+      'Your changes passed client-side validation, but no server save was performed because the authenticated profile API is not connected yet.',
+      'info'
+    );
+  }
+
+  function handlePhotoSelection() {
+    const file = elements.photoInput?.files?.[0];
+    if (!file) return;
+
+    const allowedTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
+    const maxBytes = 5 * 1024 * 1024;
+
+    if (!allowedTypes.has(file.type)) {
+      elements.photoInput.value = '';
+      setStatus('Choose a JPG, PNG, or WebP image.', 'error');
+      return;
+    }
+
+    if (file.size > maxBytes) {
+      elements.photoInput.value = '';
+      setStatus('Profile images must be 5 MB or smaller.', 'error');
+      return;
+    }
+
+    if (state.imagePreviewUrl) URL.revokeObjectURL(state.imagePreviewUrl);
+    state.imagePreviewUrl = URL.createObjectURL(file);
+
+    const initials = getInitials(state.profile || {});
+    renderAvatar(state.imagePreviewUrl, initials);
+
+    setStatus('Image preview updated. The image has not been uploaded or stored.', 'info');
+  }
+
+  function setupMobileNavigation() {
+    if (!elements.menuToggle || !elements.sidebar) return;
+
+    elements.menuToggle.addEventListener('click', () => {
+      const isOpen = elements.sidebar.classList.toggle('open');
+      elements.menuToggle.setAttribute('aria-expanded', String(isOpen));
+      elements.menuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+    });
+
+    elements.sidebar.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        elements.sidebar.classList.remove('open');
+        elements.menuToggle.setAttribute('aria-expanded', 'false');
+        elements.menuToggle.setAttribute('aria-label', 'Open navigation menu');
+      });
+    });
+  }
+
+  function setupFormEvents() {
+    elements.form?.addEventListener('submit', handleSave);
+    elements.editToggle?.addEventListener('click', () => {
+      if (state.editMode) {
+        setStatus('Finish or cancel the current profile edit before starting another action.', 'info');
+        return;
+      }
+      beginEdit();
+    });
+    elements.cancel?.addEventListener('click', cancelEdit);
+    fields.bio?.addEventListener('input', updateBioCount);
+    elements.changePhoto?.addEventListener('click', () => elements.photoInput?.click());
+    elements.photoInput?.addEventListener('change', handlePhotoSelection);
+
+    elements.emptyDismiss?.addEventListener('click', () => {
+      setEmptyState(false);
+      if (elements.content) elements.content.hidden = false;
+      setStatus('No authenticated profile data has been loaded. Fields remain blank until the profile service supplies them.', 'info');
+    });
+  }
+
+  function setupBeforeUnload() {
+    window.addEventListener('beforeunload', event => {
+      if (!state.editMode || state.saving) return;
+      event.preventDefault();
+      event.returnValue = '';
+    });
+  }
+
+  function initializeProfilePage() {
+    setLoading(true);
+    setEmptyState(false);
+    setupMobileNavigation();
+    setupFormEvents();
+    setupBeforeUnload();
+
+    /*
+     * API integration boundary:
+     * The page intentionally does not invent an endpoint or hardcode a member.
+     * The authenticated backend will later supply the current member profile.
+     * Until then, a neutral blank profile keeps this page free of fake data.
+     */
+    const emptyProfile = normalizeProfile({
+      firstName: '',
+      lastName: '',
+      displayName: '',
+      email: '',
+      jobTitle: '',
+      department: '',
+      role: '',
+      employeeId: '',
+      joiningDate: '',
+      phone: '',
+      bio: '',
+      professionalLink: '',
+      profileImageUrl: ''
+    });
+
+    window.setTimeout(() => {
+      setLoading(false);
+      renderProfile(emptyProfile);
+      setStatus('Profile service is not connected yet. No member information has been fabricated.', 'info');
+    }, 120);
+  }
+
+  initializeProfilePage();
+})();
