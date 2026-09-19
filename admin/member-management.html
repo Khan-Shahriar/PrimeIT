@@ -1,607 +1,344 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>PrimeIt — Member Management</title>
-
-    <link
-        rel="stylesheet"
-        href="../css/member-management.css"
-    >
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PrimeIt administrator member management">
+  <title>PrimeIt — Member Management</title>
+  <link rel="stylesheet" href="../css/member-management.css">
 </head>
-
 <body class="app-body">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
-<div class="app-shell">
+  <div class="app-shell">
+    <aside class="sidebar" id="admin-sidebar" aria-label="PrimeIt Admin Panel">
+      <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
 
-    <!-- ==========================================
-         Sidebar
-    =========================================== -->
+      <p class="side-label">Admin Panel</p>
 
-    <aside class="sidebar">
+      <nav class="side-nav" aria-label="Admin navigation">
+        <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link active" href="member-management.html" aria-current="page">Member Management</a>
+        <a class="nav-link" href="leave-management.html">Leave Management</a>
+        <a class="nav-link" href="holiday-management.html">Holiday Management</a>
+        <a class="nav-link" href="admin-announcements.html">Announcements</a>
+        <a class="nav-link" href="admin-office-information.html">Office Information</a>
+        <a class="nav-link" href="admin-gallery.html">Gallery</a>
+        <a class="nav-link" href="role-permissions.html">Role &amp; Permissions</a>
+        <a class="nav-link" href="admin-profile.html">Admin Profile</a>
+      </nav>
 
-        <a class="logo" href="admin-dashboard.html">
-            <span class="logo-mark">
-                <span>P</span>
-            </span>
-
-            <span class="logo-text">
-                PrimeIt
-            </span>
-        </a>
-
-        <div
-            class="side-label"
-            style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em"
-        >
-            Admin Panel
-        </div>
-
-        <nav class="side-nav">
-
-            <a
-                class="nav-link"
-                href="admin-dashboard.html"
-            >
-                Dashboard
-            </a>
-
-            <a
-                class="nav-link active"
-                href="member-management.html"
-            >
-                Members
-            </a>
-
-            <a
-                class="nav-link"
-                href="leave-management.html"
-            >
-                Leave Management
-            </a>
-
-            <a
-                class="nav-link"
-                href="holiday-management.html"
-            >
-                Holidays
-            </a>
-
-            <a
-                class="nav-link"
-                href="admin-announcements.html"
-            >
-                Announcements
-            </a>
-
-            <a
-                class="nav-link"
-                href="admin-office-information.html"
-            >
-                Office Information
-            </a>
-
-            <a
-                class="nav-link"
-                href="admin-gallery.html"
-            >
-                Gallery
-            </a>
-
-            <a
-                class="nav-link"
-                href="role-permissions.html"
-            >
-                Roles & Permissions
-            </a>
-
-            <a
-                class="nav-link"
-                href="admin-profile.html"
-            >
-                Admin Profile
-            </a>
-
-        </nav>
-
-        <div class="side-bottom">
-
-            <a
-                class="nav-link"
-                href="../public/index.html"
-            >
-                ↩
-                <span class="side-label">
-                    Back to Website
-                </span>
-            </a>
-
-            <a
-                class="nav-link"
-                href="admin-login.html"
-            >
-                ⇥
-                <span class="side-label">
-                    Logout
-                </span>
-            </a>
-
-        </div>
-
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">Back to Website</a>
+        <button class="nav-link nav-button" type="button" data-logout>Logout</button>
+      </div>
     </aside>
 
+    <div class="sidebar-backdrop" data-sidebar-close hidden></div>
 
-    <!-- ==========================================
-         Main
-    =========================================== -->
+    <main class="main" id="main-content">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-controls="admin-sidebar" aria-expanded="false" data-sidebar-toggle>
+            <span aria-hidden="true">☰</span>
+          </button>
+          <div class="topbar-context">Member Management</div>
+        </div>
 
-    <main class="main">
+        <div class="user-chip" aria-label="Administrator account context">
+          <span class="user-context">
+            <span class="user-name" data-admin-name>Administrator</span>
+            <span class="user-role" data-admin-role>Account context</span>
+          </span>
+          <span class="user-avatar" aria-hidden="true" data-admin-initials>AD</span>
+        </div>
+      </header>
 
-        <!-- ======================================
-             Topbar
-        ======================================= -->
+      <section class="content" aria-labelledby="page-title">
+        <div class="breadcrumb" aria-label="Breadcrumb">
+          <a href="admin-dashboard.html">Admin Panel</a>
+          <span aria-hidden="true">/</span>
+          <span>Member Management</span>
+        </div>
 
-        <header class="app-topbar">
-
-            <button
-                class="mobile-toggle"
-                type="button"
-                aria-label="Toggle navigation"
-            >
-                ☰
-            </button>
-
-            <div class="search">
-
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    aria-label="Search"
-                >
-
-            </div>
-
-            <div class="user-chip">
-
-                <span>
-                    Administrator
-                </span>
-
-                <span class="user-avatar">
-                    AD
-                </span>
-
-            </div>
-
+        <header class="content-header">
+          <div>
+            <p class="eyebrow">People &amp; accounts</p>
+            <h1 id="page-title">Member Management</h1>
+            <p>Review PrimeIt members and prepare member account changes for the connected administration API.</p>
+          </div>
+          <button class="btn btn-primary" id="add-member-btn" type="button">
+            <span aria-hidden="true">+</span>
+            Add Member
+          </button>
         </header>
 
-
-        <!-- ======================================
-             Content
-        ======================================= -->
-
-        <section class="content">
-
-            <div class="breadcrumb">
-                Admin Panel / Member Management
-            </div>
-
-
-            <!-- Page Header -->
-
-            <div class="content-header">
-
-                <div>
-
-                    <h1
-                        style="font-size:34px;margin:0"
-                    >
-                        Member Management
-                    </h1>
-
-                    <p>
-                        Create, edit, activate, deactivate, and view member accounts.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- ==================================
-                 Toolbar
-            =================================== -->
-
-            <div class="toolbar">
-
-                <input
-                    type="text"
-                    placeholder="Search members..."
-                    style="max-width:280px"
-                >
-
-                <select>
-                    <option>
-                        All Departments
-                    </option>
-                </select>
-
-                <select>
-                    <option>
-                        All Status
-                    </option>
-
-                    <option value="active">
-                        Active
-                    </option>
-
-                    <option value="inactive">
-                        Inactive
-                    </option>
-                </select>
-
-                <button
-                    class="btn btn-primary"
-                    id="add-member-btn"
-                    type="button"
-                >
-                    + Add Member
-                </button>
-
-            </div>
-
-
-            <!-- ==================================
-                 Add Member Modal
-            =================================== -->
-
-            <div
-                id="add-member-modal"
-                class="member-modal"
-                hidden
-            >
-
-                <div class="member-modal-content">
-
-                    <div class="member-modal-header">
-
-                        <div>
-
-                            <h2>
-                                Add Member
-                            </h2>
-
-                            <p>
-                                Create a new PrimeIt member account.
-                            </p>
-
-                        </div>
-
-                        <button
-                            type="button"
-                            id="close-add-member"
-                            class="member-modal-close"
-                            aria-label="Close"
-                        >
-                            ×
-                        </button>
-
-                    </div>
-
-
-                    <!-- Add Member Form -->
-
-                    <form id="add-member-form">
-
-                        <div class="form-grid">
-
-
-                            <!-- Full Name -->
-
-                            <div class="form-group">
-
-                                <label
-                                    for="member-full-name"
-                                >
-                                    Full Name
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="member-full-name"
-                                    name="full_name"
-                                    required
-                                    minlength="2"
-                                    maxlength="100"
-                                >
-
-                            </div>
-
-
-                            <!-- Email -->
-
-                            <div class="form-group">
-
-                                <label
-                                    for="member-email"
-                                >
-                                    Email
-                                </label>
-
-                                <input
-                                    type="email"
-                                    id="member-email"
-                                    name="email"
-                                    required
-                                    maxlength="150"
-                                >
-
-                            </div>
-
-
-                            <!-- Password -->
-
-                            <div class="form-group">
-
-                                <label
-                                    for="member-password"
-                                >
-                                    Password
-                                </label>
-
-                                <input
-                                    type="password"
-                                    id="member-password"
-                                    name="password"
-                                    required
-                                    minlength="8"
-                                    maxlength="128"
-                                    autocomplete="new-password"
-                                >
-
-                            </div>
-
-
-                            <!-- Phone -->
-
-                            <div class="form-group">
-
-                                <label
-                                    for="member-phone"
-                                >
-                                    Phone
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="member-phone"
-                                    name="phone"
-                                    maxlength="30"
-                                >
-
-                            </div>
-
-
-                            <!-- Department -->
-
-                            <div class="form-group">
-
-                                <label
-                                    for="member-department"
-                                >
-                                    Department
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="member-department"
-                                    name="department"
-                                    maxlength="100"
-                                >
-
-                            </div>
-
-
-                            <!-- Position -->
-
-                            <div class="form-group">
-
-                                <label
-                                    for="member-position"
-                                >
-                                    Position
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="member-position"
-                                    name="position"
-                                    maxlength="100"
-                                >
-
-                            </div>
-
-
-                            <!-- Role -->
-
-                            <div class="form-group">
-
-                                <label
-                                    for="member-role"
-                                >
-                                    Role
-                                </label>
-
-                                <select
-                                    id="member-role"
-                                    name="role"
-                                >
-
-                                    <option value="member">
-                                        Member
-                                    </option>
-
-                                    <option value="admin">
-                                        Admin
-                                    </option>
-
-                                    <option value="hr">
-                                        HR
-                                    </option>
-
-                                    <option value="ceo">
-                                        CEO
-                                    </option>
-
-                                    <option value="developer">
-                                        Developer
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-                            <!-- Status -->
-
-                            <div class="form-group">
-
-                                <label
-                                    for="member-status"
-                                >
-                                    Status
-                                </label>
-
-                                <select
-                                    id="member-status"
-                                    name="status"
-                                >
-
-                                    <option value="active">
-                                        Active
-                                    </option>
-
-                                    <option value="inactive">
-                                        Inactive
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Form Actions -->
-
-                        <div class="member-modal-actions">
-
-                            <button
-                                type="button"
-                                id="cancel-add-member"
-                                class="btn btn-secondary"
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                type="submit"
-                                class="btn btn-primary"
-                            >
-                                Create Member
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-
-            <!-- ==================================
-                 Members Table
-            =================================== -->
-
-            <div class="table-wrap">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Member
-                            </th>
-
-                            <th>
-                                Position
-                            </th>
-
-                            <th>
-                                Department
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Joined
-                            </th>
-
-                            <th>
-                                Actions
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-                        <!--
-                            Real members are loaded
-                            from /api/members
-                            by member-management.js
-                        -->
-
-                        <tr>
-
-                            <td
-                                colspan="6"
-                                style="text-align:center;padding:30px;"
-                            >
-                                Loading members...
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
+        <p class="sr-status" id="page-status" role="status" aria-live="polite" aria-atomic="true">Member data is ready for future API integration.</p>
+
+        <section class="stats-grid" aria-labelledby="member-stats-title">
+          <h2 class="sr-only" id="member-stats-title">Member statistics</h2>
+          <article class="stat-card">
+            <span class="stat-label">Total Members</span>
+            <strong class="stat-value" data-stat="total">—</strong>
+            <span class="stat-meta" data-stat-meta="total">Data unavailable</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Active Members</span>
+            <strong class="stat-value" data-stat="active">—</strong>
+            <span class="stat-meta" data-stat-meta="active">Data unavailable</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Inactive Members</span>
+            <strong class="stat-value" data-stat="inactive">—</strong>
+            <span class="stat-meta" data-stat-meta="inactive">Data unavailable</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Invited / Pending</span>
+            <strong class="stat-value" data-stat="pending">—</strong>
+            <span class="stat-meta" data-stat-meta="pending">Data unavailable</span>
+          </article>
         </section>
 
+        <section class="management-card" aria-labelledby="member-list-title">
+          <div class="card-heading">
+            <div>
+              <p class="section-kicker">Directory</p>
+              <h2 id="member-list-title">Members</h2>
+              <p>Search and filter the member directory when live data is available.</p>
+            </div>
+            <div class="result-count" id="result-count" aria-live="polite">No member data</div>
+          </div>
+
+          <div class="toolbar" role="search" aria-label="Member search and filters">
+            <div class="search-field">
+              <label class="sr-only" for="member-search">Search members</label>
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input id="member-search" type="search" placeholder="Search name, email, ID, or job title" autocomplete="off">
+              <button class="clear-search" id="clear-search" type="button" aria-label="Clear member search" hidden>×</button>
+            </div>
+
+            <div class="filter-field">
+              <label class="sr-only" for="department-filter">Filter by department</label>
+              <select id="department-filter">
+                <option value="">All Departments</option>
+              </select>
+            </div>
+
+            <div class="filter-field">
+              <label class="sr-only" for="role-filter">Filter by role</label>
+              <select id="role-filter">
+                <option value="">All Roles</option>
+              </select>
+            </div>
+
+            <div class="filter-field">
+              <label class="sr-only" for="status-filter">Filter by status</label>
+              <select id="status-filter">
+                <option value="">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="suspended">Suspended</option>
+              </select>
+            </div>
+
+            <button class="btn btn-secondary" id="reset-filters" type="button">Reset</button>
+          </div>
+
+          <div class="table-shell" id="member-table-shell">
+            <div class="loading-panel" id="list-loading" hidden>
+              <span class="spinner" aria-hidden="true"></span>
+              <span>Loading member data…</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="member-table">
+                <caption class="sr-only">PrimeIt member directory</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Member</th>
+                    <th scope="col">Member ID</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Joined</th>
+                    <th scope="col" class="actions-column">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="member-table-body"></tbody>
+              </table>
+            </div>
+
+            <div class="state-panel" id="list-state" data-state="unavailable">
+              <div class="state-icon" aria-hidden="true">M</div>
+              <h3 id="list-state-title">Member data unavailable</h3>
+              <p id="list-state-message">Connect the Member Management REST API to load real members. No production member records are being fabricated in the frontend.</p>
+              <button class="btn btn-secondary" id="retry-members" type="button">Retry data source</button>
+            </div>
+          </div>
+
+          <div class="pagination" id="pagination" hidden aria-label="Member pagination">
+            <div class="pagination-summary" id="pagination-summary"></div>
+            <div class="pagination-controls">
+              <button class="btn btn-secondary btn-sm" id="previous-page" type="button">Previous</button>
+              <span id="page-indicator" aria-live="polite">Page 1</span>
+              <button class="btn btn-secondary btn-sm" id="next-page" type="button">Next</button>
+            </div>
+          </div>
+        </section>
+      </section>
     </main>
+  </div>
 
-</div>
+  <div class="modal-backdrop" id="member-modal-backdrop" hidden></div>
 
+  <section class="dialog" id="member-details-dialog" role="dialog" aria-modal="true" aria-labelledby="details-title" aria-describedby="details-description" hidden>
+    <div class="dialog-card dialog-card-details">
+      <header class="dialog-header">
+        <div>
+          <p class="section-kicker">Member profile</p>
+          <h2 id="details-title">Member Details</h2>
+          <p id="details-description">Review non-sensitive member information.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="member-details-dialog" aria-label="Close member details">×</button>
+      </header>
+      <div class="details-content" id="member-details-content"></div>
+      <footer class="dialog-actions">
+        <button class="btn btn-secondary" type="button" data-close-dialog="member-details-dialog">Close</button>
+        <button class="btn btn-primary" id="details-edit-btn" type="button">Edit Member</button>
+      </footer>
+    </div>
+  </section>
 
-<!-- ==========================================
-     JavaScript
-=========================================== -->
+  <section class="dialog" id="member-form-dialog" role="dialog" aria-modal="true" aria-labelledby="member-form-title" aria-describedby="member-form-description" hidden>
+    <div class="dialog-card dialog-card-form">
+      <header class="dialog-header">
+        <div>
+          <p class="section-kicker">Member record</p>
+          <h2 id="member-form-title">Add Member</h2>
+          <p id="member-form-description">Enter professional member information. Account credentials are handled by the future authentication system.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="member-form-dialog" aria-label="Close member form">×</button>
+      </header>
 
-<script src="../js/member-management.js"></script>
+      <div class="form-message" id="member-form-message" role="alert" aria-live="assertive" hidden></div>
 
+      <form id="member-form" novalidate>
+        <input type="hidden" id="member-record-id" name="member_id">
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="first-name">First Name <span aria-hidden="true">*</span></label>
+            <input id="first-name" name="first_name" type="text" required minlength="1" maxlength="80" autocomplete="given-name">
+            <span class="field-error" id="first-name-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="last-name">Last Name <span aria-hidden="true">*</span></label>
+            <input id="last-name" name="last_name" type="text" required minlength="1" maxlength="80" autocomplete="family-name">
+            <span class="field-error" id="last-name-error"></span>
+          </div>
+
+          <div class="form-field form-field-wide">
+            <label for="display-name">Display Name</label>
+            <input id="display-name" name="display_name" type="text" maxlength="160" autocomplete="name">
+            <span class="field-error" id="display-name-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="work-email">Work Email <span aria-hidden="true">*</span></label>
+            <input id="work-email" name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email">
+            <span class="field-error" id="work-email-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="member-phone">Phone</label>
+            <input id="member-phone" name="phone" type="tel" maxlength="30" autocomplete="tel" inputmode="tel">
+            <span class="field-error" id="member-phone-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="member-department">Department</label>
+            <input id="member-department" name="department" type="text" maxlength="100">
+            <span class="field-error" id="member-department-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="member-job-title">Job Title</label>
+            <input id="member-job-title" name="job_title" type="text" maxlength="120">
+            <span class="field-error" id="member-job-title-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="member-role">Role</label>
+            <select id="member-role" name="role">
+              <option value="">Select role</option>
+            </select>
+            <span class="field-help">Role options are prepared for dynamic data from Role &amp; Permissions.</span>
+            <span class="field-error" id="member-role-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="member-status">Status</label>
+            <select id="member-status" name="status">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="suspended">Suspended</option>
+            </select>
+            <span class="field-error" id="member-status-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="joining-date">Joining Date</label>
+            <input id="joining-date" name="joining_date" type="date">
+            <span class="field-error" id="joining-date-error"></span>
+          </div>
+
+          <div class="form-field form-field-wide">
+            <label for="member-location">Location</label>
+            <input id="member-location" name="location" type="text" maxlength="120" autocomplete="address-level2">
+            <span class="field-error" id="member-location-error"></span>
+          </div>
+
+          <div class="form-field form-field-wide">
+            <label for="member-bio">Short Bio</label>
+            <textarea id="member-bio" name="bio" rows="4" maxlength="500"></textarea>
+            <span class="field-error" id="member-bio-error"></span>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="btn btn-secondary" type="button" data-close-dialog="member-form-dialog">Cancel</button>
+          <button class="btn btn-primary" id="member-form-submit" type="submit">Create Member</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="dialog" id="member-action-dialog" role="dialog" aria-modal="true" aria-labelledby="action-title" aria-describedby="action-description" hidden>
+    <div class="dialog-card dialog-card-confirm">
+      <header class="dialog-header">
+        <div>
+          <p class="section-kicker">Account action</p>
+          <h2 id="action-title">Confirm action</h2>
+          <p id="action-description">Review the requested member action before continuing.</p>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="member-action-dialog" aria-label="Close confirmation">×</button>
+      </header>
+      <div class="confirmation-body">
+        <strong id="action-member-name">Member</strong>
+        <p id="action-message"></p>
+      </div>
+      <div class="dialog-actions">
+        <button class="btn btn-secondary" type="button" data-close-dialog="member-action-dialog">Cancel</button>
+        <button class="btn btn-danger" id="confirm-member-action" type="button">Confirm</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/member-management.js"></script>
 </body>
-
 </html>
