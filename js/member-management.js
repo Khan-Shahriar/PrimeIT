@@ -340,9 +340,10 @@
     setStatus("Loading member data…");
 
     try {
-      await apiAdapter.listMembers();
+      const response = await apiAdapter.listMembers();
+      const records = Array.isArray(response) ? response : (response && Array.isArray(response.members) ? response.members : []);
+      state.members = records.map(normalizeMember).filter(Boolean);
       state.dataAvailable = true;
-      state.members = [];
       populateFilterOptions();
       renderStats();
       applyFilters();
