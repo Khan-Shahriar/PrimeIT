@@ -266,3 +266,30 @@ tr:last-child td{border-bottom:0}
 .office-rules-preview > div:first-child{align-items:flex-start;flex-direction:column;gap:4px}
 .office-rule-list{grid-template-columns:1fr}
 }
+/* member dashboard responsive and accessibility finalization */
+.dashboard-announcements .btn:focus-visible,
+.dashboard-leave-summary .btn:focus-visible,
+.dashboard-gallery-preview .btn:focus-visible,
+.dashboard-office-preview .btn:focus-visible,
+.quick-action-card:focus-visible,
+.gallery-preview-card:focus-visible,
+.office-preview-card:focus-visible{
+  outline:3px solid rgba(37,99,235,.22);
+  outline-offset:3px;
+}
+
+@media(max-width:1000px){
+  .quick-actions-grid,
+  .gallery-preview-grid,
+  .office-preview-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:680px){
+  .quick-actions-grid,
+  .gallery-preview-grid,
+  .office-preview-grid{
+    grid-template-columns:1fr;
+  }
+}
