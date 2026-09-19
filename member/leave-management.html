@@ -1,14 +1,306 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Leave Management</title><link rel="stylesheet" href="../css/leave-management.css"></head>
-<body class="app-body"><div class="app-shell">
-<aside class="sidebar"><a class="logo" href="member-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Member Panel</div>
-<nav class="side-nav"><a class="nav-link " href="member-dashboard.html">Dashboard</a>
-<a class="nav-link " href="members.html">Members</a>
-<a class="nav-link " href="announcements.html">Announcements</a>
-<a class="nav-link " href="office-information.html">Office Information</a>
-<a class="nav-link active" href="leave-management.html">Leave Management</a>
-<a class="nav-link " href="member-gallery.html">Gallery</a>
-<a class="nav-link " href="my-profile.html">My Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="member-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Shahriar</span><span class="user-avatar">SH</span></div></header><section class="content"><div class="breadcrumb">Member Panel / Leave Management</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Leave Management</h1><p>Check balances, request leave, and track your history.</p></div></div><div class="kpi-grid"><div class="kpi"><div class="label">Casual Leave</div><strong>4</strong><small>6 total</small></div><div class="kpi"><div class="label">Sick Leave</div><strong>5</strong><small>6 total</small></div><div class="kpi"><div class="label">Pending</div><strong>1</strong><small>Awaiting review</small></div><div class="kpi"><div class="label">This Year</div><strong>3</strong><small>Days used</small></div></div><div class="card" style="margin-bottom:20px"><div class="content-header" style="margin:0"><div><h3>Request Leave</h3><p>Submit a new leave request.</p></div><button class="btn btn-primary" data-toast="Leave request form opened">+ Request Leave</button></div></div><div class="table-wrap"><table><thead><tr><th>Type</th><th>Dates</th><th>Days</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td>Casual</td><td>Sep 10, 2026</td><td>1</td><td>Personal</td><td><span class="badge success">Approved</span></td><td>—</td></tr><tr><td>Sick</td><td>Aug 20–21</td><td>2</td><td>Medical</td><td><span class="badge danger">Rejected</span></td><td>View</td></tr><tr><td>Casual</td><td>Sep 18, 2026</td><td>1</td><td>Personal</td><td><span class="badge warning">Pending</span></td><td><button class="btn btn-sm btn-danger" data-toast="Request cancellation queued">Cancel</button></td></tr></tbody></table></div></section></main></div><script src="../js/leave-management.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PrimeIt member leave management">
+  <title>PrimeIt — Leave Management</title>
+  <link rel="stylesheet" href="../css/leave-management.css">
+</head>
+<body class="app-body">
+  <a class="skip-link" href="#leave-main-content">Skip to main content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="member-sidebar">
+      <a class="logo" href="member-dashboard.html" aria-label="PrimeIt Member Dashboard">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
+
+      <div class="side-label">Member Panel</div>
+
+      <nav class="side-nav" aria-label="Member panel navigation">
+        <a class="nav-link" href="member-dashboard.html">Dashboard</a>
+        <a class="nav-link" href="members.html">Members</a>
+        <a class="nav-link" href="announcements.html">Announcements</a>
+        <a class="nav-link" href="office-information.html">Office Information</a>
+        <a class="nav-link active" href="leave-management.html" aria-current="page">Leave Management</a>
+        <a class="nav-link" href="member-gallery.html">Gallery</a>
+        <a class="nav-link" href="my-profile.html">My Profile</a>
+      </nav>
+
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">↩ <span>Back to Website</span></a>
+        <a class="nav-link" id="member-logout-link" href="member-login.html" data-action="logout">⇥ <span>Logout</span></a>
+      </div>
+    </aside>
+
+    <main class="main" id="leave-main-content">
+      <header class="app-topbar">
+        <button class="mobile-toggle" type="button" aria-label="Open navigation menu" aria-controls="member-sidebar" aria-expanded="false">☰</button>
+        <div class="search">
+          <input type="search" placeholder="Search..." aria-label="Search">
+        </div>
+        <div class="user-chip" aria-label="Signed-in member">
+          <span>Member</span>
+          <span class="user-avatar" aria-hidden="true">M</span>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="breadcrumb" aria-label="Breadcrumb">Member Panel / Leave Management</div>
+
+        <header class="page-header">
+          <div>
+            <span class="section-label">Leave Management</span>
+            <h1>Manage Your Leave</h1>
+            <p>Review your leave balance, submit a request, track request status, and view company holidays.</p>
+          </div>
+        </header>
+
+        <section class="section-block" aria-labelledby="leave-balance-title">
+          <div class="section-heading">
+            <div>
+              <span class="section-label">Balance</span>
+              <h2 id="leave-balance-title">Leave Balance</h2>
+              <p class="section-description">Your current allowance and usage will be supplied by the authenticated member account.</p>
+            </div>
+          </div>
+
+          <div class="balance-grid" id="leave-balance-list" aria-live="polite">
+            <article class="balance-card">
+              <div class="balance-icon" aria-hidden="true">H</div>
+              <div class="balance-content">
+                <h3>Holiday Leave</h3>
+                <div class="balance-values">
+                  <span>Total <strong data-balance-total="holiday">6</strong></span>
+                  <span>Used <strong data-balance-used="holiday">—</strong></span>
+                  <span>Remaining <strong data-balance-remaining="holiday">—</strong></span>
+                </div>
+              </div>
+            </article>
+
+            <article class="balance-card">
+              <div class="balance-icon" aria-hidden="true">C</div>
+              <div class="balance-content">
+                <h3>Casual Leave</h3>
+                <div class="balance-values">
+                  <span>Total <strong data-balance-total="casual">6</strong></span>
+                  <span>Used <strong data-balance-used="casual">—</strong></span>
+                  <span>Remaining <strong data-balance-remaining="casual">—</strong></span>
+                </div>
+              </div>
+            </article>
+
+            <article class="balance-card">
+              <div class="balance-icon" aria-hidden="true">S</div>
+              <div class="balance-content">
+                <h3>Sick Leave</h3>
+                <div class="balance-values">
+                  <span>Total <strong data-balance-total="sick">6</strong></span>
+                  <span>Used <strong data-balance-used="sick">—</strong></span>
+                  <span>Remaining <strong data-balance-remaining="sick">—</strong></span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="state-panel state-error" id="balance-error" hidden role="alert">
+            <strong>Unable to load your leave balance.</strong>
+            <p>Please try again. Your balance will be retrieved from the authenticated account when API integration is enabled.</p>
+            <button class="btn btn-secondary btn-sm" type="button" data-action="retry-balance">Try again</button>
+          </div>
+        </section>
+
+        <section class="section-block" aria-labelledby="request-leave-title">
+          <div class="section-heading">
+            <div>
+              <span class="section-label">Request</span>
+              <h2 id="request-leave-title">Request Leave</h2>
+              <p class="section-description">Submit a new leave request for review.</p>
+            </div>
+          </div>
+
+          <div class="card form-card">
+            <div class="notice" id="request-api-notice">
+              Leave requests are not submitted yet. This interface is prepared for the future PrimeIt REST API.
+            </div>
+
+            <form id="leave-request-form" novalidate>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="leave-type">Leave type <span aria-hidden="true">*</span></label>
+                  <select id="leave-type" name="leaveType" required aria-describedby="leave-type-error">
+                    <option value="">Select leave type</option>
+                    <option value="holiday">Holiday Leave</option>
+                    <option value="casual">Casual Leave</option>
+                    <option value="sick">Sick Leave</option>
+                  </select>
+                  <p class="field-error" id="leave-type-error" role="alert"></p>
+                </div>
+
+                <div class="field">
+                  <label for="start-date">Start date <span aria-hidden="true">*</span></label>
+                  <input id="start-date" name="startDate" type="date" required aria-describedby="start-date-error">
+                  <p class="field-error" id="start-date-error" role="alert"></p>
+                </div>
+
+                <div class="field">
+                  <label for="end-date">End date <span aria-hidden="true">*</span></label>
+                  <input id="end-date" name="endDate" type="date" required aria-describedby="end-date-error">
+                  <p class="field-error" id="end-date-error" role="alert"></p>
+                </div>
+
+                <div class="field">
+                  <label for="requested-days">Requested days</label>
+                  <input id="requested-days" type="text" value="—" readonly aria-describedby="requested-days-help">
+                  <p class="field-help" id="requested-days-help">Calculated from the selected dates. The server will remain authoritative.</p>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="leave-reason">Reason</label>
+                <textarea id="leave-reason" name="reason" rows="5" maxlength="1000" aria-describedby="leave-reason-help leave-reason-error" placeholder="Add a short reason if required by your company policy."></textarea>
+                <div class="field-meta">
+                  <p class="field-help" id="leave-reason-help">No additional company-specific reason rule is assumed by this frontend.</p>
+                  <span class="character-count" id="reason-count">0 / 1000</span>
+                </div>
+                <p class="field-error" id="leave-reason-error" role="alert"></p>
+              </div>
+
+              <div class="form-summary" id="request-summary" hidden aria-live="polite">
+                <div>
+                  <span>Leave type</span>
+                  <strong id="summary-type">—</strong>
+                </div>
+                <div>
+                  <span>Requested days</span>
+                  <strong id="summary-days">—</strong>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary" id="submit-leave-request" type="submit">
+                  Submit Leave Request
+                </button>
+                <button class="btn btn-secondary" id="reset-leave-request" type="reset">Clear</button>
+              </div>
+
+              <div class="form-state" id="request-form-state" aria-live="polite"></div>
+            </form>
+          </div>
+        </section>
+
+        <section class="section-block" aria-labelledby="leave-history-title">
+          <div class="section-heading">
+            <div>
+              <span class="section-label">History</span>
+              <h2 id="leave-history-title">My Leave Requests</h2>
+              <p class="section-description">Only requests belonging to the authenticated member should be returned by the future API.</p>
+            </div>
+          </div>
+
+          <div class="state-panel state-loading" id="history-loading" hidden aria-live="polite">
+            <span class="loading-spinner" aria-hidden="true"></span>
+            <span>Loading your leave history…</span>
+          </div>
+
+          <div class="state-panel state-empty" id="history-empty">
+            <strong>No leave requests yet.</strong>
+            <p>Your submitted requests will appear here once they are returned by the leave service.</p>
+          </div>
+
+          <div class="state-panel state-error" id="history-error" hidden role="alert">
+            <strong>Unable to load your leave history.</strong>
+            <p>Please try again. No request data has been fabricated on this page.</p>
+            <button class="btn btn-secondary btn-sm" type="button" data-action="retry-history">Try again</button>
+          </div>
+
+          <div class="table-card" id="history-table-container" hidden>
+            <div class="table-scroll">
+              <table>
+                <caption class="sr-only">Your leave requests</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Leave type</th>
+                    <th scope="col">Dates</th>
+                    <th scope="col">Days</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Submitted</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="leave-history-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block" aria-labelledby="holiday-title">
+          <div class="section-heading">
+            <div>
+              <span class="section-label">Company Calendar</span>
+              <h2 id="holiday-title">2026 Company Holidays</h2>
+              <p class="section-description">Company holidays are separate from your individual leave requests.</p>
+            </div>
+          </div>
+
+          <div class="holiday-card">
+            <div class="holiday-list" id="holiday-list">
+              <article class="holiday-item">
+                <div><strong>New Year</strong><span>Thursday</span></div><time datetime="2026-01-01">January 1, 2026</time>
+              </article>
+              <article class="holiday-item">
+                <div><strong>Memorial Day</strong><span>Monday</span></div><time datetime="2026-05-25">May 25, 2026</time>
+              </article>
+              <article class="holiday-item">
+                <div><strong>Independence Day</strong><span>Saturday</span></div><time datetime="2026-07-04">July 4, 2026</time>
+              </article>
+              <article class="holiday-item">
+                <div><strong>Labor Day</strong><span>Monday</span></div><time datetime="2026-09-07">September 7, 2026</time>
+              </article>
+              <article class="holiday-item">
+                <div><strong>Thanksgiving</strong><span>Thursday</span></div><time datetime="2026-11-26">November 26, 2026</time>
+              </article>
+              <article class="holiday-item">
+                <div><strong>Christmas</strong><span>Friday</span></div><time datetime="2026-12-25">December 25, 2026</time>
+              </article>
+            </div>
+          </div>
+
+          <div class="state-panel state-empty" id="holiday-empty" hidden>
+            <strong>No upcoming holidays available.</strong>
+            <p>Holiday information will be supplied by the company calendar service.</p>
+          </div>
+
+          <div class="state-panel state-error" id="holiday-error" hidden role="alert">
+            <strong>Unable to load holiday information.</strong>
+            <p>Please try again later.</p>
+            <button class="btn btn-secondary btn-sm" type="button" data-action="retry-holidays">Try again</button>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="cancel-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cancel-modal-title" aria-describedby="cancel-modal-description">
+      <button class="modal-close" type="button" data-action="close-cancel-modal" aria-label="Close cancellation confirmation">×</button>
+      <span class="modal-label">Request action</span>
+      <h2 id="cancel-modal-title">Cancel this leave request?</h2>
+      <p id="cancel-modal-description">This action will be sent to the future leave service for validation. The frontend will not mark the request cancelled by itself.</p>
+      <div class="modal-request-summary" id="cancel-request-summary"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" data-action="close-cancel-modal">Keep Request</button>
+        <button class="btn btn-danger" id="confirm-cancel-request" type="button">Confirm Cancellation</button>
+      </div>
+      <p class="modal-state" id="cancel-modal-state" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="toast" id="leave-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../js/leave-management.js"></script>
+</body>
+</html>
