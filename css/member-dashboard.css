@@ -102,10 +102,21 @@ textarea{min-height:140px;resize:vertical}
 .welcome-date{flex:0 0 auto;min-width:130px;padding:15px 18px;border:1px solid var(--line);border-radius:15px;background:#fff;text-align:right}
 .welcome-date span{display:block;color:var(--muted);font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.05em}
 .welcome-date strong{display:block;margin-top:4px;font-size:16px;white-space:nowrap}
-.quick-statistics{margin-bottom:24px}
+.quick-statistics{margin-bottom:28px}
+.dashboard-announcements{margin-bottom:24px}
+.dashboard-announcements .section-heading{margin-bottom:14px}
+.announcement-preview-card{padding:8px 24px}
+.announcement-list{gap:0}
+.announcement-item{padding:18px 0;align-items:center}
+.announcement-content{min-width:0;width:100%}
+.announcement-title-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:4px}
+.announcement-title-row b{font-size:14px}
+.announcement-title-row .badge{flex:0 0 auto}
+.announcement-item .muted{font-size:13px}
 .section-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:14px}
 .section-label{display:inline-block;color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
 .section-heading h2{font-size:22px;letter-spacing:-.03em;margin:4px 0 2px}
+.section-heading .btn-sm{flex:0 0 auto}
 .section-description{margin:0;color:var(--muted);font-size:13px}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .kpi{background:#fff;border:1px solid var(--line);border-radius:17px;padding:20px;min-width:0;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
@@ -197,4 +208,6 @@ tr:last-child td{border-bottom:0}
   .dashboard-welcome{align-items:flex-start;flex-direction:column;padding:22px}
   .welcome-date{width:100%;text-align:left}
   .section-heading h2{font-size:20px}
+.announcement-title-row{align-items:flex-start;flex-direction:column;gap:7px}
+.announcement-preview-card{padding:8px 18px}
 }
