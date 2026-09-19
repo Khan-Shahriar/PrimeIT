@@ -105,3 +105,11 @@ document.querySelectorAll('.sidebar a').forEach(a=>a.addEventListener('click',()
   toggle?.setAttribute('aria-expanded','false');
   toggle?.setAttribute('aria-label','Open navigation menu');
 }));
+
+// Future authenticated logout integration point:
+// The logout link remains a normal navigation target until the server-side
+// logout endpoint is implemented. No client-side token deletion is performed here.
+const logoutLink=document.querySelector('#member-logout-link');
+if(logoutLink){
+  logoutLink.dataset.logoutReady='true';
+}
