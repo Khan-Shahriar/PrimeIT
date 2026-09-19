@@ -371,7 +371,7 @@
       if (!Number.isInteger(page) || page < 1) return;
       state.page = page;
       renderResults();
-      elements.announcementResults?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelector('.announcement-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     elements.modalClose.addEventListener('click', closeDetails);
