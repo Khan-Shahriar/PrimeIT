@@ -314,6 +314,13 @@
     if (state.saving) return;
     restoreFormState(state.originalForm);
     clearValidation();
+
+    if (state.imagePreviewUrl) {
+      URL.revokeObjectURL(state.imagePreviewUrl);
+      state.imagePreviewUrl = null;
+    }
+
+    renderAvatar(state.profile?.profileImageUrl || '', getInitials(state.profile || {}));
     setEditMode(false);
     setStatus('Unsaved profile changes were discarded.', 'info');
   }
@@ -341,6 +348,16 @@
 
     await new Promise(resolve => window.setTimeout(resolve, 250));
 
+    const values = captureFormState();
+    state.profile = {
+      ...(state.profile || {}),
+      ...values
+    };
+    const displayName = getDisplayName(state.profile);
+    if (elements.summaryName) elements.summaryName.textContent = displayName;
+    if (elements.topbarName) elements.topbarName.textContent = displayName;
+    renderAvatar(state.profile.profileImageUrl || '', getInitials(state.profile));
+
     state.saving = false;
     if (elements.save) {
       elements.save.disabled = false;
@@ -349,8 +366,11 @@
     if (elements.cancel) elements.cancel.disabled = false;
     if (elements.editToggle) elements.editToggle.disabled = false;
 
+    setEditMode(false);
+    state.originalForm = captureFormState();
+
     setStatus(
-      'Your changes passed client-side validation, but no server save was performed because the authenticated profile API is not connected yet.',
+      'Changes were applied to this page only. No server save was performed because the authenticated profile API is not connected yet.',
       'info'
     );
   }
