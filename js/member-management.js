@@ -567,7 +567,7 @@
     if (!email) {
       setFieldError("work-email", "Work email is required.");
       errors.push("work-email");
-    } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setFieldError("work-email", "Enter a valid work email.");
       errors.push("work-email");
     }
