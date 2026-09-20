@@ -35,14 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
     emailInput.addEventListener("input", () => clearFieldError(emailInput, emailError));
     passwordInput.addEventListener("input", () => clearFieldError(passwordInput, passwordError));
 
-    forgotPassword?.addEventListener("click", (event) => {
-        event.preventDefault();
-        showMessage(
-            "Password recovery will be available when the PrimeIt authentication service is connected.",
-            false
-        );
-    });
-
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
