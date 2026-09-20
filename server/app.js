@@ -74,6 +74,18 @@ const passwordRecoveryLimiter = rateLimit({
     }
 });
 
+const verificationLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+        success: false,
+        message: "Too many verification requests. Please try again later.",
+        errors: []
+    }
+});
+
 function denySensitiveStaticFiles(req, res, next) {
     const pathname = req.path || "";
     if (/(^|\/)\.(env|git|gitignore)|(^|\/)server(\.js)?$|package(-lock)?\.json$/.test(pathname)) {
@@ -100,6 +112,7 @@ app.use("/admin", express.static(path.join(process.cwd(), "admin"), staticOption
 
 app.use("/api/v1/auth/forgot-password", passwordRecoveryLimiter);
 app.use("/api/v1/auth/reset-password", passwordRecoveryLimiter);
+app.use("/api/v1/auth/verify-email", verificationLimiter);
 app.use("/api/v1/auth", authLimiter);
 
 app.use("/api/v1", apiRoutes);
@@ -113,6 +126,7 @@ app.get("/api/health", getHealth);
  */
 app.use("/api/auth/forgot-password", passwordRecoveryLimiter);
 app.use("/api/auth/reset-password", passwordRecoveryLimiter);
+app.use("/api/auth/verify-email", verificationLimiter);
 app.use("/api/auth", authLimiter, require("./routes/auth"));
 app.use("/api/members", require("./routes/members"));
 app.use("/api/roles", require("./routes/roles"));
