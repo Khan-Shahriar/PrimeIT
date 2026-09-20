@@ -32,6 +32,16 @@
     pageStatus: $('[data-gallery-status]'),
     uploadModal: $('#upload-modal'),
     detailsModal: $('#details-modal'),
+    editModal: $('#edit-modal'),
+    editForm: $('#edit-form'),
+    editTitle: $('#edit-image-title'),
+    editAlt: $('#edit-image-alt'),
+    editDescription: $('#edit-image-description'),
+    editCategory: $('#edit-image-category'),
+    editCollection: $('#edit-image-collection'),
+    editFeatured: $('#edit-image-featured'),
+    editStatus: $('#edit-image-status'),
+    editMessage: $('[data-edit-message']),
     lightboxModal: $('#lightbox-modal'),
     uploadForm: $('#upload-form'),
     fileInput: $('#gallery-file'),
@@ -117,7 +127,7 @@
     if (!modal) return;
     modal.hidden = true;
     if (state.openModal === modal) state.openModal = null;
-    if (![els.uploadModal, els.detailsModal, els.lightboxModal].some(item => item && !item.hidden)) {
+    if (![els.uploadModal, els.detailsModal, els.editModal, els.lightboxModal].some(item => item && !item.hidden)) {
       document.body.style.overflow = '';
     }
     state.lastFocusedElement?.focus?.();
@@ -405,7 +415,16 @@
     }
 
     if (action === 'edit') {
-      showToast('Edit interface is prepared for future API-backed gallery records.');
+      els.editTitle.value = item.title || '';
+      els.editAlt.value = item.altText || '';
+      els.editDescription.value = item.description || '';
+      els.editCategory.value = item.category || '';
+      els.editCollection.value = item.collection || '';
+      els.editFeatured.checked = Boolean(item.isFeatured);
+      els.editStatus.value = item.status || 'Draft';
+      els.editForm.dataset.itemId = String(item.id);
+      if (els.editMessage) els.editMessage.hidden = true;
+      openModal(els.editModal, trigger);
       return;
     }
 
@@ -425,6 +444,20 @@
     }
   }
 
+  function prepareEdit(event) {
+    event.preventDefault();
+    const title = els.editTitle.value.trim();
+    const altText = els.editAlt.value.trim();
+    if (!title || !altText) {
+      els.editMessage.textContent = 'Title and alt text are required.';
+      els.editMessage.hidden = false;
+      return;
+    }
+    setPageStatus('Gallery metadata changes are validated and ready for a future API update.');
+    showToast('Changes prepared locally. Nothing was persisted.');
+    closeModal(els.editModal);
+  }
+
   function resetFilters() {
     if (els.search) els.search.value = '';
     if (els.category) els.category.value = '';
@@ -442,6 +475,7 @@
     if (action === 'open-upload') return openUpload(actionElement);
     if (action === 'close-upload') return closeModal(els.uploadModal);
     if (action === 'close-details') return closeModal(els.detailsModal);
+    if (action === 'close-edit') return closeModal(els.editModal);
     if (action === 'close-lightbox') return closeModal(els.lightboxModal);
     if (action === 'choose-file') return els.fileInput?.click();
     if (action === 'remove-file') return clearFileSelection();
@@ -497,7 +531,9 @@
       selectFile(event.dataTransfer.files?.[0]);
     });
 
-    [els.uploadModal, els.detailsModal, els.lightboxModal].forEach(modal => {
+    els.editForm?.addEventListener('submit', prepareEdit);
+
+    [els.uploadModal, els.detailsModal, els.editModal, els.lightboxModal].forEach(modal => {
       modal?.addEventListener('mousedown', event => {
         if (event.target === modal) closeModal(modal);
       });
