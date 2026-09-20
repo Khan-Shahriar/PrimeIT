@@ -43,25 +43,23 @@
                     </div>
                 </div>
                 <div class="card">
-                    <form data-demo>
+                    <form data-office-information-form novalidate>
                         <div class="grid-3">
-                            <div class="field"><label>Office Name</label><input value="PrimeIt"></div>
-                            <div class="field"><label>Phone</label><input value="+880 1XXX-XXXXXX"></div>
-                            <div class="field"><label>Email</label><input value="hello@primeit.example"></div>
+                            <div class="field"><label for="officeName">Office Name</label><input id="officeName" name="officeName" type="text" placeholder="Office name will be provided by the backend." autocomplete="organization"></div>
+                            <div class="field"><label for="officePhone">Phone</label><input id="officePhone" name="phone" type="tel" placeholder="Office phone will be provided by the backend." autocomplete="tel"></div>
+                            <div class="field"><label for="officeEmail">Email</label><input id="officeEmail" name="email" type="email" placeholder="Office email will be provided by the backend." autocomplete="email"></div>
                         </div>
-                        <div class="field"><label>Address</label><input value="Dhaka, Bangladesh"></div>
+                        <div class="field"><label for="officeAddress">Address</label><input id="officeAddress" name="address" type="text" placeholder="Office address will be provided by the backend." autocomplete="street-address"></div>
                         <div class="grid-3">
-                            <div class="field"><label>Opening Time</label><input type="time" value="09:00"></div>
-                            <div class="field"><label>Closing Time</label><input type="time" value="18:00"></div>
-                            <div class="field"><label>Working Days</label><select>
-                                    <option>Monday – Friday</option>
+                            <div class="field"><label for="openingTime">Opening Time</label><input id="openingTime" name="openingTime" type="time"></div>
+                            <div class="field"><label for="closingTime">Closing Time</label><input id="closingTime" name="closingTime" type="time"></div>
+                            <div class="field"><label for="workingDays">Working Days</label><select id="workingDays" name="workingDays">
+                                    <option value="" selected>Not configured</option>
                                 </select></div>
                         </div>
-                        <div class="field"><label>Office
-                                Rules</label><textarea>Keep shared spaces clean. Respect meeting room schedules. Follow security procedures.</textarea>
+                        <div class="field"><label for="officeRules">Office Rules</label><textarea id="officeRules" name="officeRules" placeholder="Office rules will be provided by the backend."></textarea>
                         </div>
-                        <div class="field"><label>Emergency
-                                Information</label><textarea>Office Manager: +880 1XXX-XXXXXX</textarea></div><button
+                        <div class="field"><label for="emergencyInformation">Emergency Information</label><textarea id="emergencyInformation" name="emergencyInformation" placeholder="Emergency information will be provided by the backend."></textarea></div><button
                             class="btn btn-primary" type="submit">Save Office Information</button>
                     </form>
                 </div>
