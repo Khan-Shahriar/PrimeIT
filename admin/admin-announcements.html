@@ -1,16 +1,353 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Announcements</title><link rel="stylesheet" href="../css/admin-announcements.css"></head>
-<body class="app-body"><div class="app-shell">
-<aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Admin Panel</div>
-<nav class="side-nav"><a class="nav-link " href="admin-dashboard.html">Dashboard</a>
-<a class="nav-link " href="member-management.html">Members</a>
-<a class="nav-link " href="leave-management.html">Leave Management</a>
-<a class="nav-link " href="holiday-management.html">Holidays</a>
-<a class="nav-link active" href="admin-announcements.html">Announcements</a>
-<a class="nav-link " href="admin-office-information.html">Office Information</a>
-<a class="nav-link " href="admin-gallery.html">Gallery</a>
-<a class="nav-link " href="role-permissions.html">Roles & Permissions</a>
-<a class="nav-link " href="admin-profile.html">Admin Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div></header><section class="content"><div class="breadcrumb">Admin Panel / Announcements</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Announcements</h1><p>Create, edit, publish, draft, and manage company announcements.</p></div></div><div class="toolbar"><select><option>All Status</option><option>Published</option><option>Draft</option></select><button class="btn btn-primary" data-toast="Create announcement dialog opened">+ New Announcement</button></div><div class="grid-3"><div class="card"><span class="badge success">Published</span><h3 style="margin-top:15px">Office Meeting Tomorrow</h3><p class="muted">Monthly meeting and office updates.</p><div class="actions"><button class="btn btn-sm btn-secondary">Edit</button><button class="btn btn-sm btn-danger">Delete</button></div></div><div class="card"><span class="badge warning">Draft</span><h3 style="margin-top:15px">Team Event</h3><p class="muted">Draft event announcement awaiting publication.</p><div class="actions"><button class="btn btn-sm btn-secondary">Edit</button><button class="btn btn-sm btn-primary">Publish</button></div></div><div class="card"><span class="badge blue">Important</span><h3 style="margin-top:15px">New Office Policy</h3><p class="muted">Updated workplace guidelines.</p><div class="actions"><button class="btn btn-sm btn-secondary">Edit</button><button class="btn btn-sm btn-danger">Delete</button></div></div></div></section></main></div><script src="../js/admin-announcements.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="PrimeIt administrative announcement management">
+  <title>PrimeIt — Announcement Management</title>
+  <link rel="stylesheet" href="../css/admin-announcements.css">
+</head>
+<body class="app-body">
+  <a class="skip-link" href="#announcements-main-content">Skip to main content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="admin-sidebar">
+      <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
+
+      <p class="side-label">Admin Panel</p>
+
+      <nav class="side-nav" aria-label="Admin panel navigation">
+        <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link" href="member-management.html">Member Management</a>
+        <a class="nav-link" href="leave-management.html">Leave Management</a>
+        <a class="nav-link" href="holiday-management.html">Holiday Management</a>
+        <a class="nav-link active" href="admin-announcements.html" aria-current="page">Announcements</a>
+        <a class="nav-link" href="admin-office-information.html">Office Information</a>
+        <a class="nav-link" href="admin-gallery.html">Gallery</a>
+        <a class="nav-link" href="role-permissions.html">Role &amp; Permissions</a>
+        <a class="nav-link" href="admin-profile.html">Admin Profile</a>
+      </nav>
+
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">Back to Website</a>
+        <button class="nav-link nav-button" type="button" data-action="logout">Logout</button>
+      </div>
+    </aside>
+
+    <div class="sidebar-backdrop" data-sidebar-close hidden></div>
+
+    <main class="main" id="announcements-main-content">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-controls="admin-sidebar" aria-expanded="false" data-sidebar-toggle>
+            <span aria-hidden="true">☰</span>
+          </button>
+          <div class="topbar-context">
+            <span class="topbar-label">Admin Panel</span>
+            <span class="topbar-title">Announcements</span>
+          </div>
+        </div>
+
+        <div class="user-chip" aria-label="Administrator account context">
+          <span class="user-name">Administrator</span>
+          <span class="user-avatar" aria-hidden="true">AD</span>
+        </div>
+      </header>
+
+      <section class="content" aria-labelledby="page-title">
+        <div class="breadcrumb" aria-label="Breadcrumb">Admin Panel <span aria-hidden="true">/</span> Announcements</div>
+
+        <header class="content-header">
+          <div>
+            <p class="eyebrow">Administrative communication</p>
+            <h1 id="page-title">Announcements</h1>
+            <p>Create, review, publish, and manage company announcements. Backend data will remain authoritative after API integration.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" type="button" data-action="refresh">Refresh</button>
+            <button class="btn btn-primary" type="button" data-action="open-create">Add Announcement</button>
+          </div>
+        </header>
+
+        <section class="kpi-grid" aria-labelledby="statistics-title">
+          <h2 id="statistics-title" class="sr-only">Announcement statistics</h2>
+          <article class="kpi-card">
+            <span>Total Announcements</span>
+            <strong data-stat="total">—</strong>
+            <small data-stat-meta="total">Awaiting API data</small>
+          </article>
+          <article class="kpi-card">
+            <span>Published</span>
+            <strong data-stat="published">—</strong>
+            <small data-stat-meta="published">Awaiting API data</small>
+          </article>
+          <article class="kpi-card">
+            <span>Draft</span>
+            <strong data-stat="draft">—</strong>
+            <small data-stat-meta="draft">Awaiting API data</small>
+          </article>
+          <article class="kpi-card">
+            <span>Archived</span>
+            <strong data-stat="archived">—</strong>
+            <small data-stat-meta="archived">Awaiting API data</small>
+          </article>
+          <article class="kpi-card">
+            <span>Important / Pinned</span>
+            <strong data-stat="important">—</strong>
+            <small data-stat-meta="important">Awaiting API data</small>
+          </article>
+          <p class="sr-status" role="status" aria-live="polite" data-page-status>Announcement data is ready for future REST API integration.</p>
+        </section>
+
+        <section class="card filter-card" aria-labelledby="filters-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Announcement directory</p>
+              <h2 id="filters-title">Search &amp; filters</h2>
+            </div>
+            <button class="btn btn-secondary btn-sm" type="button" data-action="reset-filters">Clear Filters</button>
+          </div>
+
+          <form id="announcement-filters" class="filter-grid" novalidate>
+            <div class="field field-search">
+              <label for="announcement-search">Search announcements</label>
+              <input id="announcement-search" name="search" type="search" maxlength="120" autocomplete="off" placeholder="Title, summary, category, or author">
+            </div>
+
+            <div class="field">
+              <label for="announcement-status-filter">Status</label>
+              <select id="announcement-status-filter" name="status">
+                <option value="">All statuses</option>
+                <option value="Draft">Draft</option>
+                <option value="Published">Published</option>
+                <option value="Unpublished">Unpublished</option>
+                <option value="Archived">Archived</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="announcement-category-filter">Category</label>
+              <select id="announcement-category-filter" name="category">
+                <option value="">All categories</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="announcement-audience-filter">Audience</label>
+              <select id="announcement-audience-filter" name="audience">
+                <option value="">All audiences</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="announcement-date-filter">Published date</label>
+              <select id="announcement-date-filter" name="date">
+                <option value="">Any date</option>
+                <option value="today">Today</option>
+                <option value="7">Last 7 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="older">Older</option>
+              </select>
+            </div>
+
+            <label class="checkbox-field">
+              <input id="announcement-important-filter" type="checkbox">
+              <span>Important only</span>
+            </label>
+
+            <label class="checkbox-field">
+              <input id="announcement-pinned-filter" type="checkbox">
+              <span>Pinned only</span>
+            </label>
+          </form>
+        </section>
+
+        <section class="card list-card" aria-labelledby="list-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Managed announcements</p>
+              <h2 id="list-title">Announcement List</h2>
+              <p class="section-description" data-result-summary>No announcement data available.</p>
+            </div>
+          </div>
+
+          <div class="state-panel loading-state" data-state="loading" hidden role="status" aria-live="polite">
+            <span class="spinner" aria-hidden="true"></span>
+            <span>Loading announcements…</span>
+          </div>
+
+          <div class="state-panel empty-state" data-state="empty">
+            <div class="state-icon" aria-hidden="true">A</div>
+            <strong data-empty-title>No announcements available.</strong>
+            <p data-empty-message>Announcements will appear here when the future REST API supplies authoritative data. No production announcements are fabricated by this frontend.</p>
+            <button class="btn btn-secondary btn-sm" type="button" data-action="open-create">Add Announcement</button>
+          </div>
+
+          <div class="state-panel error-state" data-state="error" hidden role="alert">
+            <div class="state-icon" aria-hidden="true">!</div>
+            <strong>Unable to load announcements.</strong>
+            <p data-error-message>Please try again later.</p>
+            <button class="btn btn-secondary btn-sm" type="button" data-action="retry">Try again</button>
+          </div>
+
+          <div class="table-scroll" data-announcement-table hidden>
+            <table>
+              <caption class="sr-only">Managed company announcements</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Title</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Audience</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Published</th>
+                  <th scope="col">Priority</th>
+                  <th scope="col" class="actions-heading">Actions</th>
+                </tr>
+              </thead>
+              <tbody data-announcement-body></tbody>
+            </table>
+          </div>
+
+          <div class="mobile-announcement-list" data-mobile-announcement-list hidden aria-label="Announcement cards"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" data-modal="details" hidden>
+    <section class="modal modal-large" role="dialog" aria-modal="true" aria-labelledby="details-title" aria-describedby="details-description" tabindex="-1">
+      <button class="modal-close" type="button" data-action="close-modal" aria-label="Close announcement details">×</button>
+      <p class="section-kicker">Announcement details</p>
+      <h2 id="details-title">Announcement</h2>
+      <p id="details-description" class="modal-description">Review the announcement information.</p>
+      <div class="details-meta" data-details-meta></div>
+      <div class="announcement-content" data-details-content></div>
+      <div class="details-grid" data-details-grid></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" data-action="close-modal">Close</button>
+        <button class="btn btn-secondary" type="button" data-action="edit-selected">Edit</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" data-modal="form" hidden>
+    <section class="modal modal-large" role="dialog" aria-modal="true" aria-labelledby="form-title" aria-describedby="form-description" tabindex="-1">
+      <button class="modal-close" type="button" data-action="close-modal" aria-label="Close announcement form">×</button>
+      <p class="section-kicker" data-form-kicker>Create announcement</p>
+      <h2 id="form-title">Add Announcement</h2>
+      <p id="form-description" class="modal-description">Draft and publish actions are frontend-only until the REST API is connected. The server will remain authoritative.</p>
+
+      <form id="announcement-form" novalidate>
+        <input type="hidden" id="announcement-id" name="id">
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="announcement-title">Title <span aria-hidden="true">*</span></label>
+            <input id="announcement-title" name="title" type="text" maxlength="180" required aria-describedby="announcement-title-error">
+            <p class="field-error" id="announcement-title-error" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="announcement-category">Category <span aria-hidden="true">*</span></label>
+            <select id="announcement-category" name="category" required aria-describedby="announcement-category-error">
+              <option value="">Select category</option>
+              <option value="General">General</option>
+              <option value="Office">Office</option>
+              <option value="HR">HR</option>
+              <option value="Holiday">Holiday</option>
+              <option value="Event">Event</option>
+              <option value="Policy">Policy</option>
+              <option value="Important">Important</option>
+            </select>
+            <p class="field-error" id="announcement-category-error" role="alert"></p>
+          </div>
+
+          <div class="field field-full">
+            <label for="announcement-summary">Summary</label>
+            <textarea id="announcement-summary" name="summary" maxlength="500" rows="3" aria-describedby="announcement-summary-help announcement-summary-error"></textarea>
+            <div class="field-meta"><span id="announcement-summary-help">Optional short description, maximum 500 characters.</span><span data-summary-count>0 / 500</span></div>
+            <p class="field-error" id="announcement-summary-error" role="alert"></p>
+          </div>
+
+          <div class="field field-full">
+            <label for="announcement-content">Content <span aria-hidden="true">*</span></label>
+            <textarea id="announcement-content" name="content" maxlength="10000" rows="10" required aria-describedby="announcement-content-help announcement-content-error"></textarea>
+            <div class="field-meta"><span id="announcement-content-help">Plain text is used in this frontend until a safe rich-content strategy is finalized.</span><span data-content-count>0 / 10000</span></div>
+            <p class="field-error" id="announcement-content-error" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="announcement-audience">Audience</label>
+            <select id="announcement-audience" name="audience">
+              <option value="">Select audience</option>
+              <option value="All Members">All Members</option>
+              <option value="Employees">Employees</option>
+              <option value="Administrators">Administrators</option>
+              <option value="HR">HR</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="announcement-form-status">Status</label>
+            <select id="announcement-form-status" name="status">
+              <option value="Draft">Draft</option>
+              <option value="Published">Published</option>
+              <option value="Unpublished">Unpublished</option>
+              <option value="Archived">Archived</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="announcement-publish-date">Publish date</label>
+            <input id="announcement-publish-date" name="publishedAt" type="datetime-local">
+          </div>
+
+          <div class="checkbox-group">
+            <label class="checkbox-field">
+              <input id="announcement-important" name="isImportant" type="checkbox">
+              <span>Mark as important</span>
+            </label>
+            <label class="checkbox-field">
+              <input id="announcement-pinned" name="isPinned" type="checkbox">
+              <span>Pin announcement</span>
+            </label>
+          </div>
+        </div>
+
+        <p class="form-server-error" data-form-error role="alert"></p>
+
+        <div class="modal-actions">
+          <button class="btn btn-secondary" type="button" data-action="close-modal">Cancel</button>
+          <button class="btn btn-secondary" type="submit" name="intent" value="draft">Save Draft</button>
+          <button class="btn btn-primary" type="submit" name="intent" value="publish">Publish</button>
+        </div>
+
+        <p class="modal-state" role="status" aria-live="polite" data-form-state></p>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" data-modal="confirm" hidden>
+    <section class="modal modal-small" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-description" tabindex="-1">
+      <button class="modal-close" type="button" data-action="close-modal" aria-label="Close confirmation">×</button>
+      <p class="section-kicker">Confirm action</p>
+      <h2 id="confirm-title">Confirm announcement action</h2>
+      <p id="confirm-description" data-confirm-description>This action will be sent to the backend after API integration. No server record is changed by this frontend.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" data-action="close-modal">Cancel</button>
+        <button class="btn btn-danger" type="button" data-action="confirm-action">Confirm</button>
+      </div>
+      <p class="modal-state" role="status" aria-live="polite" data-confirm-state></p>
+    </section>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite" aria-atomic="true" data-toast></div>
+
+  <script src="../js/admin-announcements.js"></script>
+</body>
+</html>
