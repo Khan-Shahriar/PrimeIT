@@ -16,9 +16,7 @@
         <span class="logo-mark" aria-hidden="true"><span>P</span></span>
         <span class="logo-text">PrimeIt</span>
       </a>
-
       <p class="side-label">Admin Panel</p>
-
       <nav class="side-nav" aria-label="Admin panel navigation">
         <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
         <a class="nav-link" href="member-management.html">Member Management</a>
@@ -30,7 +28,6 @@
         <a class="nav-link" href="role-permissions.html">Role &amp; Permissions</a>
         <a class="nav-link" href="admin-profile.html">Admin Profile</a>
       </nav>
-
       <div class="side-bottom">
         <a class="nav-link" href="../public/index.html">Back to Website</a>
         <button class="nav-link nav-button" type="button" data-action="logout">Logout</button>
@@ -42,14 +39,7 @@
     <main class="main" id="gallery-main-content">
       <header class="app-topbar">
         <div class="topbar-left">
-          <button
-            class="mobile-toggle"
-            type="button"
-            aria-label="Open admin navigation"
-            aria-controls="admin-sidebar"
-            aria-expanded="false"
-            data-sidebar-toggle
-          >
+          <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-controls="admin-sidebar" aria-expanded="false" data-sidebar-toggle>
             <span aria-hidden="true">☰</span>
           </button>
           <div class="topbar-context">
@@ -57,7 +47,6 @@
             <span class="topbar-title">Gallery</span>
           </div>
         </div>
-
         <div class="user-chip" aria-label="Administrator account context">
           <span class="user-name">Administrator</span>
           <span class="user-avatar" aria-hidden="true">AD</span>
@@ -66,9 +55,7 @@
 
       <section class="content" aria-labelledby="gallery-page-title">
         <div class="breadcrumb" aria-label="Breadcrumb">
-          <span>Admin Panel</span>
-          <span aria-hidden="true">/</span>
-          <strong>Gallery</strong>
+          <span>Admin Panel</span><span aria-hidden="true">/</span><strong>Gallery</strong>
         </div>
 
         <header class="content-header">
@@ -77,66 +64,83 @@
             <h1 id="gallery-page-title">Gallery</h1>
             <p>Manage PrimeIt gallery content and prepare images for publication across the platform.</p>
           </div>
-
           <div class="header-actions">
+            <button class="btn btn-secondary" type="button" data-action="refresh">Refresh</button>
             <button class="btn btn-primary" type="button" data-action="open-upload">Add Image</button>
           </div>
         </header>
 
-        <section class="toolbar" aria-label="Gallery controls">
-          <label class="search-control">
-            <span class="sr-only">Search gallery</span>
-            <input
-              id="gallery-search"
-              name="search"
-              type="search"
-              placeholder="Search gallery..."
-              autocomplete="off"
-              maxlength="120"
-            >
-          </label>
-
-          <label class="filter-control">
-            <span class="sr-only">Filter gallery category</span>
-            <select id="gallery-category-filter" name="category">
-              <option value="">All categories</option>
-              <option value="Office">Office</option>
-              <option value="Team">Team</option>
-              <option value="Events">Events</option>
-              <option value="Projects">Projects</option>
-              <option value="Culture">Culture</option>
-              <option value="Activities">Activities</option>
-              <option value="Other">Other</option>
-            </select>
-          </label>
-
-          <label class="filter-control">
-            <span class="sr-only">Filter gallery publication status</span>
-            <select id="gallery-status-filter" name="status">
-              <option value="">All statuses</option>
-              <option value="Published">Published</option>
-              <option value="Draft">Draft</option>
-              <option value="Unpublished">Unpublished</option>
-              <option value="Archived">Archived</option>
-            </select>
-          </label>
-
-          <button class="btn btn-secondary btn-sm" type="button" data-action="reset-filters">Clear Filters</button>
+        <section class="kpi-grid" aria-labelledby="statistics-title">
+          <h2 id="statistics-title" class="sr-only">Gallery statistics</h2>
+          <article class="kpi-card">
+            <span>Total Images</span><strong data-stat="total">—</strong><small data-stat-meta="total">Awaiting API data</small>
+          </article>
+          <article class="kpi-card">
+            <span>Published</span><strong data-stat="published">—</strong><small data-stat-meta="published">Awaiting API data</small>
+          </article>
+          <article class="kpi-card">
+            <span>Draft / Unpublished</span><strong data-stat="draft">—</strong><small data-stat-meta="draft">Awaiting API data</small>
+          </article>
+          <article class="kpi-card">
+            <span>Featured</span><strong data-stat="featured">—</strong><small data-stat-meta="featured">Awaiting API data</small>
+          </article>
+          <article class="kpi-card">
+            <span>Archived</span><strong data-stat="archived">—</strong><small data-stat-meta="archived">Awaiting API data</small>
+          </article>
         </section>
 
-        <p class="sr-status" role="status" aria-live="polite" data-gallery-status>
-          Gallery data is ready for future REST API integration.
-        </p>
+        <p class="sr-status" role="status" aria-live="polite" data-gallery-status>Gallery data is ready for future REST API integration.</p>
 
-        <section class="gallery-section" aria-labelledby="gallery-list-title">
+        <section class="card filter-card" aria-labelledby="filters-title">
           <div class="section-heading">
             <div>
               <p class="section-kicker">Gallery directory</p>
-              <h2 id="gallery-list-title">Images</h2>
+              <h2 id="filters-title">Search &amp; filters</h2>
+            </div>
+            <button class="btn btn-secondary btn-sm" type="button" data-action="reset-filters">Clear Filters</button>
+          </div>
+          <div class="filter-grid">
+            <div class="field">
+              <label for="gallery-search">Search</label>
+              <input id="gallery-search" type="search" maxlength="120" autocomplete="off" placeholder="Title, description, category, collection, uploader">
+            </div>
+            <div class="field">
+              <label for="gallery-category-filter">Category</label>
+              <select id="gallery-category-filter">
+                <option value="">All categories</option>
+                <option value="Office">Office</option><option value="Team">Team</option>
+                <option value="Events">Events</option><option value="Projects">Projects</option>
+                <option value="Culture">Culture</option><option value="Activities">Activities</option><option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gallery-collection-filter">Collection</label>
+              <select id="gallery-collection-filter">
+                <option value="">All collections</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gallery-status-filter">Status</label>
+              <select id="gallery-status-filter">
+                <option value="">All statuses</option><option value="Published">Published</option>
+                <option value="Draft">Draft</option><option value="Unpublished">Unpublished</option><option value="Archived">Archived</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gallery-featured-filter">Featured</label>
+              <select id="gallery-featured-filter">
+                <option value="">All</option><option value="true">Featured</option><option value="false">Not featured</option>
+              </select>
             </div>
           </div>
+        </section>
 
-          <div class="gallery-grid" id="gallery-grid" aria-live="polite">
+        <section class="gallery-section" aria-labelledby="gallery-list-title">
+          <div class="section-heading">
+            <div><p class="section-kicker">Content</p><h2 id="gallery-list-title">Images</h2></div>
+            <span class="result-count" data-result-count>0 items</span>
+          </div>
+          <div class="gallery-grid" id="gallery-grid">
             <div class="state-panel gallery-empty-state" data-state="empty">
               <div class="state-icon" aria-hidden="true">▧</div>
               <h3>No gallery images available</h3>
@@ -147,6 +151,62 @@
         </section>
       </section>
     </main>
+  </div>
+
+  <div class="modal-backdrop" id="upload-modal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="upload-title" aria-describedby="upload-description">
+      <div class="modal-header">
+        <div><p class="section-kicker">Gallery content</p><h2 id="upload-title">Add Image</h2></div>
+        <button class="icon-button" type="button" aria-label="Close upload dialog" data-action="close-upload">×</button>
+      </div>
+      <p id="upload-description" class="modal-description">Select a temporary local image and prepare its metadata. No file is permanently uploaded by this frontend.</p>
+      <form id="upload-form" novalidate>
+        <div class="upload-dropzone" data-upload-dropzone>
+          <input id="gallery-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+          <div class="upload-icon" aria-hidden="true">↑</div>
+          <strong>Select an image</strong>
+          <span>JPG, JPEG, PNG, WebP or GIF. Backend limits will be enforced later.</span>
+          <button class="btn btn-secondary btn-sm" type="button" data-action="choose-file">Choose File</button>
+        </div>
+        <div class="file-preview" data-file-preview hidden>
+          <img data-preview-image alt="">
+          <div class="file-preview-info"><strong data-file-name></strong><span data-file-meta></span></div>
+          <button class="btn btn-secondary btn-sm" type="button" data-action="remove-file">Remove</button>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label for="image-title">Title <span aria-hidden="true">*</span></label><input id="image-title" maxlength="160" required></div>
+          <div class="field"><label for="image-alt">Alt text <span aria-hidden="true">*</span></label><input id="image-alt" maxlength="250" required></div>
+          <div class="field"><label for="image-category">Category</label><select id="image-category"><option value="">Select category</option><option>Office</option><option>Team</option><option>Events</option><option>Projects</option><option>Culture</option><option>Activities</option><option>Other</option></select></div>
+          <div class="field"><label for="image-collection">Collection</label><input id="image-collection" maxlength="120" placeholder="Optional collection"></div>
+          <div class="field field-full"><label for="image-description">Description</label><textarea id="image-description" maxlength="1000" placeholder="Optional gallery description"></textarea></div>
+          <div class="field checkbox-field"><label><input id="image-featured" type="checkbox"> <span>Mark as featured</span></label></div>
+          <div class="field"><label for="image-status">Status</label><select id="image-status"><option>Draft</option><option>Unpublished</option><option>Published</option></select></div>
+        </div>
+        <p class="form-message" role="alert" data-upload-message hidden></p>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" type="button" data-action="close-upload">Cancel</button>
+          <button class="btn btn-primary" type="submit">Prepare Upload</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="details-modal" hidden>
+    <section class="modal modal-large" role="dialog" aria-modal="true" aria-labelledby="details-title">
+      <div class="modal-header">
+        <div><p class="section-kicker">Gallery item</p><h2 id="details-title">Image Details</h2></div>
+        <button class="icon-button" type="button" aria-label="Close image details" data-action="close-details">×</button>
+      </div>
+      <div class="details-content" data-details-content></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop lightbox-backdrop" id="lightbox-modal" hidden>
+    <section class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+      <button class="icon-button lightbox-close" type="button" aria-label="Close image preview" data-action="close-lightbox">×</button>
+      <img data-lightbox-image alt="">
+      <div class="lightbox-caption"><h2 id="lightbox-title"></h2><p data-lightbox-caption></p></div>
+    </section>
   </div>
 
   <script src="../js/admin-gallery.js"></script>
