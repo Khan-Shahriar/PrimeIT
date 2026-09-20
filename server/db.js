@@ -6,10 +6,11 @@ const pool = mysql.createPool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-
     waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    connectionLimit: Number(process.env.DB_CONNECTION_LIMIT || 10),
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
 });
 
 async function testDatabaseConnection() {
@@ -17,21 +18,23 @@ async function testDatabaseConnection() {
 
     try {
         connection = await pool.getConnection();
-
         await connection.query("SELECT 1");
-
-        console.log("✅ MySQL database connected");
+        console.log("MySQL database connected");
     } catch (error) {
-        console.error("❌ MySQL connection failed:", error.message);
+        console.error("MySQL connection failed:", error.message);
         throw error;
     } finally {
-        if (connection) {
-            connection.release();
-        }
+        connection?.release();
     }
+}
+
+async function closeDatabasePool() {
+    await pool.end();
+    console.log("MySQL connection pool closed");
 }
 
 module.exports = {
     pool,
-    testDatabaseConnection
+    testDatabaseConnection,
+    closeDatabasePool
 };
