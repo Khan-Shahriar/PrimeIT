@@ -3,7 +3,7 @@ const COOKIE_NAME = process.env.COOKIE_NAME?.trim() || "primeit_token";
 function getAuthCookieOptions(rememberMe = false) {
     const options = {
         httpOnly: true,
-        secure: process.env.COOKIE_SECURE ? process.env.COOKIE_SECURE === "true" : process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production" ? true : process.env.COOKIE_SECURE === "true",
         sameSite: (process.env.COOKIE_SAME_SITE || "lax").toLowerCase(),
         path: process.env.COOKIE_PATH || "/"
     };
