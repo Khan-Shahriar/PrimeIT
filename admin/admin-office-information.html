@@ -1,72 +1,167 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="PrimeIt administrator office information management.">
     <title>PrimeIt — Office Information</title>
     <link rel="stylesheet" href="../css/admin-office-information.css">
 </head>
-
 <body class="app-body">
+    <a class="skip-link" href="#office-information-main">Skip to office information</a>
+
     <div class="app-shell">
-        <aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span
-                    class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-            <div class="side-label"
-                style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">
-                Admin Panel</div>
-            <nav class="side-nav"><a class="nav-link " href="admin-dashboard.html">Dashboard</a>
-                <a class="nav-link " href="member-management.html">Members</a>
-                <a class="nav-link " href="leave-management.html">Leave Management</a>
-                <a class="nav-link " href="holiday-management.html">Holidays</a>
-                <a class="nav-link " href="admin-announcements.html">Announcements</a>
-                <a class="nav-link active" href="admin-office-information.html">Office Information</a>
-                <a class="nav-link " href="admin-gallery.html">Gallery</a>
-                <a class="nav-link " href="role-permissions.html">Roles & Permissions</a>
-                <a class="nav-link " href="admin-profile.html">Admin Profile</a>
+        <aside class="sidebar" id="admin-sidebar">
+            <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard">
+                <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+                <span class="logo-text">PrimeIt</span>
+            </a>
+            <div class="side-label">Admin Panel</div>
+            <nav class="side-nav" aria-label="Admin panel navigation">
+                <a class="nav-link" href="admin-dashboard.html"><span aria-hidden="true">▦</span><span>Dashboard</span></a>
+                <a class="nav-link" href="member-management.html"><span aria-hidden="true">♙</span><span>Members</span></a>
+                <a class="nav-link" href="leave-management.html"><span aria-hidden="true">◷</span><span>Leave Management</span></a>
+                <a class="nav-link" href="holiday-management.html"><span aria-hidden="true">▣</span><span>Holidays</span></a>
+                <a class="nav-link" href="admin-announcements.html"><span aria-hidden="true">◈</span><span>Announcements</span></a>
+                <a class="nav-link active" href="admin-office-information.html" aria-current="page"><span aria-hidden="true">⌂</span><span>Office Information</span></a>
+                <a class="nav-link" href="admin-gallery.html"><span aria-hidden="true">▧</span><span>Gallery</span></a>
+                <a class="nav-link" href="role-permissions.html"><span aria-hidden="true">⚿</span><span>Roles &amp; Permissions</span></a>
+                <a class="nav-link" href="admin-profile.html"><span aria-hidden="true">◎</span><span>Admin Profile</span></a>
             </nav>
-            <div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to
-                        Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span
-                        class="side-label">Logout</span></a></div>
+            <div class="side-bottom">
+                <a class="nav-link" href="../public/index.html"><span aria-hidden="true">↩</span><span>Back to Website</span></a>
+                <a class="nav-link" href="admin-login.html"><span aria-hidden="true">⇥</span><span>Logout</span></a>
+            </div>
         </aside>
-        <main class="main">
-            <header class="app-topbar"><button class="mobile-toggle">☰</button>
-                <div class="search"><input placeholder="Search..." aria-label="Search"></div>
-                <div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div>
+
+        <main class="main" id="office-information-main">
+            <header class="app-topbar">
+                <button class="mobile-toggle" type="button" aria-label="Open navigation menu" aria-controls="admin-sidebar" aria-expanded="false">☰</button>
+                <div class="topbar-title">Admin Panel</div>
+                <div class="user-chip" aria-label="Current administrator">
+                    <span>Administrator</span>
+                    <span class="user-avatar" aria-hidden="true">AD</span>
+                </div>
             </header>
+
             <section class="content">
-                <div class="breadcrumb">Admin Panel / Office Information</div>
-                <div class="content-header">
+                <div class="breadcrumb" aria-label="Breadcrumb">
+                    <span>Admin Panel</span><span aria-hidden="true">/</span><strong>Office Information</strong>
+                </div>
+
+                <header class="content-header">
                     <div>
-                        <h1 style="font-size:34px;margin:0">Office Information</h1>
-                        <p>Manage the information visible to office members.</p>
+                        <span class="section-label">Office Management</span>
+                        <h1>Office Information</h1>
+                        <p>Manage the office information that will be presented to members.</p>
                     </div>
-                </div>
-                <div class="card">
-                    <form data-office-information-form novalidate>
-                        <div class="grid-3">
-                            <div class="field"><label for="officeName">Office Name</label><input id="officeName" name="officeName" type="text" placeholder="Office name will be provided by the backend." autocomplete="organization"></div>
-                            <div class="field"><label for="officePhone">Phone</label><input id="officePhone" name="phone" type="tel" placeholder="Office phone will be provided by the backend." autocomplete="tel"></div>
-                            <div class="field"><label for="officeEmail">Email</label><input id="officeEmail" name="email" type="email" placeholder="Office email will be provided by the backend." autocomplete="email"></div>
+                    <button class="btn btn-primary" id="edit-office-button" type="button">Edit Information</button>
+                </header>
+
+                <div id="office-status" class="status-region" aria-live="polite"></div>
+
+                <section class="overview-card card" aria-labelledby="overview-heading">
+                    <div class="section-heading">
+                        <div>
+                            <span class="section-label">Overview</span>
+                            <h2 id="overview-heading">Office Overview</h2>
                         </div>
-                        <div class="field"><label for="officeAddress">Address</label><input id="officeAddress" name="address" type="text" placeholder="Office address will be provided by the backend." autocomplete="street-address"></div>
-                        <div class="grid-3">
-                            <div class="field"><label for="openingTime">Opening Time</label><input id="openingTime" name="openingTime" type="time"></div>
-                            <div class="field"><label for="closingTime">Closing Time</label><input id="closingTime" name="closingTime" type="time"></div>
-                            <div class="field"><label for="workingDays">Working Days</label><select id="workingDays" name="workingDays">
-                                    <option value="" selected>Not configured</option>
-                                </select></div>
-                        </div>
-                        <div class="field"><label for="officeRules">Office Rules</label><textarea id="officeRules" name="officeRules" placeholder="Office rules will be provided by the backend."></textarea>
-                        </div>
-                        <div class="field"><label for="emergencyInformation">Emergency Information</label><textarea id="emergencyInformation" name="emergencyInformation" placeholder="Emergency information will be provided by the backend."></textarea></div><button
-                            class="btn btn-primary" type="submit">Save Office Information</button>
-                    </form>
-                </div>
+                        <span id="office-status-badge" class="badge neutral">Not configured</span>
+                    </div>
+                    <div id="overview-content" class="overview-content"></div>
+                    <div id="overview-meta" class="updated-meta"></div>
+                </section>
+
+                <section class="management-section" aria-labelledby="hours-heading">
+                    <div class="section-heading">
+                        <div><span class="section-label">Schedule</span><h2 id="hours-heading">Working Hours</h2></div>
+                    </div>
+                    <div id="hours-list" class="hours-card card"></div>
+                </section>
+
+                <section class="management-section" aria-labelledby="departments-heading">
+                    <div class="section-heading">
+                        <div><span class="section-label">Teams</span><h2 id="departments-heading">Departments</h2></div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-add="department">Add Department</button>
+                    </div>
+                    <div class="toolbar" aria-label="Department controls">
+                        <label class="search-control"><span class="sr-only">Search departments</span><input id="department-search" type="search" placeholder="Search departments..." autocomplete="off"></label>
+                        <label class="filter-control"><span class="sr-only">Filter department status</span><select id="department-status-filter"><option value="all">All statuses</option><option value="active">Active</option><option value="archived">Archived</option></select></label>
+                    </div>
+                    <div id="departments-list" class="resource-grid"></div>
+                </section>
+
+                <section class="management-section" aria-labelledby="contacts-heading">
+                    <div class="section-heading">
+                        <div><span class="section-label">Support</span><h2 id="contacts-heading">Important Contacts</h2></div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-add="contact">Add Contact</button>
+                    </div>
+                    <div class="toolbar" aria-label="Contact controls">
+                        <label class="search-control"><span class="sr-only">Search contacts</span><input id="contact-search" type="search" placeholder="Search contacts..." autocomplete="off"></label>
+                        <label class="filter-control"><span class="sr-only">Filter contact type</span><select id="contact-type-filter"><option value="all">All types</option></select></label>
+                        <label class="filter-control"><span class="sr-only">Filter contact status</span><select id="contact-status-filter"><option value="all">All statuses</option><option value="active">Active</option><option value="archived">Archived</option></select></label>
+                    </div>
+                    <div id="contacts-list" class="resource-grid"></div>
+                </section>
+
+                <section class="management-section" aria-labelledby="policies-heading">
+                    <div class="section-heading">
+                        <div><span class="section-label">Guidelines</span><h2 id="policies-heading">Office Policies</h2></div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-add="policy">Add Policy</button>
+                    </div>
+                    <div class="toolbar" aria-label="Policy controls">
+                        <label class="search-control"><span class="sr-only">Search policies</span><input id="policy-search" type="search" placeholder="Search policies..." autocomplete="off"></label>
+                        <label class="filter-control"><span class="sr-only">Filter policy category</span><select id="policy-category-filter"><option value="all">All categories</option></select></label>
+                        <label class="filter-control"><span class="sr-only">Filter policy status</span><select id="policy-status-filter"><option value="all">All statuses</option><option value="published">Published</option><option value="draft">Draft</option><option value="archived">Archived</option></select></label>
+                    </div>
+                    <div id="policies-list" class="resource-grid"></div>
+                </section>
+
+                <section class="management-section" aria-labelledby="resources-heading">
+                    <div class="section-heading">
+                        <div><span class="section-label">Resources</span><h2 id="resources-heading">Useful Resources</h2></div>
+                        <button class="btn btn-secondary btn-sm" type="button" data-add="resource">Add Resource</button>
+                    </div>
+                    <div class="toolbar" aria-label="Resource controls">
+                        <label class="search-control"><span class="sr-only">Search resources</span><input id="resource-search" type="search" placeholder="Search resources..." autocomplete="off"></label>
+                        <label class="filter-control"><span class="sr-only">Filter resource category</span><select id="resource-category-filter"><option value="all">All categories</option></select></label>
+                        <label class="filter-control"><span class="sr-only">Filter resource status</span><select id="resource-status-filter"><option value="all">All statuses</option><option value="published">Published</option><option value="draft">Draft</option><option value="archived">Archived</option></select></label>
+                    </div>
+                    <div id="resources-list" class="resource-list"></div>
+                </section>
             </section>
         </main>
     </div>
+
+    <div class="modal-backdrop" id="modal-backdrop" hidden>
+        <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+            <div class="modal-header">
+                <div><span class="section-label" id="modal-label">Office Information</span><h2 id="modal-title">Edit</h2><p id="modal-description">Update information for the current page session.</p></div>
+                <button class="icon-button" type="button" id="modal-close" aria-label="Close dialog">×</button>
+            </div>
+            <form id="management-form" novalidate>
+                <div id="modal-fields" class="modal-fields"></div>
+                <div id="form-message" class="form-message" role="alert" hidden></div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" type="button" id="modal-cancel">Cancel</button>
+                    <button class="btn btn-primary" type="submit" id="modal-save">Save Draft</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div class="modal-backdrop" id="details-backdrop" hidden>
+        <section class="modal modal-details" role="dialog" aria-modal="true" aria-labelledby="details-title">
+            <div class="modal-header">
+                <div><span class="section-label">Details</span><h2 id="details-title">Information</h2></div>
+                <button class="icon-button" type="button" id="details-close" aria-label="Close details">×</button>
+            </div>
+            <div id="details-content" class="details-content"></div>
+            <div class="modal-actions"><button class="btn btn-secondary" type="button" id="details-dismiss">Close</button></div>
+        </section>
+    </div>
+
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
     <script src="../js/admin-office-information.js"></script>
 </body>
-
 </html>
