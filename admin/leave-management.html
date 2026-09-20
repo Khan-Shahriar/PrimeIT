@@ -1,100 +1,148 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>PrimeIt — Leave Management</title>
-    <link rel="stylesheet" href="../css/admin-leave-management.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="PrimeIt administrative leave management">
+  <title>PrimeIt — Leave Management</title>
+  <link rel="stylesheet" href="../css/admin-leave-management.css">
 </head>
-
 <body class="app-body">
-    <div class="app-shell">
-        <aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span
-                    class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-            <div class="side-label"
-                style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">
-                Admin Panel</div>
-            <nav class="side-nav"><a class="nav-link " href="admin-dashboard.html">Dashboard</a>
-                <a class="nav-link " href="member-management.html">Members</a>
-                <a class="nav-link active" href="leave-management.html">Leave Management</a>
-                <a class="nav-link " href="holiday-management.html">Holidays</a>
-                <a class="nav-link " href="admin-announcements.html">Announcements</a>
-                <a class="nav-link " href="admin-office-information.html">Office Information</a>
-                <a class="nav-link " href="admin-gallery.html">Gallery</a>
-                <a class="nav-link " href="role-permissions.html">Roles & Permissions</a>
-                <a class="nav-link " href="admin-profile.html">Admin Profile</a>
-            </nav>
-            <div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to
-                        Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span
-                        class="side-label">Logout</span></a></div>
-        </aside>
-        <main class="main">
-            <header class="app-topbar"><button class="mobile-toggle">☰</button>
-                <div class="search"><input placeholder="Search..." aria-label="Search"></div>
-                <div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div>
-            </header>
-            <section class="content">
-                <div class="breadcrumb">Admin Panel / Leave Management</div>
-                <div class="content-header">
-                    <div>
-                        <h1 style="font-size:34px;margin:0">Leave Management</h1>
-                        <p>Review and process office leave requests.</p>
-                    </div>
-                </div>
-                <div class="toolbar"><select>
-                        <option>Pending</option>
-                        <option>All</option>
-                        <option>Approved</option>
-                        <option>Rejected</option>
-                    </select><select>
-                        <option>All Leave Types</option>
-                        <option>Casual</option>
-                        <option>Sick</option>
-                    </select><input placeholder="Search member..." style="max-width:240px"></div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Member</th>
-                                <th>Type</th>
-                                <th>Dates</th>
-                                <th>Days</th>
-                                <th>Reason</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Sarah Khan</td>
-                                <td>Casual</td>
-                                <td>Sep 03</td>
-                                <td>1</td>
-                                <td>Personal</td>
-                                <td><span class="badge warning">Pending</span></td>
-                                <td class="actions"><button class="btn btn-sm btn-primary"
-                                        data-toast="Leave approved">Approve</button><button
-                                        class="btn btn-sm btn-danger" data-toast="Leave rejected">Reject</button></td>
-                            </tr>
-                            <tr>
-                                <td>Tanvir Ahmed</td>
-                                <td>Sick</td>
-                                <td>Sep 04–05</td>
-                                <td>2</td>
-                                <td>Illness</td>
-                                <td><span class="badge warning">Pending</span></td>
-                                <td class="actions"><button class="btn btn-sm btn-primary"
-                                        data-toast="Leave approved">Approve</button><button
-                                        class="btn btn-sm btn-danger" data-toast="Leave rejected">Reject</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
+<a class="skip-link" href="#leave-main-content">Skip to main content</a>
+<div class="app-shell">
+  <aside class="sidebar" id="admin-sidebar">
+    <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard"><span class="logo-mark" aria-hidden="true"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
+    <p class="side-label">Admin Panel</p>
+    <nav class="side-nav" aria-label="Admin panel navigation">
+      <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
+      <a class="nav-link" href="member-management.html">Member Management</a>
+      <a class="nav-link active" href="leave-management.html" aria-current="page">Leave Management</a>
+      <a class="nav-link" href="holiday-management.html">Holiday Management</a>
+      <a class="nav-link" href="admin-announcements.html">Announcements</a>
+      <a class="nav-link" href="admin-office-information.html">Office Information</a>
+      <a class="nav-link" href="admin-gallery.html">Gallery</a>
+      <a class="nav-link" href="role-permissions.html">Role &amp; Permissions</a>
+      <a class="nav-link" href="admin-profile.html">Admin Profile</a>
+    </nav>
+    <div class="side-bottom">
+      <a class="nav-link" href="../public/index.html">Back to Website</a>
+      <a class="nav-link" href="admin-login.html">Logout</a>
     </div>
-    <script src="../js/admin-leave-management.js"></script>
-</body>
+  </aside>
+  <div class="sidebar-backdrop" data-sidebar-close hidden></div>
 
+  <main class="main" id="leave-main-content">
+    <header class="app-topbar">
+      <div class="topbar-left">
+        <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-controls="admin-sidebar" aria-expanded="false" data-sidebar-toggle><span aria-hidden="true">☰</span></button>
+        <div class="topbar-context">Leave Management</div>
+      </div>
+      <div class="user-chip" aria-label="Administrator account context"><span>Administrator</span><span class="user-avatar" aria-hidden="true">AD</span></div>
+    </header>
+
+    <section class="content" aria-labelledby="page-title">
+      <div class="breadcrumb" aria-label="Breadcrumb">Admin Panel <span aria-hidden="true">/</span> Leave Management</div>
+      <header class="content-header">
+        <div>
+          <p class="eyebrow">Administrative review</p>
+          <h1 id="page-title">Leave Management</h1>
+          <p>Review member leave requests and prepare approval decisions for the future leave service.</p>
+        </div>
+        <button class="btn btn-secondary" type="button" data-action="refresh">Refresh</button>
+      </header>
+
+      <section class="kpi-grid" aria-labelledby="statistics-title">
+        <h2 id="statistics-title" class="sr-only">Leave statistics</h2>
+        <article class="kpi-card"><span>Total Requests</span><strong data-stat="total">—</strong><small data-stat-meta="total">Unavailable</small></article>
+        <article class="kpi-card"><span>Pending Requests</span><strong data-stat="pending">—</strong><small data-stat-meta="pending">Unavailable</small></article>
+        <article class="kpi-card"><span>Approved Requests</span><strong data-stat="approved">—</strong><small data-stat-meta="approved">Unavailable</small></article>
+        <article class="kpi-card"><span>Rejected Requests</span><strong data-stat="rejected">—</strong><small data-stat-meta="rejected">Unavailable</small></article>
+        <p class="sr-status" role="status" aria-live="polite" data-page-status>Leave data is ready for future REST API integration.</p>
+      </section>
+
+      <section class="card filter-card" aria-labelledby="filters-title">
+        <div class="section-heading">
+          <div><p class="section-kicker">Review queue</p><h2 id="filters-title">Search &amp; filters</h2></div>
+          <button class="btn btn-secondary btn-sm" type="button" data-action="reset-filters">Reset filters</button>
+        </div>
+        <form id="leave-filters" class="filter-grid" novalidate>
+          <div class="field field-search">
+            <label for="leave-search">Search requests</label>
+            <input id="leave-search" name="search" type="search" maxlength="120" placeholder="Member, member ID, department, or request ID">
+          </div>
+          <div class="field"><label for="leave-status">Status</label><select id="leave-status" name="status"><option value="">All statuses</option><option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option><option value="Cancelled">Cancelled</option><option value="Withdrawn">Withdrawn</option></select></div>
+          <div class="field"><label for="leave-type">Leave type</label><select id="leave-type" name="leaveType"><option value="">All leave types</option><option value="Holiday Leave">Holiday Leave</option><option value="Casual Leave">Casual Leave</option><option value="Sick Leave">Sick Leave</option></select></div>
+          <div class="field"><label for="leave-department">Department</label><select id="leave-department" name="department"><option value="">All departments</option></select></div>
+          <div class="field"><label for="leave-from">From date</label><input id="leave-from" name="from" type="date"></div>
+          <div class="field"><label for="leave-to">To date</label><input id="leave-to" name="to" type="date" aria-describedby="date-filter-error"></div>
+          <p class="field-error" id="date-filter-error" role="alert"></p>
+        </form>
+      </section>
+
+      <section class="card request-card" aria-labelledby="requests-title">
+        <div class="section-heading">
+          <div><p class="section-kicker">Requests</p><h2 id="requests-title">Leave Requests</h2><p class="section-description" data-result-summary>No request data available.</p></div>
+        </div>
+        <div class="state-panel loading-state" data-state="loading" hidden role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span><span>Loading leave requests…</span></div>
+        <div class="state-panel empty-state" data-state="empty"><strong>No leave requests available.</strong><p>Requests will appear here when the future REST API supplies administrative leave data. No production requests are fabricated on this page.</p></div>
+        <div class="state-panel error-state" data-state="error" hidden role="alert"><strong>Unable to load leave requests.</strong><p data-error-message>Please try again later.</p><button class="btn btn-secondary btn-sm" type="button" data-action="retry">Try again</button></div>
+        <div class="table-scroll" data-request-table hidden>
+          <table>
+            <caption class="sr-only">Administrative leave requests</caption>
+            <thead><tr><th scope="col">Member</th><th scope="col">Leave type</th><th scope="col">Dates</th><th scope="col">Duration</th><th scope="col">Submitted</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+            <tbody data-request-body></tbody>
+          </table>
+        </div>
+        <div class="pagination" data-pagination hidden aria-label="Leave request pagination"></div>
+      </section>
+
+      <div class="management-grid">
+        <section class="card" aria-labelledby="balance-title">
+          <div class="section-heading"><div><p class="section-kicker">Administrative overview</p><h2 id="balance-title">Leave Balances</h2></div></div>
+          <div class="state-panel compact" data-balance-state><strong>Balance data unavailable.</strong><p>Member leave balances will be supplied by the backend. The frontend will not calculate authoritative balances.</p></div>
+          <div class="balance-table-wrap" data-balance-table hidden><table><caption class="sr-only">Member leave balances</caption><thead><tr><th scope="col">Member</th><th scope="col">Leave type</th><th scope="col">Used</th><th scope="col">Remaining</th></tr></thead><tbody data-balance-body></tbody></table></div>
+        </section>
+
+        <section class="card" aria-labelledby="calendar-title">
+          <div class="section-heading"><div><p class="section-kicker">Calendar context</p><h2 id="calendar-title">2026 Holidays</h2></div><a class="text-link" href="holiday-management.html">Manage holidays <span aria-hidden="true">→</span></a></div>
+          <div class="holiday-list" aria-live="polite">
+            <div class="holiday-item"><strong>New Year</strong><time datetime="2026-01-01">January 1, 2026</time></div>
+            <div class="holiday-item"><strong>Memorial Day</strong><time datetime="2026-05-25">May 25, 2026</time></div>
+            <div class="holiday-item"><strong>Independence Day</strong><time datetime="2026-07-04">July 4, 2026</time></div>
+            <div class="holiday-item"><strong>Labor Day</strong><time datetime="2026-09-07">September 7, 2026</time></div>
+            <div class="holiday-item"><strong>Thanksgiving</strong><time datetime="2026-11-26">November 26, 2026</time></div>
+            <div class="holiday-item"><strong>Christmas</strong><time datetime="2026-12-25">December 25, 2026</time></div>
+          </div>
+          <p class="state-note">These dates are contextual only. Final holiday data will be authoritative from the Holiday Management/backend service.</p>
+        </section>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" data-modal="details" hidden>
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="details-title" aria-describedby="details-description" tabindex="-1">
+    <button class="modal-close" type="button" data-action="close-modal" aria-label="Close request details">×</button>
+    <p class="section-kicker">Request details</p><h2 id="details-title">Leave Request</h2>
+    <p id="details-description" class="modal-description">Review the request information before taking an administrative action.</p>
+    <div class="details-grid" data-details></div>
+    <div class="modal-actions"><button class="btn btn-secondary" type="button" data-action="close-modal">Close</button><button class="btn btn-primary" type="button" data-action="approve">Approve</button><button class="btn btn-danger" type="button" data-action="reject">Reject</button></div>
+    <p class="modal-state" role="status" aria-live="polite" data-modal-state></p>
+  </section>
+</div>
+
+<div class="modal-backdrop" data-modal="decision" hidden>
+  <section class="modal modal-small" role="dialog" aria-modal="true" aria-labelledby="decision-title" tabindex="-1">
+    <button class="modal-close" type="button" data-action="close-modal" aria-label="Close decision dialog">×</button>
+    <p class="section-kicker" data-decision-kicker>Review action</p>
+    <h2 id="decision-title">Confirm decision</h2>
+    <p data-decision-description></p>
+    <div class="field" data-comment-field hidden><label for="review-comment">Reviewer comment</label><textarea id="review-comment" maxlength="1000" rows="5" placeholder="Add a review comment if appropriate." aria-describedby="review-comment-help"></textarea><div class="field-meta"><span id="review-comment-help">Maximum 1000 characters.</span><span data-comment-count>0 / 1000</span></div><p class="field-error" data-comment-error role="alert"></p></div>
+    <div class="modal-actions"><button class="btn btn-secondary" type="button" data-action="close-modal">Cancel</button><button class="btn btn-primary" type="button" data-action="submit-decision">Continue</button></div>
+    <p class="modal-state" role="status" aria-live="polite" data-decision-state></p>
+  </section>
+</div>
+<div class="toast" role="status" aria-live="polite" aria-atomic="true" data-toast></div>
+<script src="../js/admin-leave-management.js"></script>
+</body>
 </html>
