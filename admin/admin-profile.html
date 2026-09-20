@@ -1,320 +1,239 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PrimeIt — Admin Profile</title>
-    <link rel="stylesheet" href="../css/admin-profile.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manage the authenticated PrimeIt administrator profile.">
+  <title>PrimeIt — Admin Profile</title>
+  <link rel="stylesheet" href="../css/admin-profile.css">
 </head>
-
 <body class="app-body">
-
-    <div class="app-shell">
-
-        <!-- =========================
-             SIDEBAR
-        ========================== -->
-
-        <aside class="sidebar">
-
-            <a class="logo" href="admin-dashboard.html">
-                <span class="logo-mark">
-                    <span>P</span>
-                </span>
-                <span class="logo-text">PrimeIt</span>
-            </a>
-
-            <div class="side-label"
-                style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">
-                Admin Panel
-            </div>
-
-            <nav class="side-nav">
-
-                <a class="nav-link" href="admin-dashboard.html">
-                    Dashboard
-                </a>
-
-                <a class="nav-link" href="member-management.html">
-                    Members
-                </a>
-
-                <a class="nav-link" href="leave-management.html">
-                    Leave Management
-                </a>
-
-                <a class="nav-link" href="holiday-management.html">
-                    Holidays
-                </a>
-
-                <a class="nav-link" href="admin-announcements.html">
-                    Announcements
-                </a>
-
-                <a class="nav-link" href="admin-office-information.html">
-                    Office Information
-                </a>
-
-                <a class="nav-link" href="admin-gallery.html">
-                    Gallery
-                </a>
-
-                <a class="nav-link" href="role-permissions.html">
-                    Roles & Permissions
-                </a>
-
-                <a class="nav-link active" href="admin-profile.html">
-                    Admin Profile
-                </a>
-
-            </nav>
-
-            <div class="side-bottom">
-
-                <a class="nav-link" href="../public/index.html">
-                    ↩
-                    <span class="side-label">
-                        Back to Website
-                    </span>
-                </a>
-
-                <a class="nav-link" href="#" id="logout-btn">
-                    ⇥
-                    <span class="side-label">
-                        Logout
-                    </span>
-                </a>
-
-            </div>
-
-        </aside>
-
-
-        <!-- =========================
-             MAIN CONTENT
-        ========================== -->
-
-        <main class="main">
-
-            <header class="app-topbar">
-
-                <button class="mobile-toggle" type="button">
-                    ☰
-                </button>
-
-                <div class="search">
-                    <input type="search" placeholder="Search..." aria-label="Search">
-                </div>
-
-                <div class="user-chip">
-
-                    <span id="topbar-user-name">
-                        Loading...
-                    </span>
-
-                    <span class="user-avatar" id="topbar-user-avatar">
-                        AD
-                    </span>
-
-                </div>
-
-            </header>
-
-
-            <section class="content">
-
-                <div class="breadcrumb">
-                    Admin Panel / Admin Profile
-                </div>
-
-
-                <div class="content-header">
-
-                    <div>
-                        <h1 style="font-size:34px;margin:0">
-                            Admin Profile
-                        </h1>
-
-                        <p>
-                            Manage your permitted admin profile and security settings.
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <!-- =========================
-                     PROFILE GRID
-                ========================== -->
-
-                <div class="profile-grid">
-
-
-                    <!-- PROFILE SUMMARY -->
-
-                    <div class="card profile-card">
-
-                        <div class="big-avatar" id="profile-avatar">
-                            AD
-                        </div>
-
-                        <input 
-                            type="file" 
-                            id="profile-photo-input" 
-                            accept="image/jpeg,image/png,image/webp"
-                        >
-
-                        <h2 style="font-size:25px" id="profile-name">
-                            Loading...
-                        </h2>
-
-                        <span class="tag" id="profile-role">
-                            Loading...
-                        </span>
-
-                        <p class="muted" id="profile-email">
-                            Loading...
-                        </p>
-
-                    </div>
-
-
-                    <!-- ACCOUNT INFORMATION -->
-
-                    <div class="card">
-
-                        <h3>
-                            Account Information
-                        </h3>
-
-                        <form id="profile-form" style="margin-top:18px">
-
-                            <div class="grid-3">
-
-                                <div class="field">
-
-                                    <label for="full-name">
-                                        Full Name
-                                    </label>
-
-                                    <input id="full-name" name="full_name" type="text" maxlength="100" required>
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="email">
-                                        Email
-                                    </label>
-
-                                    <input id="email" name="email" type="email" readonly>
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="phone">
-                                        Phone
-                                    </label>
-
-                                    <input id="phone" name="phone" type="text" maxlength="30" placeholder="+880">
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="field">
-
-                                <label for="bio">
-                                    Bio
-                                </label>
-
-                                <textarea id="bio" name="bio" rows="4" maxlength="1000"
-                                    placeholder="Tell us about yourself"></textarea>
-
-                            </div>
-
-
-                            <button class="btn btn-primary" type="submit" id="save-profile-btn">
-                                Save Changes
-                            </button>
-
-                        </form>
-
-
-                        <!-- =========================
-                             CHANGE PASSWORD
-                        ========================== -->
-
-                        <h3 style="margin-top:30px">
-                            Change Password
-                        </h3>
-
-                        <form id="password-form" style="margin-top:18px">
-
-                            <div class="grid-3">
-
-                                <div class="field">
-
-                                    <label for="current-password">
-                                        Current Password
-                                    </label>
-
-                                    <input id="current-password" name="current_password" type="password"
-                                        autocomplete="current-password" required>
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="new-password">
-                                        New Password
-                                    </label>
-
-                                    <input id="new-password" name="new_password" type="password" minlength="8"
-                                        maxlength="128" autocomplete="new-password" required>
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="confirm-password">
-                                        Confirm Password
-                                    </label>
-
-                                    <input id="confirm-password" name="confirm_password" type="password" minlength="8"
-                                        maxlength="128" autocomplete="new-password" required>
-
-                                </div>
-
-                            </div>
-
-
-                            <button class="btn btn-primary" type="submit" id="change-password-btn">
-                                Change Password
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                </div>
-
+  <div class="app-shell">
+    <aside class="sidebar" id="admin-sidebar">
+      <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
+      <p class="side-label">Admin Panel</p>
+      <nav class="side-nav" aria-label="Admin navigation">
+        <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link" href="member-management.html">Member Management</a>
+        <a class="nav-link" href="leave-management.html">Leave Management</a>
+        <a class="nav-link" href="holiday-management.html">Holiday Management</a>
+        <a class="nav-link" href="admin-announcements.html">Announcements</a>
+        <a class="nav-link" href="admin-office-information.html">Office Information</a>
+        <a class="nav-link" href="admin-gallery.html">Gallery</a>
+        <a class="nav-link" href="role-permissions.html">Role &amp; Permissions</a>
+        <a class="nav-link active" href="admin-profile.html" aria-current="page">Admin Profile</a>
+      </nav>
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">Back to Website</a>
+        <button class="nav-link nav-button" type="button" data-logout>Logout</button>
+      </div>
+    </aside>
+
+    <div class="sidebar-backdrop" data-sidebar-close hidden></div>
+
+    <main class="main">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-controls="admin-sidebar" aria-expanded="false" data-sidebar-toggle>
+            <span aria-hidden="true">☰</span>
+          </button>
+          <div class="search-placeholder" aria-hidden="true">Admin Profile</div>
+        </div>
+        <div class="user-chip" aria-label="Authenticated administrator account context">
+          <span class="user-context">
+            <span class="user-name" data-admin-name>Administrator</span>
+            <span class="user-role" data-admin-role>Account context</span>
+          </span>
+          <span class="user-avatar" data-admin-initials aria-hidden="true">AD</span>
+        </div>
+      </header>
+
+      <section class="content" aria-labelledby="profile-page-title">
+        <div class="breadcrumb" aria-label="Breadcrumb">Admin Panel <span aria-hidden="true">/</span> Admin Profile</div>
+        <div class="content-header">
+          <div>
+            <p class="eyebrow">Account</p>
+            <h1 id="profile-page-title">Admin Profile</h1>
+            <p>View your administrator account and update the profile information permitted by the system.</p>
+          </div>
+        </div>
+
+        <div class="profile-status" role="status" aria-live="polite" aria-atomic="true" data-profile-status hidden></div>
+
+        <div class="profile-layout">
+          <aside class="profile-sidebar">
+            <section class="card profile-summary" aria-labelledby="profile-summary-title">
+              <h2 id="profile-summary-title" class="sr-only">Profile summary</h2>
+              <div class="profile-avatar-wrap">
+                <div class="profile-avatar" data-profile-avatar><span data-profile-initials>AD</span></div>
+                <button class="btn btn-secondary btn-small" type="button" data-change-photo>Change photo</button>
+                <input class="sr-only" id="profile-photo-input" type="file" accept="image/jpeg,image/png,image/webp" data-profile-photo>
+              </div>
+              <div class="profile-summary-copy">
+                <h2 data-profile-name>Administrator</h2>
+                <span class="badge blue" data-profile-role>Account role unavailable</span>
+                <p class="muted" data-profile-email>Email unavailable</p>
+              </div>
+              <dl class="profile-meta">
+                <div><dt>Department</dt><dd data-profile-department>—</dd></div>
+                <div><dt>Job title</dt><dd data-profile-job-title>—</dd></div>
+                <div><dt>Employee ID</dt><dd data-profile-employee-id>—</dd></div>
+                <div><dt>Account status</dt><dd><span class="badge neutral" data-profile-status-badge>—</span></dd></div>
+              </dl>
             </section>
 
-        </main>
+            <section class="card account-card" aria-labelledby="account-details-title">
+              <div class="section-heading compact">
+                <div><p class="section-kicker">Account</p><h2 id="account-details-title">Account details</h2></div>
+              </div>
+              <dl class="account-meta">
+                <div><dt>Joining date</dt><dd data-profile-joining-date>—</dd></div>
+                <div><dt>Last login</dt><dd data-profile-last-login>—</dd></div>
+                <div><dt>Created</dt><dd data-profile-created-at>—</dd></div>
+                <div><dt>Updated</dt><dd data-profile-updated-at>—</dd></div>
+              </dl>
+            </section>
+          </aside>
 
-    </div>
+          <div class="profile-main">
+            <section class="card" aria-labelledby="personal-information-title">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">Profile information</p>
+                  <h2 id="personal-information-title">Personal information</h2>
+                  <p>Only fields intended for self-service profile updates are editable.</p>
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-secondary" type="button" data-cancel-profile hidden>Cancel</button>
+                  <button class="btn btn-primary" type="button" data-edit-profile>Edit profile</button>
+                </div>
+              </div>
 
+              <form id="profile-form" novalidate>
+                <fieldset class="form-fieldset" data-profile-fieldset disabled>
+                  <legend class="sr-only">Editable profile information</legend>
+                  <div class="form-grid two">
+                    <div class="field">
+                      <label for="first-name">First name</label>
+                      <input id="first-name" name="firstName" type="text" maxlength="80" autocomplete="given-name" aria-describedby="first-name-error">
+                      <span class="field-error" id="first-name-error" data-field-error="firstName" role="alert"></span>
+                    </div>
+                    <div class="field">
+                      <label for="last-name">Last name</label>
+                      <input id="last-name" name="lastName" type="text" maxlength="80" autocomplete="family-name" aria-describedby="last-name-error">
+                      <span class="field-error" id="last-name-error" data-field-error="lastName" role="alert"></span>
+                    </div>
+                    <div class="field">
+                      <label for="display-name">Display name</label>
+                      <input id="display-name" name="displayName" type="text" maxlength="100" autocomplete="name" aria-describedby="display-name-error">
+                      <span class="field-error" id="display-name-error" data-field-error="displayName" role="alert"></span>
+                    </div>
+                    <div class="field">
+                      <label for="phone">Phone</label>
+                      <input id="phone" name="phone" type="tel" maxlength="30" autocomplete="tel" inputmode="tel" placeholder="+880" aria-describedby="phone-error">
+                      <span class="field-error" id="phone-error" data-field-error="phone" role="alert"></span>
+                    </div>
+                  </div>
 
-    <script src="../js/admin-profile.js"></script>
+                  <div class="field">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" rows="5" maxlength="1000" placeholder="Add a short professional bio." aria-describedby="bio-help bio-error"></textarea>
+                    <div class="field-help" id="bio-help">Keep your bio concise and appropriate for an internal company profile.</div>
+                    <span class="field-error" id="bio-error" data-field-error="bio" role="alert"></span>
+                  </div>
 
+                  <div class="form-grid two">
+                    <div class="field">
+                      <label for="linkedin-url">LinkedIn</label>
+                      <input id="linkedin-url" name="linkedin" type="url" maxlength="500" autocomplete="url" placeholder="https://www.linkedin.com/in/..." aria-describedby="linkedin-error">
+                      <span class="field-error" id="linkedin-error" data-field-error="linkedin" role="alert"></span>
+                    </div>
+                    <div class="field">
+                      <label for="website-url">Professional website</label>
+                      <input id="website-url" name="website" type="url" maxlength="500" autocomplete="url" placeholder="https://..." aria-describedby="website-error">
+                      <span class="field-error" id="website-error" data-field-error="website" role="alert"></span>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <div class="read-only-grid" aria-label="Read-only professional information">
+                  <div class="read-only-field"><span>Work email</span><strong data-profile-work-email>—</strong></div>
+                  <div class="read-only-field"><span>Role</span><strong data-profile-role-readonly>—</strong></div>
+                  <div class="read-only-field"><span>Department</span><strong data-profile-department-readonly>—</strong></div>
+                  <div class="read-only-field"><span>Job title</span><strong data-profile-job-title-readonly>—</strong></div>
+                </div>
+
+                <div class="form-footer">
+                  <p class="field-help">Work email, role, department, job title and other security-controlled identity data are read-only here.</p>
+                  <div class="form-actions">
+                    <button class="btn btn-secondary" type="button" data-cancel-profile hidden>Cancel</button>
+                    <button class="btn btn-primary" type="submit" data-save-profile hidden>Save changes</button>
+                  </div>
+                </div>
+              </form>
+            </section>
+
+            <section class="card" aria-labelledby="security-title">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">Security</p>
+                  <h2 id="security-title">Account security</h2>
+                  <p>Password changes use the authenticated security API when that integration is available.</p>
+                </div>
+              </div>
+              <form id="password-form" novalidate>
+                <div class="form-grid three">
+                  <div class="field">
+                    <label for="current-password">Current password</label>
+                    <input id="current-password" name="currentPassword" type="password" minlength="8" maxlength="128" autocomplete="current-password" required aria-describedby="current-password-error">
+                    <span class="field-error" id="current-password-error" data-password-error="currentPassword" role="alert"></span>
+                  </div>
+                  <div class="field">
+                    <label for="new-password">New password</label>
+                    <input id="new-password" name="newPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required aria-describedby="new-password-error">
+                    <span class="field-error" id="new-password-error" data-password-error="newPassword" role="alert"></span>
+                  </div>
+                  <div class="field">
+                    <label for="confirm-password">Confirm new password</label>
+                    <input id="confirm-password" name="confirmPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required aria-describedby="confirm-password-error">
+                    <span class="field-error" id="confirm-password-error" data-password-error="confirmPassword" role="alert"></span>
+                  </div>
+                </div>
+                <div class="form-footer">
+                  <p class="field-help">Passwords are never stored in browser storage by this page.</p>
+                  <button class="btn btn-primary" type="submit" data-change-password>Change password</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="card" aria-labelledby="photo-title">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">Profile image</p>
+                  <h2 id="photo-title">Profile photo</h2>
+                  <p>Select an image for preview and future authenticated media upload.</p>
+                </div>
+              </div>
+              <div class="photo-help">
+                <div class="photo-preview" data-photo-preview aria-live="polite"><span data-photo-preview-initials>AD</span></div>
+                <div>
+                  <strong data-photo-file-name>No new image selected</strong>
+                  <p class="muted">JPG, PNG or WebP. Maximum 2 MB in the current frontend validation.</p>
+                  <button class="btn btn-secondary" type="button" data-select-photo>Select image</button>
+                  <button class="btn btn-ghost" type="button" data-remove-photo hidden>Remove selection</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="sr-status" role="status" aria-live="polite" aria-atomic="true" data-global-status></div>
+  <script src="../js/admin-profile.js"></script>
 </body>
-
 </html>
