@@ -1,25 +1,62 @@
-# PrimeIt 
+# PrimeIt
 
-A UI/UX-only prototype for the PrimeIt public website, office member system, and admin system.
+PrimeIt is a professional IT company public website and internal office management platform.
 
-Design: light theme, white + blue + black + purple, modern cards, animated landing page, hover effects, responsive layouts. Logo and icons are placeholders so they can be replaced later.
+## Stack
 
-No backend, MySQL, JWT, REST API, real authentication, authorization, image upload, or persistent data is implemented yet. Buttons/forms are demo interactions only.
+- Frontend: HTML5, CSS3, Vanilla JavaScript
+- Backend: Node.js + Express.js
+- Database: MySQL
+- Authentication: JWT + HTTP-only cookies
+- API: REST API
 
-## Structure
+## Backend
+
+The canonical API namespace is `/api/v1`.
+
+Health endpoint:
+
+`GET /api/v1/health`
+
+The existing `/api/*` endpoints are retained as compatibility aliases while the frontend is migrated to the versioned API.
+
+## Local development
+
+1. Copy `.env.example` to `.env`.
+2. Configure MySQL and authentication/email environment variables.
+3. Install dependencies: `npm install`
+4. Run syntax checks: `npm run check`
+5. Start the server: `npm run dev`
+6. Verify the API: `npm run test:health`
+
+## Backend structure
+
 ```text
-PrimeIt/
-├── public/
-├── member/
-├── admin/
-├── css/
-├── js/
-└── assets/
-    ├── images/
-    ├── icons/
-    └── logo/
+server/
+├── app.js
+├── server.js
+├── db.js
+├── config/
+│   └── env.js
+├── controllers/
+│   └── systemController.js
+├── middleware/
+│   ├── asyncHandler.js
+│   ├── auth.js
+│   ├── errorHandler.js
+│   ├── notFound.js
+│   ├── profileUpload.js
+│   └── requestLogger.js
+├── routes/
+│   ├── index.js
+│   ├── system.js
+│   ├── auth.js
+│   ├── members.js
+│   ├── roles.js
+│   └── test.js
+├── sql/
+├── utils/
+└── set-ceo.js
 ```
 
-Open `public/index.html` to view the animated landing page.
-
-Because `member/leave-management.html` and `admin/leave-management.html` are separate pages, the flat CSS/JS folders use unique admin filenames: `admin-leave-management.css` and `admin-leave-management.js`.
+Private configuration stays in `.env`; it is ignored by Git. Never commit credentials, JWT secrets, database passwords, API keys, or private uploaded files.
