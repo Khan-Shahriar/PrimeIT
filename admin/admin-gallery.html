@@ -1,16 +1,154 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrimeIt — Gallery</title><link rel="stylesheet" href="../css/admin-gallery.css"></head>
-<body class="app-body"><div class="app-shell">
-<aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-<div class="side-label" style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">Admin Panel</div>
-<nav class="side-nav"><a class="nav-link " href="admin-dashboard.html">Dashboard</a>
-<a class="nav-link " href="member-management.html">Members</a>
-<a class="nav-link " href="leave-management.html">Leave Management</a>
-<a class="nav-link " href="holiday-management.html">Holidays</a>
-<a class="nav-link " href="admin-announcements.html">Announcements</a>
-<a class="nav-link " href="admin-office-information.html">Office Information</a>
-<a class="nav-link active" href="admin-gallery.html">Gallery</a>
-<a class="nav-link " href="role-permissions.html">Roles & Permissions</a>
-<a class="nav-link " href="admin-profile.html">Admin Profile</a></nav>
-<div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span class="side-label">Logout</span></a></div>
-</aside>
-<main class="main"><header class="app-topbar"><button class="mobile-toggle">☰</button><div class="search"><input placeholder="Search..." aria-label="Search"></div><div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div></header><section class="content"><div class="breadcrumb">Admin Panel / Gallery</div><div class="content-header"><div><h1 style="font-size:34px;margin:0">Gallery</h1><p>Upload, edit, publish, and manage PrimeIt company images.</p></div></div><div class="toolbar"><select><option>All Categories</option><option>Team</option><option>Office</option><option>Events</option></select><select><option>All Publication</option><option>Published</option><option>Draft</option></select><button class="btn btn-primary" data-toast="Upload image dialog opened">+ Upload Image</button></div><div class="gallery-grid"><div class="gallery-admin-card"><div class="gallery-admin-image">01</div><div class="gallery-admin-body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Team Workshop</h3><span class="badge success">Published</span></div><p class="muted">Team · Uploaded by Alex</p><div class="actions"><button class="btn btn-sm btn-secondary" data-toast="Image editor opened">Edit</button><button class="btn btn-sm btn-danger" data-toast="Delete confirmation opened">Delete</button></div></div></div><div class="gallery-admin-card"><div class="gallery-admin-image">02</div><div class="gallery-admin-body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Office Event</h3><span class="badge success">Published</span></div><p class="muted">Events · Uploaded by Sarah</p><div class="actions"><button class="btn btn-sm btn-secondary" data-toast="Image editor opened">Edit</button><button class="btn btn-sm btn-danger" data-toast="Delete confirmation opened">Delete</button></div></div></div><div class="gallery-admin-card"><div class="gallery-admin-image">03</div><div class="gallery-admin-body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>New Office</h3><span class="badge warning">Draft</span></div><p class="muted">Office · Uploaded by Alex</p><div class="actions"><button class="btn btn-sm btn-secondary" data-toast="Image editor opened">Edit</button><button class="btn btn-sm btn-danger" data-toast="Delete confirmation opened">Delete</button></div></div></div><div class="gallery-admin-card"><div class="gallery-admin-image">04</div><div class="gallery-admin-body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Annual Meetup</h3><span class="badge success">Published</span></div><p class="muted">Events · Uploaded by Mina</p><div class="actions"><button class="btn btn-sm btn-secondary" data-toast="Image editor opened">Edit</button><button class="btn btn-sm btn-danger" data-toast="Delete confirmation opened">Delete</button></div></div></div><div class="gallery-admin-card"><div class="gallery-admin-image">05</div><div class="gallery-admin-body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Team Celebration</h3><span class="badge success">Published</span></div><p class="muted">Team · Uploaded by Arif</p><div class="actions"><button class="btn btn-sm btn-secondary" data-toast="Image editor opened">Edit</button><button class="btn btn-sm btn-danger" data-toast="Delete confirmation opened">Delete</button></div></div></div><div class="gallery-admin-card"><div class="gallery-admin-image">06</div><div class="gallery-admin-body"><div style="display:flex;justify-content:space-between;gap:10px"><h3>Project Day</h3><span class="badge warning">Draft</span></div><p class="muted">Projects · Uploaded by Tanvir</p><div class="actions"><button class="btn btn-sm btn-secondary" data-toast="Image editor opened">Edit</button><button class="btn btn-sm btn-danger" data-toast="Delete confirmation opened">Delete</button></div></div></div></div></section></main></div><script src="../js/admin-gallery.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PrimeIt administrator gallery management.">
+  <title>PrimeIt — Gallery Management</title>
+  <link rel="stylesheet" href="../css/admin-gallery.css">
+</head>
+<body class="app-body">
+  <a class="skip-link" href="#gallery-main-content">Skip to gallery management</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="admin-sidebar">
+      <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard">
+        <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+        <span class="logo-text">PrimeIt</span>
+      </a>
+
+      <p class="side-label">Admin Panel</p>
+
+      <nav class="side-nav" aria-label="Admin panel navigation">
+        <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link" href="member-management.html">Member Management</a>
+        <a class="nav-link" href="leave-management.html">Leave Management</a>
+        <a class="nav-link" href="holiday-management.html">Holiday Management</a>
+        <a class="nav-link" href="admin-announcements.html">Announcements</a>
+        <a class="nav-link" href="admin-office-information.html">Office Information</a>
+        <a class="nav-link active" href="admin-gallery.html" aria-current="page">Gallery</a>
+        <a class="nav-link" href="role-permissions.html">Role &amp; Permissions</a>
+        <a class="nav-link" href="admin-profile.html">Admin Profile</a>
+      </nav>
+
+      <div class="side-bottom">
+        <a class="nav-link" href="../public/index.html">Back to Website</a>
+        <button class="nav-link nav-button" type="button" data-action="logout">Logout</button>
+      </div>
+    </aside>
+
+    <div class="sidebar-backdrop" data-sidebar-close hidden></div>
+
+    <main class="main" id="gallery-main-content">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button
+            class="mobile-toggle"
+            type="button"
+            aria-label="Open admin navigation"
+            aria-controls="admin-sidebar"
+            aria-expanded="false"
+            data-sidebar-toggle
+          >
+            <span aria-hidden="true">☰</span>
+          </button>
+          <div class="topbar-context">
+            <span class="topbar-label">Admin Panel</span>
+            <span class="topbar-title">Gallery</span>
+          </div>
+        </div>
+
+        <div class="user-chip" aria-label="Administrator account context">
+          <span class="user-name">Administrator</span>
+          <span class="user-avatar" aria-hidden="true">AD</span>
+        </div>
+      </header>
+
+      <section class="content" aria-labelledby="gallery-page-title">
+        <div class="breadcrumb" aria-label="Breadcrumb">
+          <span>Admin Panel</span>
+          <span aria-hidden="true">/</span>
+          <strong>Gallery</strong>
+        </div>
+
+        <header class="content-header">
+          <div>
+            <p class="eyebrow">Gallery management</p>
+            <h1 id="gallery-page-title">Gallery</h1>
+            <p>Manage PrimeIt gallery content and prepare images for publication across the platform.</p>
+          </div>
+
+          <div class="header-actions">
+            <button class="btn btn-primary" type="button" data-action="open-upload">Add Image</button>
+          </div>
+        </header>
+
+        <section class="toolbar" aria-label="Gallery controls">
+          <label class="search-control">
+            <span class="sr-only">Search gallery</span>
+            <input
+              id="gallery-search"
+              name="search"
+              type="search"
+              placeholder="Search gallery..."
+              autocomplete="off"
+              maxlength="120"
+            >
+          </label>
+
+          <label class="filter-control">
+            <span class="sr-only">Filter gallery category</span>
+            <select id="gallery-category-filter" name="category">
+              <option value="">All categories</option>
+              <option value="Office">Office</option>
+              <option value="Team">Team</option>
+              <option value="Events">Events</option>
+              <option value="Projects">Projects</option>
+              <option value="Culture">Culture</option>
+              <option value="Activities">Activities</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+
+          <label class="filter-control">
+            <span class="sr-only">Filter gallery publication status</span>
+            <select id="gallery-status-filter" name="status">
+              <option value="">All statuses</option>
+              <option value="Published">Published</option>
+              <option value="Draft">Draft</option>
+              <option value="Unpublished">Unpublished</option>
+              <option value="Archived">Archived</option>
+            </select>
+          </label>
+
+          <button class="btn btn-secondary btn-sm" type="button" data-action="reset-filters">Clear Filters</button>
+        </section>
+
+        <p class="sr-status" role="status" aria-live="polite" data-gallery-status>
+          Gallery data is ready for future REST API integration.
+        </p>
+
+        <section class="gallery-section" aria-labelledby="gallery-list-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Gallery directory</p>
+              <h2 id="gallery-list-title">Images</h2>
+            </div>
+          </div>
+
+          <div class="gallery-grid" id="gallery-grid" aria-live="polite">
+            <div class="state-panel gallery-empty-state" data-state="empty">
+              <div class="state-icon" aria-hidden="true">▧</div>
+              <h3>No gallery images available</h3>
+              <p>Gallery items will appear here after they are provided by the future gallery API.</p>
+              <button class="btn btn-primary" type="button" data-action="open-upload">Add Image</button>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/admin-gallery.js"></script>
+</body>
+</html>
