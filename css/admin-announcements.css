@@ -33,7 +33,7 @@ button,input,textarea,select{color:inherit}
 .nav-link.active{background:linear-gradient(90deg,#EEF2FF,#F6F0FF);color:var(--blue2);font-weight:800}
 .nav-button{width:100%;border:0;background:transparent;text-align:left}
 .side-bottom{margin-top:auto;padding-top:18px;border-top:1px solid var(--line)}
-.sidebar-backdrop{display:none}
+.sidebar-backdrop{display:none}.sidebar-backdrop[hidden]{display:none}
 
 .main{min-width:0}
 .app-topbar{height:76px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:30}
@@ -86,7 +86,7 @@ tr:last-child td{border-bottom:0}
 .title-cell{max-width:260px}
 .title-cell strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .title-cell small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
-.actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}.muted{color:var(--muted)}
 .badge{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:850;white-space:nowrap}
 .badge.success{background:#ECFDF3;color:#027A48}
 .badge.warning{background:#FFFAEB;color:#B54708}
