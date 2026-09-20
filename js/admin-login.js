@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (status === 403) {
             showMessage(
-                "This account is not authorized to access the Admin Panel.",
+                "This account cannot sign in right now.",
                 true
             );
             return;
