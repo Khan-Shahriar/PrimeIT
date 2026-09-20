@@ -72,11 +72,7 @@
     },
 
     bindLogout() {
-      this.logoutButton?.addEventListener("click", () => {
-        // Authentication/JWT invalidation belongs to the later authentication section.
-        this.state.logoutRequested = true;
-        this.showMessage("Logout is prepared for the future authentication integration.");
-      });
+      // Server-side logout is handled by js/auth-guard.js.
     },
 
     renderCurrentDate() {
