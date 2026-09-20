@@ -191,6 +191,32 @@
     </section>
   </div>
 
+  <div class="modal-backdrop" id="edit-modal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+      <div class="modal-header">
+        <div><p class="section-kicker">Gallery content</p><h2 id="edit-title">Edit Gallery Item</h2></div>
+        <button class="icon-button" type="button" aria-label="Close edit dialog" data-action="close-edit">×</button>
+      </div>
+      <p class="modal-description">Edit metadata only. Persistent changes will be submitted through the future gallery API.</p>
+      <form id="edit-form" novalidate>
+        <div class="form-grid">
+          <div class="field"><label for="edit-image-title">Title <span aria-hidden="true">*</span></label><input id="edit-image-title" maxlength="160" required></div>
+          <div class="field"><label for="edit-image-alt">Alt text <span aria-hidden="true">*</span></label><input id="edit-image-alt" maxlength="250" required></div>
+          <div class="field"><label for="edit-image-category">Category</label><select id="edit-image-category"><option value="">Select category</option><option>Office</option><option>Team</option><option>Events</option><option>Projects</option><option>Culture</option><option>Activities</option><option>Other</option></select></div>
+          <div class="field"><label for="edit-image-collection">Collection</label><input id="edit-image-collection" maxlength="120"></div>
+          <div class="field field-full"><label for="edit-image-description">Description</label><textarea id="edit-image-description" maxlength="1000"></textarea></div>
+          <div class="field checkbox-field"><label><input id="edit-image-featured" type="checkbox"> <span>Featured</span></label></div>
+          <div class="field"><label for="edit-image-status">Status</label><select id="edit-image-status"><option>Draft</option><option>Unpublished</option><option>Published</option><option>Archived</option></select></div>
+        </div>
+        <p class="form-message" role="alert" data-edit-message hidden></p>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" type="button" data-action="close-edit">Cancel</button>
+          <button class="btn btn-primary" type="submit">Prepare Changes</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
   <div class="modal-backdrop" id="details-modal" hidden>
     <section class="modal modal-large" role="dialog" aria-modal="true" aria-labelledby="details-title">
       <div class="modal-header">
