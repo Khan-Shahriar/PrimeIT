@@ -1,94 +1,272 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>PrimeIt — Holiday Management</title>
-    <link rel="stylesheet" href="../css/holiday-management.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="PrimeIt administrative holiday management">
+  <title>PrimeIt — Holiday Management</title>
+  <link rel="stylesheet" href="../css/holiday-management.css">
 </head>
-
 <body class="app-body">
-    <div class="app-shell">
-        <aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span
-                    class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-            <div class="side-label"
-                style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">
-                Admin Panel</div>
-            <nav class="side-nav"><a class="nav-link " href="admin-dashboard.html">Dashboard</a>
-                <a class="nav-link " href="member-management.html">Members</a>
-                <a class="nav-link " href="leave-management.html">Leave Management</a>
-                <a class="nav-link active" href="holiday-management.html">Holidays</a>
-                <a class="nav-link " href="admin-announcements.html">Announcements</a>
-                <a class="nav-link " href="admin-office-information.html">Office Information</a>
-                <a class="nav-link " href="admin-gallery.html">Gallery</a>
-                <a class="nav-link " href="role-permissions.html">Roles & Permissions</a>
-                <a class="nav-link " href="admin-profile.html">Admin Profile</a>
-            </nav>
-            <div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to
-                        Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span
-                        class="side-label">Logout</span></a></div>
-        </aside>
-        <main class="main">
-            <header class="app-topbar"><button class="mobile-toggle">☰</button>
-                <div class="search"><input placeholder="Search..." aria-label="Search"></div>
-                <div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div>
-            </header>
-            <section class="content">
-                <div class="breadcrumb">Admin Panel / Holiday Management</div>
-                <div class="content-header">
-                    <div>
-                        <h1 style="font-size:34px;margin:0">Holiday Management</h1>
-                        <p>Manage office holidays shown throughout the system.</p>
-                    </div>
-                </div>
-                <div class="toolbar"><button class="btn btn-primary" data-toast="Create holiday dialog opened">+ Add
-                        Holiday</button></div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Holiday</th>
-                                <th>Date</th>
-                                <th>Type</th>
-                                <th>Visibility</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Labor Day</td>
-                                <td>Sep 07, 2026</td>
-                                <td>Public Holiday</td>
-                                <td><span class="badge success">Visible</span></td>
-                                <td class="actions"><button class="btn btn-sm btn-secondary"
-                                        data-toast="Edit holiday opened">Edit</button><button
-                                        class="btn btn-sm btn-danger"
-                                        data-toast="Holiday deletion requested">Delete</button></td>
-                            </tr>
-                            <tr>
-                                <td>Thanksgiving</td>
-                                <td>Nov 26, 2026</td>
-                                <td>Office Holiday</td>
-                                <td><span class="badge success">Visible</span></td>
-                                <td class="actions"><button class="btn btn-sm btn-secondary">Edit</button><button
-                                        class="btn btn-sm btn-danger">Delete</button></td>
-                            </tr>
-                            <tr>
-                                <td>Christmas</td>
-                                <td>Dec 25, 2026</td>
-                                <td>Public Holiday</td>
-                                <td><span class="badge success">Visible</span></td>
-                                <td class="actions"><button class="btn btn-sm btn-secondary">Edit</button><button
-                                        class="btn btn-sm btn-danger">Delete</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-    </div>
-    <script src="../js/holiday-management.js"></script>
-</body>
+<a class="skip-link" href="#holiday-main-content">Skip to main content</a>
 
+<div class="app-shell">
+  <aside class="sidebar" id="admin-sidebar">
+    <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard">
+      <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+      <span class="logo-text">PrimeIt</span>
+    </a>
+    <p class="side-label">Admin Panel</p>
+    <nav class="side-nav" aria-label="Admin panel navigation">
+      <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
+      <a class="nav-link" href="member-management.html">Member Management</a>
+      <a class="nav-link" href="leave-management.html">Leave Management</a>
+      <a class="nav-link active" href="holiday-management.html" aria-current="page">Holiday Management</a>
+      <a class="nav-link" href="admin-announcements.html">Announcements</a>
+      <a class="nav-link" href="admin-office-information.html">Office Information</a>
+      <a class="nav-link" href="admin-gallery.html">Gallery</a>
+      <a class="nav-link" href="role-permissions.html">Role &amp; Permissions</a>
+      <a class="nav-link" href="admin-profile.html">Admin Profile</a>
+    </nav>
+    <div class="side-bottom">
+      <a class="nav-link" href="../public/index.html">Back to Website</a>
+      <button class="nav-link nav-button" type="button" data-action="logout">Logout</button>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" data-sidebar-close hidden></div>
+
+  <main class="main" id="holiday-main-content">
+    <header class="app-topbar">
+      <div class="topbar-left">
+        <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-controls="admin-sidebar" aria-expanded="false" data-sidebar-toggle><span aria-hidden="true">☰</span></button>
+        <div class="topbar-context">Holiday Management</div>
+      </div>
+      <div class="user-chip" aria-label="Administrator account context">
+        <span class="user-name">Administrator</span>
+        <span class="user-avatar" aria-hidden="true">AD</span>
+      </div>
+    </header>
+
+    <section class="content" aria-labelledby="page-title">
+      <div class="breadcrumb" aria-label="Breadcrumb">Admin Panel <span aria-hidden="true">/</span> Holiday Management</div>
+
+      <header class="content-header">
+        <div>
+          <p class="eyebrow">Administrative calendar</p>
+          <h1 id="page-title">Holiday Management</h1>
+          <p>Manage company holidays used by the office leave and calendar workflows.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" type="button" data-action="refresh">Refresh</button>
+          <button class="btn btn-primary" type="button" data-action="open-create">Add Holiday</button>
+        </div>
+      </header>
+
+      <section class="kpi-grid" aria-labelledby="statistics-title">
+        <h2 id="statistics-title" class="sr-only">Holiday statistics</h2>
+        <article class="kpi-card">
+          <span>Total Holidays</span><strong data-stat="total">—</strong><small data-stat-meta="total">Unavailable</small>
+        </article>
+        <article class="kpi-card">
+          <span>Current Year</span><strong data-stat="current-year">—</strong><small data-stat-meta="current-year">Unavailable</small>
+        </article>
+        <article class="kpi-card">
+          <span>Upcoming</span><strong data-stat="upcoming">—</strong><small data-stat-meta="upcoming">Unavailable</small>
+        </article>
+        <article class="kpi-card">
+          <span>Past</span><strong data-stat="past">—</strong><small data-stat-meta="past">Unavailable</small>
+        </article>
+        <p class="sr-status" role="status" aria-live="polite" data-page-status>Holiday data is ready for future REST API integration.</p>
+      </section>
+
+      <section class="card filter-card" aria-labelledby="filters-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Holiday directory</p>
+            <h2 id="filters-title">Search &amp; filters</h2>
+          </div>
+          <button class="btn btn-secondary btn-sm" type="button" data-action="reset-filters">Reset filters</button>
+        </div>
+        <form id="holiday-filters" class="filter-grid" novalidate>
+          <div class="field field-search">
+            <label for="holiday-search">Search holidays</label>
+            <input id="holiday-search" name="search" type="search" maxlength="120" placeholder="Holiday name or description" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="holiday-year">Year</label>
+            <select id="holiday-year" name="year">
+              <option value="">All years</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="holiday-type">Holiday type</label>
+            <select id="holiday-type" name="type">
+              <option value="">All types</option>
+              <option value="Public Holiday">Public Holiday</option>
+              <option value="Company Holiday">Company Holiday</option>
+              <option value="Optional Holiday">Optional Holiday</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="holiday-status">Status</label>
+            <select id="holiday-status" name="status">
+              <option value="">All statuses</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="holiday-time">Date</label>
+            <select id="holiday-time" name="time">
+              <option value="">All dates</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="past">Past</option>
+            </select>
+          </div>
+        </form>
+      </section>
+
+      <section class="card list-card" aria-labelledby="holiday-list-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Managed holidays</p>
+            <h2 id="holiday-list-title">Holiday List</h2>
+            <p class="section-description" data-result-summary>No holiday data available.</p>
+          </div>
+        </div>
+
+        <div class="state-panel loading-state" data-state="loading" hidden role="status" aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span><span>Loading holidays…</span>
+        </div>
+
+        <div class="state-panel empty-state" data-state="empty">
+          <div class="state-icon" aria-hidden="true">H</div>
+          <strong data-empty-title>No holiday data available.</strong>
+          <p data-empty-message>Holiday records will appear here when the future REST API supplies authoritative data. No production holiday records are fabricated by this frontend.</p>
+          <button class="btn btn-secondary btn-sm" type="button" data-action="refresh">Try again</button>
+        </div>
+
+        <div class="state-panel error-state" data-state="error" hidden role="alert">
+          <div class="state-icon" aria-hidden="true">!</div>
+          <strong>Unable to load holiday data.</strong>
+          <p data-error-message>Please try again later.</p>
+          <button class="btn btn-secondary btn-sm" type="button" data-action="retry">Try again</button>
+        </div>
+
+        <div class="table-scroll" data-holiday-table hidden>
+          <table>
+            <caption class="sr-only">Managed company holidays</caption>
+            <thead>
+              <tr>
+                <th scope="col">Holiday</th>
+                <th scope="col">Date</th>
+                <th scope="col">Day</th>
+                <th scope="col">Year</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="actions-heading">Actions</th>
+              </tr>
+            </thead>
+            <tbody data-holiday-body></tbody>
+          </table>
+        </div>
+
+        <div class="mobile-holiday-list" data-mobile-holiday-list hidden aria-label="Holiday cards"></div>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" data-modal="details" hidden>
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="details-title" aria-describedby="details-description" tabindex="-1">
+    <button class="modal-close" type="button" data-action="close-modal" aria-label="Close holiday details">×</button>
+    <p class="section-kicker">Holiday details</p>
+    <h2 id="details-title">Holiday</h2>
+    <p id="details-description" class="modal-description">Review the holiday information.</p>
+    <div class="details-grid" data-details></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" type="button" data-action="close-modal">Close</button>
+      <button class="btn btn-secondary" type="button" data-action="edit-selected">Edit</button>
+    </div>
+  </section>
+</div>
+
+<div class="modal-backdrop" data-modal="form" hidden>
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="form-title" aria-describedby="form-description" tabindex="-1">
+    <button class="modal-close" type="button" data-action="close-modal" aria-label="Close holiday form">×</button>
+    <p class="section-kicker" data-form-kicker>Add holiday</p>
+    <h2 id="form-title">Add Holiday</h2>
+    <p id="form-description" class="modal-description">Enter the holiday information. The server will remain authoritative when API integration is connected.</p>
+
+    <form id="holiday-form" novalidate>
+      <input type="hidden" id="holiday-id" name="id">
+      <div class="form-grid">
+        <div class="field">
+          <label for="form-name">Holiday name <span aria-hidden="true">*</span></label>
+          <input id="form-name" name="name" type="text" maxlength="120" required autocomplete="off" aria-describedby="form-name-error">
+          <p class="field-error" id="form-name-error" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="form-date">Date <span aria-hidden="true">*</span></label>
+          <input id="form-date" name="date" type="date" required aria-describedby="form-date-error">
+          <p class="field-error" id="form-date-error" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="form-type">Holiday type <span aria-hidden="true">*</span></label>
+          <select id="form-type" name="type" required aria-describedby="form-type-error">
+            <option value="">Select type</option>
+            <option value="Public Holiday">Public Holiday</option>
+            <option value="Company Holiday">Company Holiday</option>
+            <option value="Optional Holiday">Optional Holiday</option>
+            <option value="Other">Other</option>
+          </select>
+          <p class="field-error" id="form-type-error" role="alert"></p>
+        </div>
+        <div class="field field-full">
+          <label for="form-description">Description</label>
+          <textarea id="form-description" name="description" maxlength="500" rows="4" aria-describedby="form-description-help form-description-error"></textarea>
+          <div class="field-meta"><span id="form-description-help">Optional, maximum 500 characters.</span><span data-description-count>0 / 500</span></div>
+          <p class="field-error" id="form-description-error" role="alert"></p>
+        </div>
+        <div class="field checkbox-field">
+          <label class="checkbox-label"><input id="form-recurring" name="recurring" type="checkbox"><span>Recurring annually</span></label>
+          <small>Use only when the holiday is intended to repeat each year.</small>
+        </div>
+        <div class="field">
+          <label for="form-status">Status</label>
+          <select id="form-status" name="status">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="form-server-error" data-form-server-error role="alert"></p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" data-action="close-modal">Cancel</button>
+        <button class="btn btn-primary" type="submit" data-submit-holiday>Save Holiday</button>
+      </div>
+      <p class="modal-state" role="status" aria-live="polite" data-form-state></p>
+    </form>
+  </section>
+</div>
+
+<div class="modal-backdrop" data-modal="confirm" hidden>
+  <section class="modal modal-small" role="dialog" aria-modal="true" aria-labelledby="confirm-title" tabindex="-1">
+    <button class="modal-close" type="button" data-action="close-modal" aria-label="Close confirmation">×</button>
+    <p class="section-kicker">Confirm action</p>
+    <h2 id="confirm-title">Remove holiday?</h2>
+    <p data-confirm-description>This action requires backend confirmation. No local record will be removed until the server confirms it.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" type="button" data-action="close-modal">Cancel</button>
+      <button class="btn btn-danger" type="button" data-action="confirm-remove">Remove Holiday</button>
+    </div>
+    <p class="modal-state" role="status" aria-live="polite" data-confirm-state></p>
+  </section>
+</div>
+
+<div class="toast" role="status" aria-live="polite" aria-atomic="true" data-toast></div>
+<script src="../js/holiday-management.js"></script>
+</body>
 </html>
