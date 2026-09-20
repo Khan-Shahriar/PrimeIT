@@ -4,79 +4,101 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>PrimeIt — Role & Permissions</title>
+    <title>PrimeIt — Role &amp; Permissions</title>
     <link rel="stylesheet" href="../css/role-permissions.css">
 </head>
 
 <body class="app-body">
     <div class="app-shell">
-        <aside class="sidebar"><a class="logo" href="admin-dashboard.html"><span
-                    class="logo-mark"><span>P</span></span><span class="logo-text">PrimeIt</span></a>
-            <div class="side-label"
-                style="margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em">
-                Admin Panel</div>
-            <nav class="side-nav"><a class="nav-link " href="admin-dashboard.html">Dashboard</a>
-                <a class="nav-link " href="member-management.html">Members</a>
-                <a class="nav-link " href="leave-management.html">Leave Management</a>
-                <a class="nav-link " href="holiday-management.html">Holidays</a>
-                <a class="nav-link " href="admin-announcements.html">Announcements</a>
-                <a class="nav-link " href="admin-office-information.html">Office Information</a>
-                <a class="nav-link " href="admin-gallery.html">Gallery</a>
-                <a class="nav-link active" href="role-permissions.html">Roles & Permissions</a>
-                <a class="nav-link " href="admin-profile.html">Admin Profile</a>
+        <aside class="sidebar">
+            <a class="logo" href="admin-dashboard.html">
+                <span class="logo-mark" aria-hidden="true"><span>P</span></span>
+                <span class="logo-text">PrimeIt</span>
+            </a>
+
+            <div class="side-label admin-panel-label">Admin Panel</div>
+
+            <nav class="side-nav" aria-label="Admin navigation">
+                <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
+                <a class="nav-link" href="member-management.html">Members</a>
+                <a class="nav-link" href="leave-management.html">Leave Management</a>
+                <a class="nav-link" href="holiday-management.html">Holidays</a>
+                <a class="nav-link" href="admin-announcements.html">Announcements</a>
+                <a class="nav-link" href="admin-office-information.html">Office Information</a>
+                <a class="nav-link" href="admin-gallery.html">Gallery</a>
+                <a class="nav-link active" href="role-permissions.html" aria-current="page">Roles &amp; Permissions</a>
+                <a class="nav-link" href="admin-profile.html">Admin Profile</a>
             </nav>
-            <div class="side-bottom"><a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to
-                        Website</span></a><a class="nav-link" href="admin-login.html">⇥ <span
-                        class="side-label">Logout</span></a></div>
+
+            <div class="side-bottom">
+                <a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a>
+                <a class="nav-link" href="admin-login.html">⇥ <span class="side-label">Logout</span></a>
+            </div>
         </aside>
+
         <main class="main">
-            <header class="app-topbar"><button class="mobile-toggle">☰</button>
-                <div class="search"><input placeholder="Search..." aria-label="Search"></div>
-                <div class="user-chip"><span>Administrator</span><span class="user-avatar">AD</span></div>
+            <header class="app-topbar">
+                <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-expanded="false">☰</button>
+
+                <div class="search">
+                    <input type="search" placeholder="Search..." aria-label="Search">
+                </div>
+
+                <div class="user-chip">
+                    <span>Administrator</span>
+                    <span class="user-avatar" aria-hidden="true">AD</span>
+                </div>
             </header>
+
             <section class="content">
-                <div class="breadcrumb">Admin Panel / Role & Permissions</div>
+                <div class="breadcrumb" aria-label="Breadcrumb">Admin Panel / Role &amp; Permissions</div>
+
                 <div class="content-header">
                     <div>
-                        <h1 style="font-size:34px;margin:0">Role & Permissions</h1>
+                        <h1>Role &amp; Permissions</h1>
                         <p>Control access using granular roles and permissions.</p>
                     </div>
                 </div>
+
                 <div class="role-layout">
-                    <div class="role-list">
-                        <div class="role-item active">CEO</div>
-                        <div class="role-item">Developer</div>
-                        <div class="role-item">Admin</div>
-                        <div class="role-item">HR</div>
-                        <div class="role-item">Marketing Manager</div>
-                        <div class="role-item">Office Manager</div><button class="btn btn-primary"
-                            style="width:100%;margin-top:12px" data-toast="Create role dialog opened">+ Create
-                            Role</button>
+                    <div class="role-list" aria-label="Roles">
+                        <button class="role-item active" type="button" data-role-name="ceo" aria-pressed="true">CEO</button>
+                        <button class="role-item" type="button" data-role-name="developer" aria-pressed="false">Developer</button>
+                        <button class="role-item" type="button" data-role-name="admin" aria-pressed="false">Admin</button>
+                        <button class="role-item" type="button" data-role-name="hr" aria-pressed="false">HR</button>
+                        <button class="role-item" type="button" data-role-name="marketing_manager" aria-pressed="false">Marketing Manager</button>
+                        <button class="role-item" type="button" data-role-name="office_manager" aria-pressed="false">Office Manager</button>
+
+                        <button class="btn btn-primary create-role-button" type="button">+ Create Role</button>
                     </div>
+
                     <div class="card">
                         <div class="content-header">
                             <div>
-                                <h3 id="selected-role-name">Select a role</h3>
-                                <p id="selected-role-description">
-                                    Select a role to view its permissions.
-                                </p>
+                                <h2 id="selected-role-name">Select a role</h2>
+                                <p id="selected-role-description">Select a role to view its permissions.</p>
                             </div>
+
                             <button class="btn btn-primary" id="save-permissions-btn" type="button">
                                 Save Changes
                             </button>
                         </div>
-                        <div class="permission-grid" id="permission-grid">
+
+                        <div class="permission-grid" id="permission-grid" aria-live="polite">
                             <div class="head">Permission</div>
                             <div class="head">Status</div>
                         </div>
-                        <div class="notice" style="margin-top:18px">CEO and Developer have full access. Admin, HR, and
-                            custom roles receive only explicitly assigned permissions. Backend authorization remains the
-                            source of truth.</div>
+
+                        <div class="notice">
+                            CEO and Developer have full access. Admin, HR, and custom roles receive only explicitly assigned
+                            permissions. Backend authorization remains the source of truth.
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
     </div>
+
     <script src="../js/role-permissions.js"></script>
 </body>
 
