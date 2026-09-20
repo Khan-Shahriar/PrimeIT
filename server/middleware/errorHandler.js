@@ -3,6 +3,10 @@ function normalizeErrors(error) {
         return error.errors;
     }
 
+    if (error?.type === "entity.parse.failed") {
+        return [{ field: "body", message: "Malformed JSON request body" }];
+    }
+
     return [];
 }
 
@@ -11,7 +15,10 @@ function errorHandler(error, req, res, next) {
         return next(error);
     }
 
-    const status = Number.isInteger(error?.statusCode) ? error.statusCode : 500;
+    const status = Number.isInteger(error?.statusCode)
+        ? error.statusCode
+        : (Number.isInteger(error?.status) ? error.status : 500);
+
     const isServerError = status >= 500;
 
     console.error("API error", {
@@ -24,7 +31,9 @@ function errorHandler(error, req, res, next) {
 
     return res.status(status).json({
         success: false,
-        message: isServerError ? "Internal server error" : (error.message || "Request failed"),
+        message: isServerError
+            ? "Internal server error"
+            : (error.message || "Request failed"),
         errors: isServerError ? [] : normalizeErrors(error)
     });
 }
