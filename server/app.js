@@ -12,6 +12,7 @@ const requestLogger = require("./middleware/requestLogger");
 const notFoundHandler = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
 const apiRoutes = require("./routes");
+const { getHealth } = require("./controllers/systemController");
 
 const config = getConfig();
 assertDatabaseConfiguration(config);
@@ -102,6 +103,9 @@ app.use("/api/v1/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/v1/auth", authLimiter);
 
 app.use("/api/v1", apiRoutes);
+
+// Legacy health endpoint retained for existing tooling/frontend compatibility.
+app.get("/api/health", getHealth);
 
 /*
  * Legacy API aliases are retained so the existing PrimeIt frontend
