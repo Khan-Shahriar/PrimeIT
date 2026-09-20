@@ -388,7 +388,8 @@
         if (def.placeholder) control.placeholder = def.placeholder;
         if (def.autocomplete) control.autocomplete = def.autocomplete;
         if (def.required) control.required = true;
-        if (def.value !== undefined && def.value !== null) control.value = def.value;
+        if (def.type === 'checkbox') control.checked = Boolean(def.value);
+        else if (def.value !== undefined && def.value !== null) control.value = def.value;
         if (def.type === 'checkbox') {
             wrapper.className = 'form-field checkbox-field';
             label.htmlFor = 'field-' + def.name;
@@ -599,8 +600,18 @@
 
     function normalizeIncomingData(data) {
         if (!data || typeof data !== 'object') return null;
+        const rawOffice = data.office || data.overview || null;
+        const office = rawOffice ? {
+            ...rawOffice,
+            officeName: rawOffice.officeName || rawOffice.name || '',
+            description: rawOffice.description || '',
+            address: rawOffice.address || (data.contact && data.contact.address) || '',
+            phone: rawOffice.phone || (data.contact && data.contact.phone) || '',
+            email: rawOffice.email || (data.contact && data.contact.email) || '',
+            timezone: rawOffice.timezone || ''
+        } : null;
         return {
-            office: data.office || data.overview || null,
+            office,
             departments: Array.isArray(data.departments) ? data.departments : [],
             contacts: Array.isArray(data.importantContacts) ? data.importantContacts : (Array.isArray(data.contacts) ? data.contacts : []),
             policies: Array.isArray(data.policies) ? data.policies : [],
