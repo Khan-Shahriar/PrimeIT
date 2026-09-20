@@ -1,4 +1,4 @@
-const { pool } = require("../db");
+const { getHealthData } = require("../services/systemService");
 
 async function getApiRoot(req, res) {
     return res.json({
@@ -15,20 +15,19 @@ async function getHealth(req, res) {
     const startedAt = Date.now();
 
     try {
-        await pool.query("SELECT 1");
+        const health = await getHealthData();
+
         return res.status(200).json({
             success: true,
             data: {
-                status: "ok",
-                database: "ok",
-                uptimeSeconds: Math.round(process.uptime() * 100) / 100,
-                responseTimeMs: Date.now() - startedAt,
-                timestamp: new Date().toISOString()
+                ...health,
+                responseTimeMs: Date.now() - startedAt
             },
             message: "PrimeIt API is healthy"
         });
     } catch (error) {
         console.error("Health check database error:", error.message);
+
         return res.status(503).json({
             success: false,
             data: {
