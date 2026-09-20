@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
-    "check": "node --check server/server.js && node --check server/app.js && node --check server/config/env.js && node --check server/controllers/systemController.js && node --check server/middleware/asyncHandler.js && node --check server/middleware/errorHandler.js && node --check server/middleware/notFound.js && node --check server/middleware/requestLogger.js && node --check server/routes/index.js && node --check server/routes/system.js"
+    "check": "node --check server/server.js && node --check server/app.js && node --check server/config/env.js && node --check server/controllers/systemController.js && node --check server/middleware/asyncHandler.js && node --check server/middleware/errorHandler.js && node --check server/middleware/notFound.js && node --check server/middleware/requestLogger.js && node --check server/routes/index.js && node --check server/routes/system.js",
+    "test:health": "node scripts/health-check.js",
+    "test:api": "npm run test:health"
   },
   "keywords": [
     "primeit",
