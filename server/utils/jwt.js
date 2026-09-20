@@ -15,7 +15,7 @@ function getJwtConfiguration() {
 function createAccessToken({ userId, tokenVersion = 0 }) {
     const { secret, expiresIn, issuer, audience } = getJwtConfiguration();
     return jwt.sign({ sub: String(userId), typ: "access", ver: Number(tokenVersion) || 0 }, secret, {
-        expiresIn, issuer, audience, algorithms: ["HS256"], jwtid: crypto.randomUUID()
+        expiresIn, issuer, audience, algorithm: "HS256", jwtid: crypto.randomUUID()
     });
 }
 
