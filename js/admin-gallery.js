@@ -70,7 +70,7 @@
   }
 
   function formatBytes(bytes) {
-    if (!Number.isFinite(bytes) return 'Unknown size';
+    if (!Number.isFinite(bytes)) return 'Unknown size';
     if (bytes < 1024) return bytes + ' B';
     const units = ['KB', 'MB', 'GB'];
     let value = bytes / 1024;
