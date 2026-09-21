@@ -33,6 +33,7 @@ router.get("/:id", asyncHandler(galleryController.getOne));
 
 router.post("/", galleryWriteLimiter, requireAuth, requirePermission("gallery.create"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.create));
 router.patch("/:id", galleryWriteLimiter, requireAuth, requirePermission("gallery.update"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.update));
+router.post("/:id/publish", galleryWriteLimiter, requireAuth, requirePermission("gallery.publish"), asyncHandler(galleryController.publish));
 router.post("/:id/archive", galleryWriteLimiter, requireAuth, requirePermission("gallery.archive"), asyncHandler(galleryController.archive));
 
 module.exports = router;
