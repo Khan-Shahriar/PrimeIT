@@ -28,7 +28,7 @@ async function list({ admin = false } = {}) {
     return rows;
 }
 
-async function findById(id) {
+async function findByStoredFilename(filename) {\n    const [rows] = await pool.query(`SELECT id, status, stored_filename AS storedFilename FROM gallery_media WHERE stored_filename = ? LIMIT 1`, [filename]);\n    return rows[0] || null;\n}\n\nasync function findById(id) {
     const [rows] = await pool.query(`SELECT ${SELECT_FIELDS}, g.stored_filename AS storedFilename FROM gallery_media g WHERE g.id = ? LIMIT 1`, [id]);
     return rows[0] || null;
 }
@@ -84,4 +84,4 @@ async function archive(id) {
     return findById(id);
 }
 
-module.exports = { list, findById, create, update, archive };
+module.exports = { list, findById, findByStoredFilename, create, update, archive };
