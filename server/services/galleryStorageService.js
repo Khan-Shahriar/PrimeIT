@@ -18,7 +18,7 @@ function createStoredName(format) {
 }
 
 function publicUrl(filename) {
-    return `/uploads/gallery/originals/${encodeURIComponent(filename)}`;
+    return `/media/gallery/${encodeURIComponent(filename)}`;
 }
 
 async function saveOriginal(buffer, format) {
