@@ -2,38 +2,34 @@ const galleryRepository = require("../repositories/galleryRepository");
 const { saveOriginal, deleteFile } = require("./galleryStorageService");
 const { validateMetadata, validateImageBuffer } = require("../validators/galleryValidators");
 
-function normalizeInput(body, partial = false) {
+function makeError(message, statusCode, errors) {
+    const error = new Error(message);
+    error.statusCode = statusCode;
+    if (errors) error.errors = errors;
+    return error;
+}
+
+function normalizeInput(body = {}, partial = false) {
     const { errors, metadata } = validateMetadata(body, { partial });
-    if (Object.keys(errors).length) {
-        const error = new Error("Please correct the gallery validation errors.");
-        error.statusCode = 400;
-        error.errors = errors;
-        throw error;
-    }
-    return {
-        title: metadata.title?.value ?? null,
-        description: metadata.description?.value ?? null,
-        altText: metadata.altText?.value ?? null,
-        category: metadata.category?.value ?? null,
-        collection: metadata.collection?.value ?? null,
-        status: metadata.status,
-        isFeatured: metadata.isFeatured
-    };
+    if (Object.keys(errors).length) throw makeError("Please correct the gallery validation errors.", 400, errors);
+
+    const result = {};
+    const present = new Set(Object.keys(body));
+    if (present.has("title")) result.title = metadata.title.value;
+    if (present.has("description")) result.description = metadata.description.value;
+    if (present.has("altText") || present.has("alt_text")) result.altText = metadata.altText.value;
+    if (present.has("category")) result.category = metadata.category.value;
+    if (present.has("collection") || present.has("album")) result.collection = metadata.collection.value;
+    if (present.has("status")) result.status = metadata.status;
+    if (present.has("isFeatured") || present.has("is_featured")) result.isFeatured = metadata.isFeatured;
+    return result;
 }
 
 async function create({ body, file, userId }) {
-    if (!file) {
-        const error = new Error("An image file is required.");
-        error.statusCode = 400;
-        throw error;
-    }
+    if (!file) throw makeError("An image file is required.", 400);
 
     const image = validateImageBuffer(file.buffer, file.mimetype);
-    if (!image.valid) {
-        const error = new Error(image.message);
-        error.statusCode = 400;
-        throw error;
-    }
+    if (!image.valid) throw makeError(image.message, 400);
 
     const metadata = normalizeInput(body, false);
     let stored = null;
@@ -60,26 +56,18 @@ async function create({ body, file, userId }) {
 
 async function update({ id, body, file }) {
     const existing = await galleryRepository.findById(id);
-    if (!existing) {
-        const error = new Error("Gallery item not found.");
-        error.statusCode = 404;
-        throw error;
-    }
+    if (!existing) throw makeError("Gallery item not found.", 404);
 
     const metadata = normalizeInput(body, true);
     let stored = null;
 
     try {
-        let result = existing;
+        let fileData;
         if (file) {
             const image = validateImageBuffer(file.buffer, file.mimetype);
-            if (!image.valid) {
-                const error = new Error(image.message);
-                error.statusCode = 400;
-                throw error;
-            }
+            if (!image.valid) throw makeError(image.message, 400);
             stored = await saveOriginal(file.buffer, image.format);
-            result = await galleryRepository.replaceFile(id, {
+            fileData = {
                 imageUrl: stored.url,
                 thumbnailUrl: stored.url,
                 originalFilename: String(file.originalname || "").slice(0, 255),
@@ -88,10 +76,10 @@ async function update({ id, body, file }) {
                 fileSize: file.size,
                 width: image.width,
                 height: image.height
-            });
+            };
         }
 
-        result = await galleryRepository.update(id, metadata);
+        const result = await galleryRepository.update(id, { ...metadata, file: fileData });
         if (stored && existing.storedFilename) await deleteFile(existing.storedFilename).catch(() => {});
         return result;
     } catch (error) {
@@ -102,24 +90,8 @@ async function update({ id, body, file }) {
 
 async function archive(id) {
     const existing = await galleryRepository.findById(id);
-    if (!existing) {
-        const error = new Error("Gallery item not found.");
-        error.statusCode = 404;
-        throw error;
-    }
+    if (!existing) throw makeError("Gallery item not found.", 404);
     return galleryRepository.archive(id);
 }
 
-async function remove(id) {
-    const existing = await galleryRepository.findById(id);
-    if (!existing) {
-        const error = new Error("Gallery item not found.");
-        error.statusCode = 404;
-        throw error;
-    }
-    await galleryRepository.archive(id);
-    if (existing.storedFilename) await deleteFile(existing.storedFilename).catch(() => {});
-    return true;
-}
-
-module.exports = { create, update, archive, remove, list: galleryRepository.list, findById: galleryRepository.findById };
+module.exports = { create, update, archive, list: galleryRepository.list, findById: galleryRepository.findById };
