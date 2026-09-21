@@ -31,6 +31,15 @@ async function update(req, res) {
     return res.json({ success: true, message: "Gallery item updated successfully", data: item });
 }
 
+async function publish(req, res) {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ success: false, message: "Invalid gallery ID" });
+    const status = String(req.body?.status || "Published").trim();
+    if (!["Published", "Draft"].includes(status)) return res.status(400).json({ success: false, message: "Invalid publication status" });
+    const item = await galleryService.update({ id, body: { status }, file: null });
+    return res.json({ success: true, message: status === "Published" ? "Gallery item published successfully" : "Gallery item unpublished successfully", data: item });
+}
+
 async function archive(req, res) {
     const id = Number(req.params.id);
     if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ success: false, message: "Invalid gallery ID" });
@@ -38,4 +47,4 @@ async function archive(req, res) {
     return res.json({ success: true, message: "Gallery item archived successfully", data: item });
 }
 
-module.exports = { listPublic, listAdmin, getOne, create, update, archive };
+module.exports = { listPublic, listAdmin, getOne, create, update, publish, archive };
