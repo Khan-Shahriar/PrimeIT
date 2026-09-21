@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const multer = require("multer");
 const galleryController = require("../controllers/galleryController");
 const { requireAuth, requirePermission } = require("../middleware/auth");
@@ -6,6 +7,14 @@ const { galleryUpload } = require("../middleware/galleryUpload");
 const asyncHandler = require("../middleware/asyncHandler");
 
 const router = express.Router();
+
+const galleryWriteLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { success: false, message: "Too many gallery write requests. Please try again later.", errors: [] }
+});
 
 function uploadErrorHandler(error, req, res, next) {
     if (!error) return next();
@@ -22,8 +31,8 @@ router.get("/", asyncHandler(galleryController.listPublic));
 router.get("/admin", requireAuth, requirePermission("manage_gallery"), asyncHandler(galleryController.listAdmin));
 router.get("/:id", asyncHandler(galleryController.getOne));
 
-router.post("/", requireAuth, requirePermission("manage_gallery"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.create));
-router.patch("/:id", requireAuth, requirePermission("manage_gallery"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.update));
-router.post("/:id/archive", requireAuth, requirePermission("manage_gallery"), asyncHandler(galleryController.archive));
+router.post("/", galleryWriteLimiter, requireAuth, requirePermission("manage_gallery"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.create));
+router.patch("/:id", galleryWriteLimiter, requireAuth, requirePermission("manage_gallery"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.update));
+router.post("/:id/archive", galleryWriteLimiter, requireAuth, requirePermission("manage_gallery"), asyncHandler(galleryController.archive));
 
 module.exports = router;
