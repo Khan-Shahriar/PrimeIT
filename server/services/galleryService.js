@@ -31,7 +31,7 @@ async function create({ body, file, userId }) {
     const image = validateImageBuffer(file.buffer, file.mimetype);
     if (!image.valid) throw makeError(image.message, 400);
 
-    const metadata = normalizeInput(body, false);
+    const metadata = normalizeInput({ ...body, status: "Draft" }, false);
     let stored = null;
 
     try {
