@@ -10,11 +10,11 @@
    */
 
   const API = Object.freeze({
-    roles: "/api/roles",
-    permissions: "/api/permissions",
-    rolePermissions: (id) => `/api/roles/${encodeURIComponent(id)}/permissions`,
-    roleMembers: (id) => `/api/roles/${encodeURIComponent(id)}/members`,
-    roleAssignments: "/api/role-assignments"
+    roles: "/api/v1/roles",
+    permissions: "/api/v1/roles/permissions",
+    rolePermissions: (id) => `/api/v1/roles/${encodeURIComponent(id)}/permissions`,
+    roleMembers: (id) => `/api/v1/roles/${encodeURIComponent(id)}/members`,
+    roleAssignments: "/api/v1/users"
   });
 
   const SYSTEM_ROLE_NAMES = new Set(["ceo", "developer", "admin", "hr"]);
