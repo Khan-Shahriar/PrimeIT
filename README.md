@@ -60,3 +60,15 @@ server/
 ```
 
 Private configuration stays in `.env`; it is ignored by Git. Never commit credentials, JWT secrets, database passwords, API keys, or private uploaded files.
+
+## Section 30 — Gallery Uploads
+
+Gallery media is stored outside application source files under `uploads/gallery/` by default. The API accepts only JPEG, PNG, and WebP images, with a 10 MB request-file limit and server-side content/dimension validation.
+
+Run the additive migration before using gallery management:
+
+`sql/section-30-gallery.sql`
+
+Gallery API endpoints use the canonical `/api/v1/gallery` namespace. Gallery management is protected by the existing Section 28 permissions: `gallery.view`, `gallery.create`, `gallery.update`, `gallery.publish`, and `gallery.archive`.
+
+Uploaded media is intentionally excluded from Git. Do not commit files from `uploads/gallery/`.
