@@ -25,6 +25,7 @@ async function create(req, res) {
 }
 
 async function update(req, res) {
+    if (req.body && req.body.status !== undefined) return res.status(400).json({ success: false, message: "Use the publication endpoint to change gallery status." });
     const id = Number(req.params.id);
     if (!Number.isInteger(id) || id <= 0) return res.status(400).json({ success: false, message: "Invalid gallery ID" });
     const item = await galleryService.update({ id, body: req.body, file: req.file });
