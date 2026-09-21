@@ -89,19 +89,19 @@
     if (!data || typeof data !== 'object') return null;
 
     return {
-      firstName: String(data.firstName ?? ''),
-      lastName: String(data.lastName ?? ''),
-      displayName: String(data.displayName ?? ''),
+      firstName: String(data.firstName ?? data.first_name ?? ''),
+      lastName: String(data.lastName ?? data.last_name ?? ''),
+      displayName: String(data.displayName ?? data.display_name ?? data.full_name ?? ''),
       email: String(data.email ?? ''),
-      jobTitle: String(data.jobTitle ?? ''),
+      jobTitle: String(data.jobTitle ?? data.job_title ?? data.position ?? ''),
       department: String(data.department ?? ''),
       role: String(data.role ?? ''),
-      employeeId: String(data.employeeId ?? ''),
-      joiningDate: String(data.joiningDate ?? ''),
+      employeeId: String(data.employeeId ?? data.employee_id ?? ''),
+      joiningDate: String(data.joiningDate ?? data.joining_date ?? data.created_at ?? ''),
       phone: String(data.phone ?? ''),
       bio: String(data.bio ?? ''),
-      professionalLink: String(data.professionalLink ?? ''),
-      profileImageUrl: typeof data.profileImageUrl === 'string' ? data.profileImageUrl : ''
+      professionalLink: String(data.professionalLink ?? data.professional_link ?? ''),
+      profileImageUrl: typeof (data.profileImageUrl ?? data.profile_image ?? data.profile_photo) === 'string' ? (data.profileImageUrl ?? data.profile_image ?? data.profile_photo) : ''
     };
   }
 
@@ -331,13 +331,6 @@
 
     if (!validateProfile()) return;
 
-    /*
-     * Backend boundary:
-     * No profile endpoint is invented here. No fake request or fake success
-     * response is generated. The future authenticated REST integration should
-     * submit captureFormState() with credentials: 'include' and use the server
-     * response as the source of truth.
-     */
     state.saving = true;
     if (elements.save) {
       elements.save.disabled = true;
@@ -346,17 +339,26 @@
     if (elements.cancel) elements.cancel.disabled = true;
     if (elements.editToggle) elements.editToggle.disabled = true;
 
-    await new Promise(resolve => window.setTimeout(resolve, 250));
-
-    const values = captureFormState();
-    state.profile = {
-      ...(state.profile || {}),
-      ...values
-    };
-    const displayName = getDisplayName(state.profile);
-    if (elements.summaryName) elements.summaryName.textContent = displayName;
-    if (elements.topbarName) elements.topbarName.textContent = displayName;
-    renderAvatar(state.profile.profileImageUrl || '', getInitials(state.profile));
+    try {
+      const values = captureFormState();
+      const payload = {
+        full_name: values.displayName.trim() || [values.firstName.trim(), values.lastName.trim()].filter(Boolean).join(" "),
+        phone: values.phone.trim(),
+        bio: values.bio.trim()
+      };
+      const response = await window.PrimeItApi.put("/auth/me", payload);
+      const serverProfile = normalizeProfile(response?.user || response);
+      renderProfile(serverProfile);
+      state.originalForm = captureFormState();
+      setEditMode(false);
+      setStatus("Profile updated successfully.", "success");
+    } catch (error) {
+      setStatus(error?.status === 403
+        ? "You do not have permission to update this profile."
+        : error?.status === 401
+          ? "Your session has expired. Please sign in again."
+          : (error?.message || "Unable to save profile changes. Your entered values were kept."), "error");
+    }
 
     state.saving = false;
     if (elements.save) {
@@ -450,40 +452,34 @@
     });
   }
 
-  function initializeProfilePage() {
+  async function initializeProfilePage() {
     setLoading(true);
     setEmptyState(false);
     setupMobileNavigation();
     setupFormEvents();
     setupBeforeUnload();
 
-    /*
-     * API integration boundary:
-     * The page intentionally does not invent an endpoint or hardcode a member.
-     * The authenticated backend will later supply the current member profile.
-     * Until then, a neutral blank profile keeps this page free of fake data.
-     */
-    const emptyProfile = normalizeProfile({
-      firstName: '',
-      lastName: '',
-      displayName: '',
-      email: '',
-      jobTitle: '',
-      department: '',
-      role: '',
-      employeeId: '',
-      joiningDate: '',
-      phone: '',
-      bio: '',
-      professionalLink: '',
-      profileImageUrl: ''
-    });
-
-    window.setTimeout(() => {
+    try {
+      const profile = await window.PrimeItApi.getCurrentUser();
+      const normalized = normalizeProfile(profile);
+      if (!normalized) {
+        setEmptyState(true);
+        setStatus("No authenticated profile data was returned.", "error");
+        return;
+      }
+      renderProfile(normalized);
+      state.originalForm = captureFormState();
+      setStatus("");
+    } catch (error) {
+      if (error?.status === 401) {
+        window.location.replace("/member/member-login.html");
+        return;
+      }
+      setEmptyState(true);
+      setStatus(error?.message || "Unable to load your profile. Please retry.", "error");
+    } finally {
       setLoading(false);
-      renderProfile(emptyProfile);
-      setStatus('Profile service is not connected yet. No member information has been fabricated.', 'info');
-    }, 120);
+    }
   }
 
   initializeProfilePage();
