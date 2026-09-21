@@ -88,7 +88,7 @@ const verificationLimiter = rateLimit({
 
 function denySensitiveStaticFiles(req, res, next) {
     const pathname = req.path || "";
-    if (/(^|\/)\.(env|git|gitignore)|(^|\/)server(\.js)?$|package(-lock)?\.json$/.test(pathname)) {
+    if (/(^|\/)\.(env|git|gitignore)|(^|\/)server(\.js)?$|package(-lock)?\.json$|^\/uploads\/gallery(?:\/|$)/i.test(pathname)) {
         return res.status(404).end();
     }
     next();
