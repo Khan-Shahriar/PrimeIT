@@ -368,16 +368,12 @@
     if (elements.cancel) elements.cancel.disabled = false;
     if (elements.editToggle) elements.editToggle.disabled = false;
 
-    setEditMode(false);
-    state.originalForm = captureFormState();
-
-    setStatus(
-      'Changes were applied to this page only. No server save was performed because the authenticated profile API is not connected yet.',
-      'info'
-    );
+    if (!state.saving) {
+      state.originalForm = captureFormState();
+    }
   }
 
-  function handlePhotoSelection() {
+  async function handlePhotoSelection() {
     const file = elements.photoInput?.files?.[0];
     if (!file) return;
 
