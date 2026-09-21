@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 
 const { pool } = require("../db");
+const { getRoleByName } = require("../repositories/roleRepository");
 
 const {
     requireAuth,
@@ -11,10 +12,7 @@ const {
 const router = express.Router();
 
 function isFullAccessRole(role) {
-    return [
-        "ceo",
-        "developer"
-    ].includes(role);
+    return ["ceo", "developer"].includes(String(role || "").toLowerCase());
 }
 
 
@@ -28,7 +26,7 @@ function isFullAccessRole(role) {
 router.post(
     "/",
     requireAuth,
-    requirePermission("manage_members"),
+    requirePermission("members.create"),
     async (req, res) => {
         try {
             const {
@@ -78,24 +76,18 @@ router.post(
                 errors.password = "Password must not exceed 128 characters.";
             }
 
-            const allowedRoles = [
-                "member",
-                "admin",
-                "hr",
-                "ceo",
-                "developer"
-            ];
-
-            if (!allowedRoles.includes(normalizedRole)) {
-                errors.role = "Invalid role.";
+            const requestedRole = await getRoleByName(normalizedRole);
+            if (!requestedRole || requestedRole.status !== "active") {
+                errors.role = "Invalid or inactive role.";
             }
 
             if (
-                isFullAccessRole(normalizedRole) &&
-                !isFullAccessRole(req.user.role)
+                requestedRole &&
+                requestedRole.is_system &&
+                isFullAccessRole(requestedRole.name) &&
+                !req.authorization?.isAuthorizationManager
             ) {
-                errors.role =
-                    "Only CEO and Developer can assign CEO or Developer roles.";
+                errors.role = "Only CEO or Developer can assign protected roles.";
             }
 
             const allowedStatuses = [
@@ -176,6 +168,11 @@ router.post(
                RETURN CREATED MEMBER
             ===================================================== */
 
+            await pool.query(
+                "INSERT IGNORE INTO user_roles (user_id, role_id) VALUES (?, ?)",
+                [result.insertId, requestedRole.id]
+            );
+
             const [newUsers] = await pool.query(
                 `SELECT
                     id,
@@ -218,7 +215,7 @@ router.post(
    UPDATE MEMBER
 ========================================================= */
 
-router.put("/:id", requireAuth, requirePermission("manage_members"), async (req, res) => {
+router.put("/:id", requireAuth, requirePermission("members.update"), async (req, res) => {
     try {
         const memberId = Number(req.params.id);
 
@@ -275,28 +272,17 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
             }
         }
 
-        const allowedRoles = [
-            "member",
-            "admin",
-            "hr",
-            "ceo",
-            "developer",
-            "office_manager",
-            "marketing_manager",
-            "marketing_assistant"
-        ];
-
-        if (role !== undefined && !allowedRoles.includes(String(role).trim().toLowerCase())) {
-            errors.role = "Invalid role.";
-        }
-
-        if (
-            role !== undefined &&
-            isFullAccessRole(String(role).trim().toLowerCase()) &&
-            !isFullAccessRole(req.user.role)
-        ) {
-            errors.role =
-                "Only CEO and Developer can assign CEO or Developer roles.";
+        let requestedRole = null;
+        if (role !== undefined) {
+            requestedRole = await getRoleByName(String(role).trim().toLowerCase());
+            if (!requestedRole || requestedRole.status !== "active") {
+                errors.role = "Invalid or inactive role.";
+            } else if (!req.authorization?.isAuthorizationManager) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Role assignment requires authorization-management access."
+                });
+            }
         }
 
 
@@ -349,7 +335,7 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
 
         if (
             isFullAccessRole(currentMember.role) &&
-            !isFullAccessRole(req.user.role)
+            !req.authorization?.isFullAccess
         ) {
             return res.status(403).json({
                 success: false,
@@ -428,7 +414,7 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
 
         const updatedRole =
             role !== undefined
-                ? String(role).trim().toLowerCase()
+                ? requestedRole.name
                 : currentMember.role;
 
         const updatedStatus =
@@ -496,6 +482,14 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
             );
         }
 
+        if (requestedRole) {
+            await pool.query("DELETE FROM user_roles WHERE user_id = ?", [memberId]);
+            await pool.query(
+                "INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)",
+                [memberId, requestedRole.id]
+            );
+        }
+
         const [updatedMembers] = await pool.query(
             `SELECT
                 id,
@@ -541,7 +535,7 @@ router.put("/:id", requireAuth, requirePermission("manage_members"), async (req,
 router.get(
     "/",
     requireAuth,
-    requirePermission("manage_members"),
+    requirePermission("members.view"),
     async (req, res) => {
         try {
             const [users] = await pool.query(
@@ -584,7 +578,7 @@ router.get(
 router.get(
     "/:id",
     requireAuth,
-    requirePermission("manage_members"),
+    requirePermission("members.view"),
     async (req, res) => {
         try {
             const memberId = Number(req.params.id);
@@ -643,7 +637,7 @@ router.get(
    DELETE MEMBER
 ========================================================= */
 
-router.delete("/:id", requireAuth, requirePermission("manage_members"), async (req, res) => {
+router.delete("/:id", requireAuth, requirePermission("members.deactivate"), async (req, res) => {
     try {
         const memberId = Number(req.params.id);
 
@@ -687,14 +681,13 @@ router.delete("/:id", requireAuth, requirePermission("manage_members"), async (r
         }
 
         await pool.query(
-            `DELETE FROM users
-             WHERE id = ?`,
+            "UPDATE users SET status = 'inactive', auth_token_version = auth_token_version + 1 WHERE id = ?",
             [memberId]
         );
 
         return res.json({
             success: true,
-            message: "Member deleted successfully"
+            message: "Member deactivated successfully"
         });
 
     } catch (error) {
