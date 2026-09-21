@@ -68,6 +68,7 @@
     "last-name",
     "display-name",
     "work-email",
+    "member-password",
     "member-phone",
     "member-department",
     "member-job-title",
@@ -83,12 +84,7 @@
       return window.PrimeItApi.get("/members");
     },
     async createMember(payload) {
-      // The current backend requires a password for account creation, while
-      // this existing form intentionally does not collect one. Do not invent
-      // credentials or generate a hidden password on the client.
-      const error = new Error("Member creation requires the backend account-creation contract to supply a password. No account was created.");
-      error.status = 422;
-      throw error;
+      return window.PrimeItApi.post("/members", payload);
     },
     async updateMember(id, payload) {
       return window.PrimeItApi.put("/members/" + encodeURIComponent(id), payload);
@@ -570,6 +566,7 @@
     const firstName = document.getElementById("first-name").value.trim();
     const lastName = document.getElementById("last-name").value.trim();
     const email = document.getElementById("work-email").value.trim();
+    const password = document.getElementById("member-password").value;
     const phone = document.getElementById("member-phone").value.trim();
     const joiningDate = document.getElementById("joining-date").value;
     const bio = document.getElementById("member-bio").value.trim();
@@ -583,6 +580,14 @@
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setFieldError("work-email", "Enter a valid work email.");
       errors.push("work-email");
+    }
+
+    if (!state.editingMember && password.length < 8) {
+      setFieldError("member-password", "Temporary password must be at least 8 characters.");
+      errors.push("member-password");
+    } else if (password.length > 128) {
+      setFieldError("member-password", "Password must be 128 characters or fewer.");
+      errors.push("member-password");
     }
 
     if (phone && phone.length > 30) {
