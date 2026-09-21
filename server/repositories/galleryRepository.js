@@ -46,6 +46,7 @@ async function create(data) {
 async function update(id, data) {
     const sets = [];
     const values = [];
+
     const fields = {
         title: "title",
         description: "description",
@@ -55,25 +56,26 @@ async function update(id, data) {
         status: "status",
         isFeatured: "is_featured"
     };
+
     for (const [key, column] of Object.entries(fields)) {
         if (data[key] !== undefined) {
             sets.push(`${column} = ?`);
             values.push(key === "isFeatured" ? (data[key] ? 1 : 0) : data[key]);
         }
     }
+
+    if (data.file) {
+        sets.push("image_url = ?", "thumbnail_url = ?", "original_filename = ?", "stored_filename = ?", "mime_type = ?", "file_size = ?", "width = ?", "height = ?");
+        values.push(data.file.imageUrl, data.file.thumbnailUrl, data.file.originalFilename, data.file.storedFilename, data.file.mimeType, data.file.fileSize, data.file.width, data.file.height);
+    }
+
     if (data.status === "Published") sets.push("published_at = COALESCE(published_at, NOW())");
     if (data.status && data.status !== "Published") sets.push("published_at = NULL");
+
     if (!sets.length) return findById(id);
+
     values.push(id);
     await pool.query(`UPDATE gallery_media SET ${sets.join(", ")} WHERE id = ?`, values);
-    return findById(id);
-}
-
-async function replaceFile(id, data) {
-    await pool.query(
-        "UPDATE gallery_media SET image_url = ?, thumbnail_url = ?, original_filename = ?, stored_filename = ?, mime_type = ?, file_size = ?, width = ?, height = ? WHERE id = ?",
-        [data.imageUrl, data.thumbnailUrl, data.originalFilename, data.storedFilename, data.mimeType, data.fileSize, data.width, data.height, id]
-    );
     return findById(id);
 }
 
@@ -82,4 +84,4 @@ async function archive(id) {
     return findById(id);
 }
 
-module.exports = { list, findById, create, update, replaceFile, archive };
+module.exports = { list, findById, create, update, archive };
