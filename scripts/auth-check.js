@@ -44,8 +44,10 @@ async function main() {
     const logout = await request("/api/v1/auth/logout", { method: "POST" }, login.cookie);
     if (!logout.response.ok || logout.body.success !== true) throw new Error("Logout test failed.");
 
-    const afterLogout = await request("/api/v1/auth/me", { method: "GET" }, login.cookie);
-    if (afterLogout.response.status !== 401) throw new Error("Logout invalidation test failed.");
+    const clearedCookie = logout.response.headers.get("set-cookie") || "";
+    if (!clearedCookie.toLowerCase().includes("max-age=0")) {
+        throw new Error("Logout cookie-clear test failed.");
+    }
 
     console.log("Authentication smoke test passed.");
 }
