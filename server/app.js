@@ -110,6 +110,7 @@ const staticOptions = {
     fallthrough: true
 };
 
+app.use("/uploads/gallery", express.static(config.gallery.uploadDir, staticOptions));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads"), staticOptions));
 app.use("/assets", express.static(path.join(process.cwd(), "assets"), staticOptions));
 app.use("/css", express.static(path.join(process.cwd(), "css"), staticOptions));
