@@ -348,7 +348,14 @@
     try {
       const created = await uploadFormData(API.create, formData, percent => { if (els.uploadProgress) els.uploadProgress.value = percent; });
       if (metadata.status === "Published" && created?.data?.id) {
-        await requestJson(API.publish(created.data.id), { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({status:"Published"}) });
+        try {
+          await requestJson(API.publish(created.data.id), { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({status:"Published"}) });
+        } catch (publishError) {
+          toast("Image uploaded as Draft; publication was not authorized.");
+          closeModal(els.uploadModal);
+          await loadGallery();
+          return;
+        }
       }
       showUploadMessage("Upload complete.");
       toast("Gallery image uploaded successfully.");
