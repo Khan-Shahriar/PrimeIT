@@ -5,6 +5,7 @@
     list: "/api/v1/gallery/admin",
     create: "/api/v1/gallery",
     item: (id) => `/api/v1/gallery/${encodeURIComponent(id)}`,
+    publish: (id) => `/api/v1/gallery/${encodeURIComponent(id)}/publish`,
     archive: (id) => `/api/v1/gallery/${encodeURIComponent(id)}/archive`
   });
 
@@ -345,7 +346,10 @@
     if (els.uploadProgress) { els.uploadProgress.hidden = false; els.uploadProgress.value = 0; }
     showUploadMessage("Uploading…");
     try {
-      await uploadFormData(API.create, formData, percent => { if (els.uploadProgress) els.uploadProgress.value = percent; });
+      const created = await uploadFormData(API.create, formData, percent => { if (els.uploadProgress) els.uploadProgress.value = percent; });
+      if (metadata.status === "Published" && created?.data?.id) {
+        await requestJson(API.publish(created.data.id), { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({status:"Published"}) });
+      }
       showUploadMessage("Upload complete.");
       toast("Gallery image uploaded successfully.");
       closeModal(els.uploadModal);
@@ -408,7 +412,7 @@
     try {
       if(action==="edit") return openEdit(id,trigger);
       if(action==="toggle-featured") await requestJson(API.item(id),{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({isFeatured:!item.isFeatured})});
-      if(action==="toggle-publish") await requestJson(API.item(id),{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status:item.status==="Published"?"Draft":"Published"})});
+      if(action==="toggle-publish") await requestJson(API.publish(id),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({status:item.status==="Published"?"Draft":"Published"})});
       if(action==="archive") {
         if(!window.confirm(`Archive "${item.title}"?`)) return;
         await requestJson(API.archive(id),{method:"POST"});
