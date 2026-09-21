@@ -33,8 +33,3 @@ CREATE TABLE IF NOT EXISTS gallery_media (
     CONSTRAINT fk_gallery_uploaded_by FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO permissions (name, description)
-SELECT 'manage_gallery', 'Create, update, publish, feature, archive, and delete gallery media.'
-WHERE NOT EXISTS (
-    SELECT 1 FROM permissions WHERE name = 'manage_gallery'
-);
