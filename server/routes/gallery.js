@@ -24,7 +24,6 @@ router.get("/:id", asyncHandler(galleryController.getOne));
 
 router.post("/", requireAuth, requirePermission("manage_gallery"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.create));
 router.patch("/:id", requireAuth, requirePermission("manage_gallery"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.update));
-router.delete("/:id", requireAuth, requirePermission("manage_gallery"), asyncHandler(galleryController.remove));
 router.post("/:id/archive", requireAuth, requirePermission("manage_gallery"), asyncHandler(galleryController.archive));
 
 module.exports = router;
