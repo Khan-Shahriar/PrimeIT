@@ -74,14 +74,6 @@ const passwordRecoveryLimiter = rateLimit({
     }
 });
 
-const galleryUploadLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 30,
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: { success: false, message: "Too many gallery requests. Please try again later.", errors: [] }
-});
-
 const verificationLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 5,
@@ -123,7 +115,6 @@ app.use("/api/v1/auth/forgot-password", passwordRecoveryLimiter);
 app.use("/api/v1/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/v1/auth/verify-email", verificationLimiter);
 app.use("/api/v1/auth", authLimiter);
-app.use("/api/v1/gallery", galleryUploadLimiter);
 
 app.use("/api/v1", apiRoutes);
 
