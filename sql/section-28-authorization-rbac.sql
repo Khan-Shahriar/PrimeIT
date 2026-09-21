@@ -15,6 +15,13 @@ CREATE TABLE IF NOT EXISTS roles (
     UNIQUE KEY uq_roles_name (name)
 ) ENGINE=InnoDB;
 
+-- Upgrade compatible Section 25 tables when they already exist.
+ALTER TABLE roles
+    ADD COLUMN IF NOT EXISTS type ENUM('system','custom') NOT NULL DEFAULT 'custom',
+    ADD COLUMN IF NOT EXISTS status ENUM('active','inactive','archived') NOT NULL DEFAULT 'active',
+    ADD COLUMN IF NOT EXISTS is_system TINYINT(1) NOT NULL DEFAULT 0,
+    ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
 CREATE TABLE IF NOT EXISTS permissions (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(120) NOT NULL,
@@ -27,6 +34,12 @@ CREATE TABLE IF NOT EXISTS permissions (
     PRIMARY KEY (id),
     UNIQUE KEY uq_permissions_name (name)
 ) ENGINE=InnoDB;
+
+ALTER TABLE permissions
+    ADD COLUMN IF NOT EXISTS module VARCHAR(80) NOT NULL DEFAULT 'other',
+    ADD COLUMN IF NOT EXISTS action VARCHAR(80) NOT NULL DEFAULT 'view',
+    ADD COLUMN IF NOT EXISTS status ENUM('active','inactive') NOT NULL DEFAULT 'active',
+    ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 
 CREATE TABLE IF NOT EXISTS role_permissions (
     role_id INT UNSIGNED NOT NULL,
