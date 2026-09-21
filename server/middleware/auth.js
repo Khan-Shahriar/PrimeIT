@@ -1,7 +1,7 @@
 const { getUserForAuth } = require("../repositories/authRepository");
 const { verifyAccessToken } = require("../utils/jwt");
 const { COOKIE_NAME } = require("../utils/authCookie");
-const { requireRole, requireFullAccess, requirePermission } = require("./authorization");
+const { requireRole, requireFullAccess, requireAuthorizationManager, requirePermission } = require("./authorization");
 
 async function requireAuth(req, res, next) {
     try {
@@ -20,4 +20,4 @@ async function requireAuth(req, res, next) {
     }
 }
 
-module.exports = { COOKIE_NAME, requireAuth, requireRole, requireFullAccess, requirePermission };
+module.exports = { COOKIE_NAME, requireAuth, requireRole, requireFullAccess, requireAuthorizationManager, requirePermission };
