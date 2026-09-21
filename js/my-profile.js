@@ -401,8 +401,29 @@
 
     const initials = getInitials(state.profile || {});
     renderAvatar(state.imagePreviewUrl, initials);
+    if (elements.changePhoto) elements.changePhoto.disabled = true;
 
-    setStatus('Image preview updated. The image has not been uploaded or stored.', 'info');
+    try {
+      const formData = new FormData();
+      formData.append("profile_photo", file);
+      const response = await window.PrimeItApi.post("/auth/me/photo", formData);
+      const imageUrl = response?.profile_photo || response?.user?.profile_photo || "";
+      state.profile = { ...(state.profile || {}), profileImageUrl: imageUrl };
+      renderAvatar(imageUrl, getInitials(state.profile));
+      setStatus("Profile photo updated successfully.", "success");
+    } catch (error) {
+      renderAvatar(state.profile?.profileImageUrl || "", initials);
+      setStatus(error?.status === 401
+        ? "Your session has expired. Please sign in again."
+        : (error?.message || "Unable to upload the profile photo. The server did not confirm the change."), "error");
+    } finally {
+      if (elements.changePhoto) elements.changePhoto.disabled = state.saving;
+      if (state.imagePreviewUrl) {
+        URL.revokeObjectURL(state.imagePreviewUrl);
+        state.imagePreviewUrl = null;
+      }
+      if (elements.photoInput) elements.photoInput.value = "";
+    }
   }
 
   function setupMobileNavigation() {
