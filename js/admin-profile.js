@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
   const API = Object.freeze({
-    profile: "/api/auth/me",
-    profilePhoto: "/api/auth/me/photo",
-    password: "/api/auth/me/password",
-    logout: "/api/auth/logout"
+    profile: "/api/v1/auth/me",
+    profilePhoto: "/api/v1/auth/me/photo",
+    password: "/api/v1/auth/me/password",
+    logout: "/api/v1/auth/logout"
   });
 
   const state = {
@@ -141,17 +141,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function apiRequest(url, options = {}) {
-    const response = await fetch(url, { credentials: "include", ...options });
-    const data = await readResponse(response);
-
-    if (!response.ok) {
-      const error = new Error(data?.message || "The request could not be completed.");
-      error.status = response.status;
-      error.payload = data;
-      throw error;
+    if (!window.PrimeItApi) throw new Error("API client is unavailable.");
+    let body = options.body;
+    if (typeof body === "string" && url === API.profile) {
+      try {
+        const source = JSON.parse(body);
+        body = {
+          full_name: source.displayName || [source.firstName, source.lastName].filter(Boolean).join(" "),
+          phone: source.phone || "",
+          bio: source.bio || ""
+        };
+      } catch {}
     }
-
-    return data;
+    return window.PrimeItApi.request(url, { ...options, body });
   }
 
   function renderAvatar(container, imageUrl, initials) {
