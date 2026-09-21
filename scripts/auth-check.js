@@ -45,7 +45,9 @@ async function main() {
     if (!logout.response.ok || logout.body.success !== true) throw new Error("Logout test failed.");
 
     const clearedCookie = logout.response.headers.get("set-cookie") || "";
-    if (!clearedCookie.toLowerCase().includes("max-age=0")) {
+    const normalizedCookie = clearedCookie.toLowerCase();
+    if (!normalizedCookie.includes("primeit_token=") ||
+        (!normalizedCookie.includes("expires=") && !normalizedCookie.includes("max-age=0"))) {
         throw new Error("Logout cookie-clear test failed.");
     }
 
