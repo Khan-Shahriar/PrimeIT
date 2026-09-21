@@ -84,10 +84,31 @@
       return window.PrimeItApi.get("/members");
     },
     async createMember(payload) {
-      return window.PrimeItApi.post("/members", payload);
+      const fullName = [payload.first_name, payload.last_name].filter(Boolean).join(" ").trim();
+      return window.PrimeItApi.post("/members", {
+        full_name: payload.display_name || fullName,
+        email: payload.email,
+        password: payload.password,
+        phone: payload.phone || "",
+        department: payload.department || "",
+        position: payload.job_title || "",
+        role: payload.role || "member",
+        status: payload.status || "active"
+      });
     },
     async updateMember(id, payload) {
-      return window.PrimeItApi.put("/members/" + encodeURIComponent(id), payload);
+      const fullName = [payload.first_name, payload.last_name].filter(Boolean).join(" ").trim();
+      return window.PrimeItApi.put("/members/" + encodeURIComponent(id), {
+        full_name: payload.display_name || fullName,
+        email: payload.email,
+        password: payload.password || undefined,
+        phone: payload.phone || "",
+        bio: payload.bio || "",
+        department: payload.department || "",
+        position: payload.job_title || "",
+        role: payload.role || undefined,
+        status: payload.status || "active"
+      });
     },
     async accountAction(id, action) {
       if (action === "activate") {
