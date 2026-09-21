@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const baseUrl = process.env.PRIMEIT_BASE_URL || `http://localhost:${process.env.PORT || 8080}`;
 const email = process.env.PRIMEIT_TEST_EMAIL;
 const password = process.env.PRIMEIT_TEST_PASSWORD;
