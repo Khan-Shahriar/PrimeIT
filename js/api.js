@@ -4,6 +4,7 @@
   const DEFAULT_BASE_URL = "/api/v1";
   const configuredBaseUrl = window.PrimeItConfig?.apiBaseUrl || DEFAULT_BASE_URL;
   const API_BASE_URL = String(configuredBaseUrl).replace(/\/+$/, "");
+  const DEFAULT_CREDENTIALS = window.PrimeItConfig?.apiCredentials || "same-origin";
 
   class ApiError extends Error {
     constructor(message, options = {}) {
@@ -52,13 +53,20 @@
     });
   }
 
+  function resolveUrl(path) {
+    const value = String(path || "");
+    if (/^https?:\/\//i.test(value)) return value;
+    if (value === API_BASE_URL || value.startsWith(API_BASE_URL + "/")) return value;
+    return API_BASE_URL + "/" + value.replace(/^\/+/, "");
+  }
+
   async function request(path, options = {}) {
     const {
       method = "GET",
       body,
       headers = {},
       signal,
-      credentials = "include",
+      credentials = DEFAULT_CREDENTIALS,
       timeoutMs = 30000,
       redirectOn401 = false,
       loginPath = "",
@@ -82,7 +90,7 @@
     let response;
     let data;
     try {
-      response = await fetch(path.startsWith("http") ? path : API_BASE_URL + "/" + String(path).replace(/^\/+/, ""), {
+      response = await fetch(resolveUrl(path), {
         method,
         headers: requestHeaders,
         credentials,
