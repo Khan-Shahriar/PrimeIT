@@ -79,22 +79,28 @@
   ];
 
   const apiAdapter = {
-    /*
-     * Deliberately does not invent an endpoint contract.
-     * Later REST API work can replace these methods without changing
-     * the page rendering, validation, or interaction layer.
-     */
     async listMembers() {
-      throw new Error("Member API is not connected yet.");
+      return window.PrimeItApi.get("/members");
     },
-    async createMember() {
-      throw new Error("Member creation API is not connected yet.");
+    async createMember(payload) {
+      // The current backend requires a password for account creation, while
+      // this existing form intentionally does not collect one. Do not invent
+      // credentials or generate a hidden password on the client.
+      const error = new Error("Member creation requires the backend account-creation contract to supply a password. No account was created.");
+      error.status = 422;
+      throw error;
     },
-    async updateMember() {
-      throw new Error("Member update API is not connected yet.");
+    async updateMember(id, payload) {
+      return window.PrimeItApi.put("/members/" + encodeURIComponent(id), payload);
     },
-    async accountAction() {
-      throw new Error("Member account API is not connected yet.");
+    async accountAction(id, action) {
+      if (action === "activate") {
+        return window.PrimeItApi.put("/members/" + encodeURIComponent(id), { status: "active" });
+      }
+      if (action === "deactivate") {
+        return window.PrimeItApi.put("/members/" + encodeURIComponent(id), { status: "inactive" });
+      }
+      throw new Error("This account action is not supported by the current backend API.");
     }
   };
 
@@ -357,11 +363,17 @@
       elements.listState.hidden = false;
       elements.listState.dataset.state = "unavailable";
       elements.listStateTitle.textContent = "Member data unavailable";
-      elements.listStateMessage.textContent = "The Member Management API is not connected yet. No production member records are being fabricated in the frontend.";
+      elements.listStateMessage.textContent = error?.status === 403
+        ? "You do not have permission to manage members."
+        : error?.status === 401
+          ? "Your session is no longer valid. Please sign in again."
+          : (error?.message || "Unable to load member data. No production records are being fabricated in the frontend.");
       elements.retry.hidden = false;
       elements.resultCount.textContent = "No member data";
       elements.pagination.hidden = true;
-      setStatus("Member data is unavailable until the future REST API is connected.");
+      setStatus(error?.status === 403
+        ? "Member management access denied."
+        : "Member data could not be loaded. Please retry.");
     } finally {
       showListLoading(false);
     }
@@ -627,12 +639,18 @@
       }
 
       elements.formMessage.hidden = false;
-      elements.formMessage.textContent = "The member API is not connected. No changes were submitted.";
-      setStatus("No member changes were submitted because the backend API is not connected.");
+      elements.formMessage.textContent = state.editingMember
+        ? "Member updated successfully."
+        : "Member created successfully.";
+      setStatus(state.editingMember ? "Member updated successfully." : "Member created successfully.");
+      closeDialog(elements.formDialog);
+      await loadMembers();
     } catch (error) {
       elements.formMessage.hidden = false;
-      elements.formMessage.textContent = error.message || "The member API is not connected. No changes were submitted.";
-      setStatus("Member change is pending future API integration.");
+      elements.formMessage.textContent = error.message || "Unable to save the member.";
+      setStatus(error.status === 403
+        ? "You do not have permission to modify this member."
+        : "The member change was not saved.");
     } finally {
       elements.formSubmit.disabled = false;
       elements.formSubmit.textContent = state.editingMember ? "Save Changes" : "Create Member";
@@ -679,9 +697,13 @@
 
     try {
       await apiAdapter.accountAction(member.id, action);
-      setStatus("No account action was submitted because the backend API is not connected.");
+      closeDialog(elements.actionDialog);
+      await loadMembers();
+      setStatus("Member account status updated successfully.");
     } catch (error) {
-      setStatus("No account action was submitted because the backend API is not connected.");
+      setStatus(error?.status === 403
+        ? "You do not have permission to change this account."
+        : (error?.message || "The account action could not be completed."));
       closeDialog(elements.actionDialog);
     } finally {
       elements.confirmAction.disabled = false;
