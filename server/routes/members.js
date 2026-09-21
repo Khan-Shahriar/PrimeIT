@@ -345,18 +345,6 @@ router.put("/:id", requireAuth, requirePermission("members.update"), async (req,
         }
 
 
-        if (
-            isFullAccessRole(currentMember.role) &&
-            !isFullAccessRole(req.user.role)
-        ) {
-            return res.status(403).json({
-                success: false,
-                message:
-                    "Only CEO and Developer can modify CEO or Developer accounts."
-            });
-        }
-
-
 
         if (email !== undefined) {
             const normalizedEmail = email.trim().toLowerCase();
@@ -671,12 +659,12 @@ router.delete("/:id", requireAuth, requirePermission("members.deactivate"), asyn
 
         if (
             isFullAccessRole(currentMember.role) &&
-            !isFullAccessRole(req.user.role)
+            !req.authorization?.isFullAccess
         ) {
             return res.status(403).json({
                 success: false,
                 message:
-                    "Only CEO and Developer can delete CEO or Developer accounts."
+                    "Only CEO and Developer can deactivate CEO or Developer accounts."
             });
         }
 
