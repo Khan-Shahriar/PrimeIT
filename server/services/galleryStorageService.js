@@ -36,8 +36,5 @@ async function deleteFile(filename) {
     await fs.rm(path.join(ORIGINALS, safeName), { force: true });
 }
 
-async function replaceOriginal(buffer, format) {
-    return saveOriginal(buffer, format);
-}
 
 module.exports = { ROOT, ORIGINALS, ensureStorage, saveOriginal, replaceOriginal, deleteFile, publicUrl };
