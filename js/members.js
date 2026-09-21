@@ -311,7 +311,11 @@
     try {
       const loader = typeof config.loadMembers === 'function'
         ? config.loadMembers
-        : async () => [];
+        : async () => {
+            if (!window.PrimeItApi) throw new Error('API_CLIENT_UNAVAILABLE');
+            const payload = await window.PrimeItApi.get('/members');
+            return Array.isArray(payload?.members) ? payload.members : [];
+          };
 
       const response = await loader();
 
@@ -337,6 +341,14 @@
       setEmpty(false);
       setError(true);
       if (elements.count) elements.count.textContent = '0';
+      if (elements.error) {
+        const message = error?.status === 403
+          ? 'You do not have permission to view the member directory.'
+          : error?.status === 401
+            ? 'Your session is no longer valid. Please sign in again.'
+            : 'Unable to load the member directory. Please try again.';
+        elements.error.textContent = message;
+      }
       if (elements.resultsSummary) elements.resultsSummary.textContent = 'Directory unavailable';
     }
   };
