@@ -58,8 +58,8 @@
             </div>
         `;
 
-        const retryButton = statusRegion.querySelector('[data-office-retry]');
-        retryButton?.addEventListener('click', loadOfficeInformation);
+        const retryButtonElement = statusRegion.querySelector('[data-office-retry]');
+        retryButtonElement?.addEventListener('click', loadOfficeInformation);
     }
 
     function setLoadingState() {
