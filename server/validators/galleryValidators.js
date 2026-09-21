@@ -10,9 +10,9 @@ const MAX_DESCRIPTION = 2000;
 const MAX_ALT = 250;
 const MAX_CATEGORY = 80;
 const MAX_COLLECTION = 120;
-const MAX_WIDTH = 12000;
-const MAX_HEIGHT = 12000;
-const MAX_PIXELS = 50_000_000;
+const MAX_WIDTH = Number(process.env.MAX_IMAGE_WIDTH || 12000);
+const MAX_HEIGHT = Number(process.env.MAX_IMAGE_HEIGHT || 12000);
+const MAX_PIXELS = Number(process.env.MAX_IMAGE_PIXELS || 50_000_000);
 
 function text(value, max, field, required = false) {
     const valueText = value == null ? "" : String(value).trim();
