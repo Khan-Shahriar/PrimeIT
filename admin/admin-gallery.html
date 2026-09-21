@@ -159,13 +159,13 @@
         <div><p class="section-kicker">Gallery content</p><h2 id="upload-title">Add Image</h2></div>
         <button class="icon-button" type="button" aria-label="Close upload dialog" data-action="close-upload">×</button>
       </div>
-      <p id="upload-description" class="modal-description">Select a temporary local image and prepare its metadata. No file is permanently uploaded by this frontend.</p>
+      <p id="upload-description" class="modal-description">Upload an image to the PrimeIt gallery. The server validates the file, stores it safely, and creates the gallery record.</p>
       <form id="upload-form" novalidate>
         <div class="upload-dropzone" data-upload-dropzone>
-          <input id="gallery-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+          <input id="gallery-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
           <div class="upload-icon" aria-hidden="true">↑</div>
           <strong>Select an image</strong>
-          <span>JPG, JPEG, PNG, WebP or GIF. Backend limits will be enforced later.</span>
+          <span>JPEG, PNG or WebP. Maximum upload size: 10 MB.</span>
           <button class="btn btn-secondary btn-sm" type="button" data-action="choose-file">Choose File</button>
         </div>
         <div class="file-preview" data-file-preview hidden>
@@ -180,12 +180,12 @@
           <div class="field"><label for="image-collection">Collection</label><input id="image-collection" maxlength="120" placeholder="Optional collection"></div>
           <div class="field field-full"><label for="image-description">Description</label><textarea id="image-description" maxlength="1000" placeholder="Optional gallery description"></textarea></div>
           <div class="field checkbox-field"><label><input id="image-featured" type="checkbox"> <span>Mark as featured</span></label></div>
-          <div class="field"><label for="image-status">Status</label><select id="image-status"><option>Draft</option><option>Unpublished</option><option>Published</option></select></div>
+          <div class="field"><label for="image-status">Status</label><select id="image-status"><option>Draft</option><option>Published</option></select></div>
         </div>
-        <p class="form-message" role="alert" data-upload-message hidden></p>
+        <progress data-upload-progress max="100" value="0" hidden aria-label="Upload progress"></progress>\n        <p class="form-message" role="alert" data-upload-message hidden></p>
         <div class="modal-actions">
           <button class="btn btn-secondary" type="button" data-action="close-upload">Cancel</button>
-          <button class="btn btn-primary" type="submit">Prepare Upload</button>
+          <button class="btn btn-primary" type="submit">Upload Image</button>
         </div>
       </form>
     </section>
@@ -197,7 +197,7 @@
         <div><p class="section-kicker">Gallery content</p><h2 id="edit-title">Edit Gallery Item</h2></div>
         <button class="icon-button" type="button" aria-label="Close edit dialog" data-action="close-edit">×</button>
       </div>
-      <p class="modal-description">Edit metadata only. Persistent changes will be submitted through the future gallery API.</p>
+      <p class="modal-description">Edit gallery metadata. Changes are saved through the gallery REST API.</p>
       <form id="edit-form" novalidate>
         <div class="form-grid">
           <div class="field"><label for="edit-image-title">Title <span aria-hidden="true">*</span></label><input id="edit-image-title" maxlength="160" required></div>
@@ -206,12 +206,12 @@
           <div class="field"><label for="edit-image-collection">Collection</label><input id="edit-image-collection" maxlength="120"></div>
           <div class="field field-full"><label for="edit-image-description">Description</label><textarea id="edit-image-description" maxlength="1000"></textarea></div>
           <div class="field checkbox-field"><label><input id="edit-image-featured" type="checkbox"> <span>Featured</span></label></div>
-          <div class="field"><label for="edit-image-status">Status</label><select id="edit-image-status"><option>Draft</option><option>Unpublished</option><option>Published</option><option>Archived</option></select></div>
+          <div class="field"><label for="edit-image-status">Status</label><select id="edit-image-status"><option>Draft</option><option>Published</option><option>Archived</option></select></div>
         </div>
         <p class="form-message" role="alert" data-edit-message hidden></p>
         <div class="modal-actions">
           <button class="btn btn-secondary" type="button" data-action="close-edit">Cancel</button>
-          <button class="btn btn-primary" type="submit">Prepare Changes</button>
+          <button class="btn btn-primary" type="submit">Save Changes</button>
         </div>
       </form>
     </section>
