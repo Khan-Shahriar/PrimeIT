@@ -1,3 +1,5 @@
+const path = require("path");
+
 const DEFAULT_PORT = 8080;
 
 function parsePort(value) {
@@ -14,6 +16,12 @@ function getConfig() {
         port: parsePort(process.env.PORT || DEFAULT_PORT),
         clientOrigin: process.env.CLIENT_ORIGIN?.trim() || "",
         bodyLimit: process.env.API_BODY_LIMIT?.trim() || "1mb",
+        gallery: {
+            uploadDir: process.env.GALLERY_UPLOAD_DIR?.trim() || path.join(process.cwd(), "uploads", "gallery"),
+            maxImageSize: Number(process.env.MAX_IMAGE_SIZE || 10 * 1024 * 1024),
+            maxImageWidth: Number(process.env.MAX_IMAGE_WIDTH || 12000),
+            maxImageHeight: Number(process.env.MAX_IMAGE_HEIGHT || 12000)
+        },
         database: {
             host: process.env.DB_HOST?.trim(),
             port: Number(process.env.DB_PORT || 3306),
