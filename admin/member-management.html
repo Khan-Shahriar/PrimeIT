@@ -140,8 +140,7 @@
                 <option value="">All Statuses</option>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
-                <option value="suspended">Suspended</option>
-              </select>
+                </select>
             </div>
 
             <button class="btn btn-secondary" id="reset-filters" type="button">Reset</button>
@@ -219,7 +218,7 @@
         <div>
           <p class="section-kicker">Member record</p>
           <h2 id="member-form-title">Add Member</h2>
-          <p id="member-form-description">Enter professional member information. Account credentials are handled by the future authentication system.</p>
+          <p id="member-form-description">Enter professional member information. The temporary account password is submitted securely to the backend and is never stored by the frontend.</p>
         </div>
         <button class="icon-button" type="button" data-close-dialog="member-form-dialog" aria-label="Close member form">×</button>
       </header>
@@ -252,6 +251,12 @@
             <label for="work-email">Work Email <span aria-hidden="true">*</span></label>
             <input id="work-email" name="email" type="email" required maxlength="254" autocomplete="email" inputmode="email">
             <span class="field-error" id="work-email-error"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="member-password">Temporary Password <span aria-hidden="true">*</span></label>
+            <input id="member-password" name="password" type="password" required minlength="8" maxlength="128" autocomplete="new-password">
+            <span class="field-error" id="member-password-error"></span>
           </div>
 
           <div class="form-field">
@@ -337,7 +342,8 @@
         <button class="btn btn-danger" id="confirm-member-action" type="button">Confirm</button>
       </div>
     </div>
-  </section>
+  </section><script src="../js/api.js"></script>
+
 
   <script src="../js/member-management.js"></script>
   <script src="../js/auth-guard.js"></script>

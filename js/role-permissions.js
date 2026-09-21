@@ -2,11 +2,9 @@
   "use strict";
 
   /*
-   * Section 23 frontend boundary:
-   * - This module owns UI state and presentation only.
-   * - It never stores JWTs, roles, permissions, or authorization state in browser storage.
-   * - Server-side authorization remains mandatory.
-   * - API paths below are conceptual boundaries and are not treated as final backend contracts.
+   * Section 29: REST integration.
+   * JWTs remain in the HTTP-only authentication cookie. The backend remains
+   * the security boundary for every role/permission operation.
    */
 
   const API = Object.freeze({
@@ -14,7 +12,7 @@
     permissions: "/api/v1/roles/permissions",
     rolePermissions: (id) => `/api/v1/roles/${encodeURIComponent(id)}/permissions`,
     roleMembers: (id) => `/api/v1/roles/${encodeURIComponent(id)}/members`,
-    roleAssignments: "/api/v1/users"
+    roleAssignments: (userId) => `/api/v1/users/${encodeURIComponent(userId)}/roles`
   });
 
   const SYSTEM_ROLE_NAMES = new Set(["ceo", "developer", "admin", "hr"]);
@@ -127,26 +125,20 @@
   }
 
   async function requestJson(url, options = {}) {
-    const response = await fetch(url, {
-      credentials: "include",
-      ...options,
-      headers: {
-        Accept: "application/json",
-        ...(options.body ? { "Content-Type": "application/json" } : {}),
-        ...(options.headers || {})
-      }
+    const method = String(options.method || "GET").toUpperCase();
+    const body = options.body
+      ? (() => {
+          try { return JSON.parse(options.body); } catch { return options.body; }
+        })()
+      : undefined;
+
+    if (!window.PrimeItApi) throw new Error("API client is unavailable.");
+
+    return window.PrimeItApi.request(url, {
+      method,
+      body,
+      headers: options.headers || {}
     });
-
-    const contentType = response.headers.get("content-type") || "";
-    const data = contentType.includes("application/json") ? await response.json() : null;
-
-    if (!response.ok) {
-      const error = new Error(data?.message || `Request failed with status ${response.status}`);
-      error.status = response.status;
-      throw error;
-    }
-
-    return data;
   }
 
   function filteredRoles() {
@@ -465,7 +457,15 @@
       updateStats();
       renderRoleList();
       renderRoleDetails();
-      setStatePanel("Unable to load roles. Connect the future roles API to populate this page.", "error", loadRoles);
+      setStatePanel(
+        error?.status === 403
+          ? "You do not have permission to manage roles and permissions."
+          : error?.status === 401
+            ? "Your session is no longer valid. Please sign in again."
+            : (error?.message || "Unable to load roles. Please try again."),
+        "error",
+        loadRoles
+      );
       console.error("Roles request failed:", error);
     } finally {
       state.loading = false;

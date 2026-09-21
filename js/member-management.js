@@ -68,6 +68,7 @@
     "last-name",
     "display-name",
     "work-email",
+    "member-password",
     "member-phone",
     "member-department",
     "member-job-title",
@@ -79,22 +80,44 @@
   ];
 
   const apiAdapter = {
-    /*
-     * Deliberately does not invent an endpoint contract.
-     * Later REST API work can replace these methods without changing
-     * the page rendering, validation, or interaction layer.
-     */
     async listMembers() {
-      throw new Error("Member API is not connected yet.");
+      return window.PrimeItApi.get("/members");
     },
-    async createMember() {
-      throw new Error("Member creation API is not connected yet.");
+    async createMember(payload) {
+      const fullName = [payload.first_name, payload.last_name].filter(Boolean).join(" ").trim();
+      return window.PrimeItApi.post("/members", {
+        full_name: payload.display_name || fullName,
+        email: payload.email,
+        password: payload.password,
+        phone: payload.phone || "",
+        department: payload.department || "",
+        position: payload.job_title || "",
+        role: payload.role || "member",
+        status: payload.status || "active"
+      });
     },
-    async updateMember() {
-      throw new Error("Member update API is not connected yet.");
+    async updateMember(id, payload) {
+      const fullName = [payload.first_name, payload.last_name].filter(Boolean).join(" ").trim();
+      return window.PrimeItApi.put("/members/" + encodeURIComponent(id), {
+        full_name: payload.display_name || fullName,
+        email: payload.email,
+        password: payload.password || undefined,
+        phone: payload.phone || "",
+        bio: payload.bio || "",
+        department: payload.department || "",
+        position: payload.job_title || "",
+        role: payload.role || undefined,
+        status: payload.status || "active"
+      });
     },
-    async accountAction() {
-      throw new Error("Member account API is not connected yet.");
+    async accountAction(id, action) {
+      if (action === "activate") {
+        return window.PrimeItApi.put("/members/" + encodeURIComponent(id), { status: "active" });
+      }
+      if (action === "deactivate") {
+        return window.PrimeItApi.put("/members/" + encodeURIComponent(id), { status: "inactive" });
+      }
+      throw new Error("This account action is not supported by the current backend API.");
     }
   };
 
@@ -357,11 +380,17 @@
       elements.listState.hidden = false;
       elements.listState.dataset.state = "unavailable";
       elements.listStateTitle.textContent = "Member data unavailable";
-      elements.listStateMessage.textContent = "The Member Management API is not connected yet. No production member records are being fabricated in the frontend.";
+      elements.listStateMessage.textContent = error?.status === 403
+        ? "You do not have permission to manage members."
+        : error?.status === 401
+          ? "Your session is no longer valid. Please sign in again."
+          : (error?.message || "Unable to load member data. No production records are being fabricated in the frontend.");
       elements.retry.hidden = false;
       elements.resultCount.textContent = "No member data";
       elements.pagination.hidden = true;
-      setStatus("Member data is unavailable until the future REST API is connected.");
+      setStatus(error?.status === 403
+        ? "Member management access denied."
+        : "Member data could not be loaded. Please retry.");
     } finally {
       showListLoading(false);
     }
@@ -558,6 +587,7 @@
     const firstName = document.getElementById("first-name").value.trim();
     const lastName = document.getElementById("last-name").value.trim();
     const email = document.getElementById("work-email").value.trim();
+    const password = document.getElementById("member-password").value;
     const phone = document.getElementById("member-phone").value.trim();
     const joiningDate = document.getElementById("joining-date").value;
     const bio = document.getElementById("member-bio").value.trim();
@@ -571,6 +601,14 @@
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setFieldError("work-email", "Enter a valid work email.");
       errors.push("work-email");
+    }
+
+    if (!state.editingMember && password.length < 8) {
+      setFieldError("member-password", "Temporary password must be at least 8 characters.");
+      errors.push("member-password");
+    } else if (password.length > 128) {
+      setFieldError("member-password", "Password must be 128 characters or fewer.");
+      errors.push("member-password");
     }
 
     if (phone && phone.length > 30) {
@@ -627,12 +665,18 @@
       }
 
       elements.formMessage.hidden = false;
-      elements.formMessage.textContent = "The member API is not connected. No changes were submitted.";
-      setStatus("No member changes were submitted because the backend API is not connected.");
+      elements.formMessage.textContent = state.editingMember
+        ? "Member updated successfully."
+        : "Member created successfully.";
+      setStatus(state.editingMember ? "Member updated successfully." : "Member created successfully.");
+      closeDialog(elements.formDialog);
+      await loadMembers();
     } catch (error) {
       elements.formMessage.hidden = false;
-      elements.formMessage.textContent = error.message || "The member API is not connected. No changes were submitted.";
-      setStatus("Member change is pending future API integration.");
+      elements.formMessage.textContent = error.message || "Unable to save the member.";
+      setStatus(error.status === 403
+        ? "You do not have permission to modify this member."
+        : "The member change was not saved.");
     } finally {
       elements.formSubmit.disabled = false;
       elements.formSubmit.textContent = state.editingMember ? "Save Changes" : "Create Member";
@@ -679,9 +723,13 @@
 
     try {
       await apiAdapter.accountAction(member.id, action);
-      setStatus("No account action was submitted because the backend API is not connected.");
+      closeDialog(elements.actionDialog);
+      await loadMembers();
+      setStatus("Member account status updated successfully.");
     } catch (error) {
-      setStatus("No account action was submitted because the backend API is not connected.");
+      setStatus(error?.status === 403
+        ? "You do not have permission to change this account."
+        : (error?.message || "The account action could not be completed."));
       closeDialog(elements.actionDialog);
     } finally {
       elements.confirmAction.disabled = false;
