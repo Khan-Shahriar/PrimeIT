@@ -1,595 +1,231 @@
 const express = require("express");
-
 const { pool } = require("../db");
-
-const {
-    requireAuth,
-    requireFullAccess
-} = require("../middleware/auth");
+const { requireAuth, requireAuthorizationManager } = require("../middleware/auth");
+const { listRoles, getRoleById, getRoleMembers } = require("../repositories/roleRepository");
+const { listPermissions, getPermissionsForRole } = require("../repositories/permissionRepository");
 
 const router = express.Router();
+const SYSTEM_ROLE_NAMES = new Set(["ceo", "developer", "admin", "hr", "member"]);
 
+function parseId(value) {
+    const id = Number(value);
+    return Number.isInteger(id) && id > 0 ? id : null;
+}
 
-/* ==========================================
-   GET ALL ROLES
-   ========================================== */
-
-router.get(
-    "/",
-    requireAuth,
-    requireFullAccess,
-    async (req, res) => {
-
-        try {
-
-            const [roles] = await pool.query(
-                `
-                SELECT
-                    id,
-                    name,
-                    description,
-                    created_at
-                FROM roles
-                ORDER BY
-                    CASE name
-                        WHEN 'ceo' THEN 1
-                        WHEN 'developer' THEN 2
-                        WHEN 'admin' THEN 3
-                        WHEN 'hr' THEN 4
-                        WHEN 'member' THEN 5
-                        ELSE 6
-                    END,
-                    name ASC
-                `
-            );
-
-            return res.json({
-                success: true,
-                roles
-            });
-
-        } catch (error) {
-
-            console.error(
-                "Get roles error:",
-                error
-            );
-
-            return res.status(500).json({
-                success: false,
-                message: "Failed to load roles"
-            });
-        }
+router.get("/", requireAuth, requireAuthorizationManager, async (req, res) => {
+    try {
+        return res.json({ success: true, roles: await listRoles() });
+    } catch (error) {
+        console.error("Get roles error:", error);
+        return res.status(500).json({ success: false, message: "Failed to load roles" });
     }
-);
+});
 
-
-/* ==========================================
-   GET ALL PERMISSIONS
-   ========================================== */
-
-router.get(
-    "/permissions/all",
-    requireAuth,
-    requireFullAccess,
-    async (req, res) => {
-
-        try {
-
-            const [permissions] = await pool.query(
-                `
-                SELECT
-                    id,
-                    name,
-                    description
-                FROM permissions
-                ORDER BY id ASC
-                `
-            );
-
-            return res.json({
-                success: true,
-                permissions
-            });
-
-        } catch (error) {
-
-            console.error(
-                "Get permissions error:",
-                error
-            );
-
-            return res.status(500).json({
-                success: false,
-                message: "Failed to load permissions"
-            });
-        }
+router.get("/permissions", requireAuth, requireAuthorizationManager, async (req, res) => {
+    try {
+        return res.json({ success: true, permissions: await listPermissions() });
+    } catch (error) {
+        console.error("Get permissions error:", error);
+        return res.status(500).json({ success: false, message: "Failed to load permissions" });
     }
-);
+});
 
-
-/* ==========================================
-   GET ROLE PERMISSIONS
-   ========================================== */
-
-router.get(
-    "/:id/permissions",
-    requireAuth,
-    requireFullAccess,
-    async (req, res) => {
-
-        try {
-
-            const roleId = Number(req.params.id);
-
-            if (
-                !Number.isInteger(roleId) ||
-                roleId <= 0
-            ) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid role ID"
-                });
-            }
-
-
-            const [roles] = await pool.query(
-                `
-                SELECT
-                    id,
-                    name,
-                    description
-                FROM roles
-                WHERE id = ?
-                LIMIT 1
-                `,
-                [roleId]
-            );
-
-
-            if (roles.length === 0) {
-
-                return res.status(404).json({
-                    success: false,
-                    message: "Role not found"
-                });
-            }
-
-
-            const [permissions] = await pool.query(
-                `
-                SELECT
-                    p.id,
-                    p.name,
-                    p.description
-                FROM role_permissions rp
-                INNER JOIN permissions p
-                    ON rp.permission_id = p.id
-                WHERE rp.role_id = ?
-                ORDER BY p.id ASC
-                `,
-                [roleId]
-            );
-
-
-            return res.json({
-                success: true,
-                role: roles[0],
-                permissions
-            });
-
-        } catch (error) {
-
-            console.error(
-                "Get role permissions error:",
-                error
-            );
-
-            return res.status(500).json({
-                success: false,
-                message: "Failed to load role permissions"
-            });
-        }
+router.get("/permissions/all", requireAuth, requireAuthorizationManager, async (req, res) => {
+    try {
+        return res.json({ success: true, permissions: await listPermissions() });
+    } catch (error) {
+        console.error("Get permissions error:", error);
+        return res.status(500).json({ success: false, message: "Failed to load permissions" });
     }
-);
+});
 
+router.get("/:id", requireAuth, requireAuthorizationManager, async (req, res) => {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid role ID" });
+    try {
+        const role = await getRoleById(id);
+        if (!role) return res.status(404).json({ success: false, message: "Role not found" });
+        const permissions = await getPermissionsForRole(id);
+        return res.json({ success: true, role, permissions });
+    } catch (error) {
+        console.error("Get role error:", error);
+        return res.status(500).json({ success: false, message: "Failed to load role" });
+    }
+});
 
-/* ==========================================
-   UPDATE ROLE PERMISSIONS
-========================================== */
+router.get("/:id/permissions", requireAuth, requireAuthorizationManager, async (req, res) => {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid role ID" });
+    try {
+        const role = await getRoleById(id);
+        if (!role) return res.status(404).json({ success: false, message: "Role not found" });
+        return res.json({ success: true, role, permissions: await getPermissionsForRole(id) });
+    } catch (error) {
+        console.error("Get role permissions error:", error);
+        return res.status(500).json({ success: false, message: "Failed to load role permissions" });
+    }
+});
 
-router.put(
-    "/:id/permissions",
-    requireAuth,
-    requireFullAccess,
-    async (req, res) => {
+router.get("/:id/members", requireAuth, requireAuthorizationManager, async (req, res) => {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid role ID" });
+    try {
+        const role = await getRoleById(id);
+        if (!role) return res.status(404).json({ success: false, message: "Role not found" });
+        return res.json({ success: true, members: await getRoleMembers(id) });
+    } catch (error) {
+        console.error("Get role members error:", error);
+        return res.status(500).json({ success: false, message: "Failed to load role members" });
+    }
+});
 
-        const connection =
-            await pool.getConnection();
+router.post("/", requireAuth, requireAuthorizationManager, async (req, res) => {
+    try {
+        const name = String(req.body.name || "").trim().toLowerCase().replace(/\s+/g, "_");
+        const description = String(req.body.description || "").trim();
+        if (!/^[a-z][a-z0-9_]{2,49}$/.test(name)) {
+            return res.status(400).json({ success: false, message: "Role name must contain 3–50 lowercase letters, numbers, or underscores" });
+        }
+        if (SYSTEM_ROLE_NAMES.has(name)) {
+            return res.status(409).json({ success: false, message: "This role name is reserved" });
+        }
+        if (description.length > 255) {
+            return res.status(400).json({ success: false, message: "Description cannot exceed 255 characters" });
+        }
+        const [result] = await pool.query(
+            "INSERT INTO roles (name, description, type, status, is_system) VALUES (?, ?, 'custom', 'active', 0)",
+            [name, description || null]
+        );
+        const role = await getRoleById(result.insertId);
+        return res.status(201).json({ success: true, message: "Custom role created successfully", role });
+    } catch (error) {
+        if (error.code === "ER_DUP_ENTRY") {
+            return res.status(409).json({ success: false, message: "A role with this name already exists" });
+        }
+        console.error("Create role error:", error);
+        return res.status(500).json({ success: false, message: "Failed to create role" });
+    }
+});
 
-        let transactionStarted = false;
+router.patch("/:id", requireAuth, requireAuthorizationManager, async (req, res) => {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid role ID" });
+    try {
+        const role = await getRoleById(id);
+        if (!role) return res.status(404).json({ success: false, message: "Role not found" });
+        if (role.is_system || role.type === "system") {
+            return res.status(403).json({ success: false, message: "System roles cannot be modified" });
+        }
 
-        try {
-
-            const roleId =
-                Number(req.params.id);
-
-            if (
-                !Number.isInteger(roleId) ||
-                roleId <= 0
-            ) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid role ID"
-                });
+        const fields = [];
+        const values = [];
+        if (req.body.name !== undefined) {
+            const name = String(req.body.name).trim().toLowerCase().replace(/\s+/g, "_");
+            if (!/^[a-z][a-z0-9_]{2,49}$/.test(name) || SYSTEM_ROLE_NAMES.has(name)) {
+                return res.status(400).json({ success: false, message: "Invalid or reserved role name" });
             }
-
-
-            const permissions =
-                req.body.permissions;
-
-
-            if (!Array.isArray(permissions)) {
-                return res.status(400).json({
-                    success: false,
-                    message:
-                        "Permissions must be an array"
-                });
+            fields.push("name = ?");
+            values.push(name);
+        }
+        if (req.body.description !== undefined) {
+            const description = String(req.body.description).trim();
+            if (description.length > 255) return res.status(400).json({ success: false, message: "Description cannot exceed 255 characters" });
+            fields.push("description = ?");
+            values.push(description || null);
+        }
+        if (req.body.status !== undefined) {
+            const status = String(req.body.status).toLowerCase();
+            if (!["active", "inactive", "archived"].includes(status)) {
+                return res.status(400).json({ success: false, message: "Invalid role status" });
             }
+            fields.push("status = ?");
+            values.push(status);
+        }
+        if (!fields.length) return res.status(400).json({ success: false, message: "No valid role changes supplied" });
+        values.push(id);
+        await pool.query("UPDATE roles SET " + fields.join(", ") + " WHERE id = ?", values);
+        return res.json({ success: true, message: "Role updated successfully", role: await getRoleById(id) });
+    } catch (error) {
+        if (error.code === "ER_DUP_ENTRY") return res.status(409).json({ success: false, message: "A role with this name already exists" });
+        console.error("Update role error:", error);
+        return res.status(500).json({ success: false, message: "Failed to update role" });
+    }
+});
 
+router.patch("/:id/status", requireAuth, requireAuthorizationManager, async (req, res) => {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid role ID" });
+    req.body = { ...req.body, status: req.body.status };
+    return router.handle({ ...req, url: "/" + id, originalUrl: req.originalUrl, method: "PATCH" }, res);
+});
 
-            const [roles] =
-                await connection.query(
-                    `
-                    SELECT
-                        id,
-                        name,
-                        description
-                    FROM roles
-                    WHERE id = ?
-                    LIMIT 1
-                    `,
-                    [roleId]
-                );
+router.put("/:id/permissions", requireAuth, requireAuthorizationManager, async (req, res) => {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid role ID" });
+    if (!Array.isArray(req.body.permissions)) return res.status(400).json({ success: false, message: "Permissions must be an array" });
 
+    const connection = await pool.getConnection();
+    try {
+        const [roles] = await connection.query("SELECT id, name, type, status, is_system FROM roles WHERE id = ? LIMIT 1", [id]);
+        if (!roles.length) return res.status(404).json({ success: false, message: "Role not found" });
+        const role = roles[0];
+        if (role.is_system || role.type === "system") return res.status(403).json({ success: false, message: "System role permissions are protected" });
 
-            if (roles.length === 0) {
+        const permissionIds = [...new Set(req.body.permissions.map(Number))];
+        if (permissionIds.some(idValue => !Number.isInteger(idValue) || idValue <= 0)) {
+            return res.status(400).json({ success: false, message: "Invalid permission ID" });
+        }
 
-                return res.status(404).json({
-                    success: false,
-                    message: "Role not found"
-                });
-            }
-
-
-            const role =
-                roles[0];
-
-
-            /*
-             * CEO and Developer always have
-             * full access through middleware.
-             *
-             * Their permissions should not be
-             * manually stored.
-             */
-
-            if (
-                role.name === "ceo" ||
-                role.name === "developer"
-            ) {
-
-                return res.status(400).json({
-                    success: false,
-                    message:
-                        "CEO and Developer have full access automatically"
-                });
-            }
-
-
-            /*
-             * Convert permission IDs to numbers
-             * and remove duplicates.
-             */
-
-            const permissionIds =
-                [
-                    ...new Set(
-                        permissions.map(
-                            id => Number(id)
-                        )
-                    )
-                ];
-
-
-            /*
-             * Validate every permission ID.
-             */
-
-            if (
-                permissionIds.some(
-                    id =>
-                        !Number.isInteger(id) ||
-                        id <= 0
-                )
-            ) {
-
-                return res.status(400).json({
-                    success: false,
-                    message:
-                        "Invalid permission ID"
-                });
-            }
-
-
-            /*
-             * Verify that every permission exists.
-             */
-
-            if (permissionIds.length > 0) {
-
-                const placeholders =
-                    permissionIds
-                        .map(() => "?")
-                        .join(",");
-
-
-                const [validPermissions] =
-                    await connection.query(
-                        `
-                        SELECT id
-                        FROM permissions
-                        WHERE id IN (${placeholders})
-                        `,
-                        permissionIds
-                    );
-
-
-                if (
-                    validPermissions.length !==
-                    permissionIds.length
-                ) {
-
-                    return res.status(400).json({
-                        success: false,
-                        message:
-                            "One or more permissions do not exist"
-                    });
-                }
-            }
-
-
-            /*
-             * Start transaction.
-             */
-
-            await connection.beginTransaction();
-
-            transactionStarted = true;
-
-
-            /*
-             * Remove existing permissions.
-             */
-
-            await connection.query(
-                `
-                DELETE FROM role_permissions
-                WHERE role_id = ?
-                `,
-                [roleId]
-            );
-
-
-            /*
-             * Add new permissions.
-             */
-
-            if (permissionIds.length > 0) {
-
-                const values =
-                    permissionIds.map(
-                        permissionId => [
-                            roleId,
-                            permissionId
-                        ]
-                    );
-
-
-                await connection.query(
-                    `
-                    INSERT INTO role_permissions
-                        (role_id, permission_id)
-                    VALUES ?
-                    `,
-                    [values]
-                );
-            }
-
-
-            await connection.commit();
-
-
-            return res.json({
-                success: true,
-                message:
-                    "Role permissions updated successfully",
-                role,
+        if (permissionIds.length) {
+            const placeholders = permissionIds.map(() => "?").join(",");
+            const [valid] = await connection.query(
+                "SELECT id FROM permissions WHERE id IN (" + placeholders + ") AND status = 'active'",
                 permissionIds
-            });
-
-
-        } catch (error) {
-
-            if (transactionStarted) {
-                await connection.rollback();
-            }
-
-            console.error(
-                "Update role permissions error:",
-                error
             );
-
-            return res.status(500).json({
-                success: false,
-                message:
-                    "Failed to update role permissions"
-            });
-
-        } finally {
-
-            connection.release();
-
+            if (valid.length !== permissionIds.length) return res.status(400).json({ success: false, message: "One or more permissions are invalid or inactive" });
         }
-    }
-);
 
-
-
-/* ==========================================
-   CREATE CUSTOM ROLE
-========================================== */
-
-router.post(
-    "/",
-    requireAuth,
-    requireFullAccess,
-    async (req, res) => {
-
-        try {
-
-            const name =
-                String(req.body.name || "")
-                    .trim()
-                    .toLowerCase()
-                    .replace(/\s+/g, "_");
-
-            const description =
-                String(req.body.description || "")
-                    .trim();
-
-            if (!name) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Role name is required"
-                });
-            }
-
-            if (!/^[a-z][a-z0-9_]{2,49}$/.test(name)) {
-                return res.status(400).json({
-                    success: false,
-                    message:
-                        "Role name must contain 3–50 lowercase letters, numbers, or underscores"
-                });
-            }
-
-            if (
-                [
-                    "ceo",
-                    "developer",
-                    "admin",
-                    "hr",
-                    "member"
-                ].includes(name)
-            ) {
-                return res.status(409).json({
-                    success: false,
-                    message: "This role is reserved or already exists"
-                });
-            }
-
-            if (description.length > 255) {
-                return res.status(400).json({
-                    success: false,
-                    message:
-                        "Description cannot exceed 255 characters"
-                });
-            }
-
-            try {
-                const [result] =
-                    await pool.query(
-                        `
-            INSERT INTO roles
-                (name, description)
-            VALUES
-                (?, ?)
-            `,
-                        [
-                            name,
-                            description || null
-                        ]
-                    );
-
-                const [createdRoles] =
-                    await pool.query(
-                        `
-                        SELECT
-                            id,
-                            name,
-                            description,
-                            created_at
-                        FROM roles
-                        WHERE id = ?
-                        LIMIT 1
-                        `,
-                        [result.insertId]
-                    );
-
-                return res.status(201).json({
-                    success: true,
-                    message: "Custom role created successfully",
-                    role: createdRoles[0]
-                });
-
-            } catch (error) {
-
-                if (error.code === "ER_DUP_ENTRY") {
-                    return res.status(409).json({
-                        success: false,
-                        message: "A role with this name already exists"
-                    });
-                }
-
-                throw error;
-            }
-
-            const [createdRoles] =
-                await pool.query(
-                    `
-                    SELECT
-                        id,
-                        name,
-                        description,
-                        created_at
-                    FROM roles
-                    WHERE id = ?
-                    LIMIT 1
-                    `,
-                    [result.insertId]
-                );
-
-            return res.status(201).json({
-                success: true,
-                message: "Custom role created successfully",
-                role: createdRoles[0]
-            });
-
-        } catch (error) {
-
-            console.error(
-                "Create role error:",
-                error
+        await connection.beginTransaction();
+        await connection.query("DELETE FROM role_permissions WHERE role_id = ?", [id]);
+        if (permissionIds.length) {
+            await connection.query(
+                "INSERT INTO role_permissions (role_id, permission_id) VALUES ?",
+                [permissionIds.map(permissionId => [id, permissionId])]
             );
-
-            return res.status(500).json({
-                success: false,
-                message: "Failed to create role"
-            });
-
         }
+        await connection.commit();
+        return res.json({ success: true, message: "Role permissions updated successfully", role, permissionIds });
+    } catch (error) {
+        try { await connection.rollback(); } catch {}
+        console.error("Update role permissions error:", error);
+        return res.status(500).json({ success: false, message: "Failed to update role permissions" });
+    } finally {
+        connection.release();
     }
-);
+});
 
+router.delete("/:id", requireAuth, requireAuthorizationManager, async (req, res) => {
+    const id = parseId(req.params.id);
+    if (!id) return res.status(400).json({ success: false, message: "Invalid role ID" });
+    const connection = await pool.getConnection();
+    try {
+        const role = await getRoleById(id, connection);
+        if (!role) return res.status(404).json({ success: false, message: "Role not found" });
+        if (role.is_system || role.type === "system") return res.status(403).json({ success: false, message: "System roles cannot be deleted" });
+        const [members] = await connection.query("SELECT 1 FROM user_roles WHERE role_id = ? LIMIT 1", [id]);
+        if (members.length) return res.status(409).json({ success: false, message: "Role is assigned to users; archive it or remove assignments first" });
+        await connection.beginTransaction();
+        await connection.query("DELETE FROM role_permissions WHERE role_id = ?", [id]);
+        await connection.query("DELETE FROM roles WHERE id = ?", [id]);
+        await connection.commit();
+        return res.json({ success: true, message: "Role deleted successfully" });
+    } catch (error) {
+        try { await connection.rollback(); } catch {}
+        console.error("Delete role error:", error);
+        return res.status(500).json({ success: false, message: "Failed to delete role" });
+    } finally {
+        connection.release();
+    }
+});
 
 module.exports = router;
