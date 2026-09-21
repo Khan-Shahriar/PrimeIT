@@ -66,7 +66,7 @@ VALUES
 ('admin','PrimeIt Admin; permissions are explicitly assigned','system','active',1),
 ('hr','PrimeIt HR; permissions are explicitly assigned','system','active',1),
 ('member','PrimeIt Member; self-service permissions are explicitly assigned','system','active',1)
-ON DUPLICATE KEY UPDATE description=VALUES(description), type=VALUES(type), is_system=VALUES(is_system);
+ON DUPLICATE KEY UPDATE description=VALUES(description), type=VALUES(type), status='active', is_system=VALUES(is_system);
 
 INSERT INTO permissions (name, description, module, action)
 VALUES
