@@ -28,11 +28,11 @@ function uploadErrorHandler(error, req, res, next) {
 }
 
 router.get("/", asyncHandler(galleryController.listPublic));
-router.get("/admin", requireAuth, requirePermission("manage_gallery"), asyncHandler(galleryController.listAdmin));
+router.get("/admin", requireAuth, requirePermission("gallery.view"), asyncHandler(galleryController.listAdmin));
 router.get("/:id", asyncHandler(galleryController.getOne));
 
-router.post("/", galleryWriteLimiter, requireAuth, requirePermission("manage_gallery"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.create));
-router.patch("/:id", galleryWriteLimiter, requireAuth, requirePermission("manage_gallery"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.update));
-router.post("/:id/archive", galleryWriteLimiter, requireAuth, requirePermission("manage_gallery"), asyncHandler(galleryController.archive));
+router.post("/", galleryWriteLimiter, requireAuth, requirePermission("gallery.create"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.create));
+router.patch("/:id", galleryWriteLimiter, requireAuth, requirePermission("gallery.update"), galleryUpload, uploadErrorHandler, asyncHandler(galleryController.update));
+router.post("/:id/archive", galleryWriteLimiter, requireAuth, requirePermission("gallery.archive"), asyncHandler(galleryController.archive));
 
 module.exports = router;
