@@ -10,7 +10,9 @@
     "test:health": "node scripts/health-check.js",
     "test:api": "npm run test:health",
     "test:auth": "node scripts/auth-check.js",
-    "test:rbac": "node scripts/rbac-check.js"
+    "test:rbac": "node scripts/rbac-check.js",
+    "test:frontend": "node scripts/frontend-check.js",
+    "test:all": "npm run check && npm run test:frontend && npm run test:health && npm run test:auth && npm run test:rbac"
   },
   "keywords": [
     "primeit",
