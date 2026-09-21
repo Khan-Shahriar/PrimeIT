@@ -35,14 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
     emailInput.addEventListener("input", () => clearFieldError(emailInput, emailError));
     passwordInput.addEventListener("input", () => clearFieldError(passwordInput, passwordError));
 
-    forgotPassword?.addEventListener("click", (event) => {
-        event.preventDefault();
-        showMessage(
-            "Password recovery will be available when the PrimeIt authentication service is connected.",
-            false
-        );
-    });
-
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -63,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setLoading(true);
 
         try {
-            const response = await fetch("/api/auth/login", {
+            const response = await fetch("/api/v1/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -172,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (status === 403) {
             showMessage(
-                "This account is not authorized to access the Admin Panel.",
+                "This account cannot sign in right now.",
                 true
             );
             return;

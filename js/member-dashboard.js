@@ -69,8 +69,6 @@ function setupMobileNavigation(){
 function setupLogoutIntegration(){
   if(!logoutLink) return;
   logoutLink.dataset.logoutReady='true';
-  // Future authenticated integration: connect to the server-side logout endpoint.
-  // JWT cookies must not be read or removed by client-side JavaScript.
 }
 
 function initializeDashboard(){
