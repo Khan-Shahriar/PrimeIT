@@ -1,6 +1,7 @@
 const authService = require("../services/authService");
 const { setAuthCookie, clearAuthCookie } = require("../utils/authCookie");
 const { getAuthorizationContext } = require("../services/authorizationService");
+const authRepository = require("../repositories/authRepository");
 
 async function signup(req, res) {
     const { full_name, email, password, phone, department, position } = req.body;
@@ -31,7 +32,7 @@ async function me(req, res) {
         }
     });
 }
-async function logout(req, res) { clearAuthCookie(res); return res.json({ success: true, message: "Logout successful" }); }
+async function logout(req, res) { await authRepository.invalidateTokens(req.user.id); clearAuthCookie(res); return res.json({ success: true, message: "Logout successful" }); }
 async function verifyEmail(req, res) { await authService.verifyEmail(req.body.token.trim()); return res.json({ success: true, message: "Email verified successfully." }); }
 async function forgotPassword(req, res) { await authService.requestPasswordReset(req.body.email); return res.json({ success: true, message: authService.GENERIC_RESET_MESSAGE }); }
 async function resetPassword(req, res) { await authService.resetPassword(req.body.token.trim(), req.body.new_password); return res.json({ success: true, message: "Password reset successfully. Please sign in with your new password." }); }
