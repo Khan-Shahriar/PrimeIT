@@ -246,6 +246,10 @@ router.put("/:id", requireAuth, requirePermission("members.update"), async (req,
         } = req.body;
 
         const errors = {};
+        if (phone !== undefined && (typeof phone !== "string" || phone.trim().length > 30)) errors.phone = "Phone must not exceed 30 characters.";
+        if (bio !== undefined && (typeof bio !== "string" || bio.trim().length > 1000)) errors.bio = "Bio must not exceed 1000 characters.";
+        if (department !== undefined && (typeof department !== "string" || department.trim().length > 100)) errors.department = "Department must not exceed 100 characters.";
+        if (position !== undefined && (typeof position !== "string" || position.trim().length > 100)) errors.position = "Position must not exceed 100 characters.";
 
         if (full_name !== undefined) {
             if (typeof full_name !== "string" || !full_name.trim()) {
@@ -277,7 +281,7 @@ router.put("/:id", requireAuth, requirePermission("members.update"), async (req,
             requestedRole = await getRoleByName(String(role).trim().toLowerCase());
             if (!requestedRole || requestedRole.status !== "active") {
                 errors.role = "Invalid or inactive role.";
-            } else if (!req.authorization?.isAuthorizationManager) {
+            } else if (isFullAccessRole(requestedRole.name) && !req.authorization?.isFullAccess) {
                 return res.status(403).json({
                     success: false,
                     message: "Role assignment requires authorization-management access."
@@ -382,22 +386,22 @@ router.put("/:id", requireAuth, requirePermission("members.update"), async (req,
 
         const updatedPhone =
             phone !== undefined
-                ? phone || null
+                ? String(phone).trim() || null
                 : currentMember.phone;
 
         const updatedBio =
             bio !== undefined
-                ? bio || null
+                ? String(bio).trim() || null
                 : currentMember.bio;
 
         const updatedDepartment =
             department !== undefined
-                ? department || null
+                ? String(department).trim() || null
                 : currentMember.department;
 
         const updatedPosition =
             position !== undefined
-                ? position || null
+                ? String(position).trim() || null
                 : currentMember.position;
 
         const updatedRole =
@@ -428,7 +432,8 @@ router.put("/:id", requireAuth, requirePermission("members.update"), async (req,
                     department = ?,
                     position = ?,
                     role = ?,
-                    status = ?
+                    status = ?,
+                    auth_token_version = COALESCE(auth_token_version, 0) + 1
                  WHERE id = ?`,
                 [
                     updatedFullName,
