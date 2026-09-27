@@ -46,13 +46,14 @@ router.post(
             const normalizedRole = String(role || "member").trim().toLowerCase();
             const normalizedStatus = String(status || "active").trim().toLowerCase();
 
-            if (phone !== undefined && String(phone).trim().length > 30) errors.phone = "Phone must not exceed 30 characters.";
-
             /* =====================================================
                VALIDATION
             ===================================================== */
 
             const errors = {};
+            if (phone !== undefined && String(phone).trim().length > 30) errors.phone = "Phone must not exceed 30 characters.";
+            if (department !== undefined && String(department).trim().length > 100) errors.department = "Department must not exceed 100 characters.";
+            if (position !== undefined && String(position).trim().length > 100) errors.position = "Position must not exceed 100 characters.";
 
             if (!normalizedName) {
                 errors.full_name = "Full name is required.";
@@ -132,10 +133,7 @@ router.post(
                PASSWORD HASH
             ===================================================== */
 
-            const passwordHash = await bcrypt.hash(
-                rawPassword,
-                12
-            );
+            const passwordHash = await hashPassword(rawPassword);
 
             /* =====================================================
                CREATE MEMBER
