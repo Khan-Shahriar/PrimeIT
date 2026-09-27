@@ -23,10 +23,10 @@ function errorHandler(error, req, res, next) {
 
     console.error("API error", {
         method: req.method,
-        path: req.originalUrl,
+        path: req.path,
         status,
         code: error?.code,
-        message: error?.message
+        message: isServerError ? undefined : error?.message
     });
 
     return res.status(status).json({
