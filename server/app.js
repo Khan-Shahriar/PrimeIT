@@ -79,6 +79,57 @@ app.use(express.json({ limit: config.bodyLimit }));
 app.use(express.urlencoded({ extended: true, limit: config.bodyLimit }));
 app.use(cookieParser());
 
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: Number(process.env.API_RATE_LIMIT_MAX || 300),
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+        success: false,
+        message: "Too many requests. Please try again later.",
+        errors: []
+    }
+});
+
+function sameOriginRequest(req) {
+    const configuredOrigin = config.clientOrigin;
+    if (!configuredOrigin) return true;
+    const origin = req.get("origin");
+    if (origin) return origin === configuredOrigin;
+    const referer = req.get("referer");
+    if (referer) {
+        try { return new URL(referer).origin === configuredOrigin; } catch { return false; }
+    }
+    return true;
+}
+
+function csrfProtection(req, res, next) {
+    if (!["POST", "PUT", "PATCH", "DELETE"].includes(req.method)) return next();
+    if (!req.cookies || !Object.prototype.hasOwnProperty.call(req.cookies, require("./utils/authCookie").COOKIE_NAME)) return next();
+    if (!sameOriginRequest(req)) {
+        return res.status(403).json({
+            success: false,
+            message: "Cross-site request blocked.",
+            errors: []
+        });
+    }
+    return next();
+}
+
+function requestTargetLimit(req, res, next) {
+    if (req.originalUrl.length > Number(process.env.MAX_REQUEST_TARGET_LENGTH || 4096)) {
+        return res.status(414).json({
+            success: false,
+            message: "Request target is too large.",
+            errors: []
+        });
+    }
+    next();
+}
+
+app.use(requestTargetLimit);
+app.use(csrfProtection);
+
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 20,
@@ -145,7 +196,7 @@ app.use("/api/v1/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/v1/auth/verify-email", verificationLimiter);
 app.use("/api/v1/auth", authLimiter);
 
-app.use("/api/v1", apiRoutes);
+app.use("/api/v1", apiLimiter, apiRoutes);
 
 // Legacy health endpoint retained for existing tooling/frontend compatibility.
 app.get("/api/health", getHealth);
@@ -154,7 +205,7 @@ app.get("/api/health", getHealth);
  * Legacy API aliases are retained so the existing PrimeIt frontend
  * continues to work while the canonical API moves to /api/v1.
  */
-app.use("/api/auth/forgot-password", passwordRecoveryLimiter);
+app.use("/api", apiLimiter);\napp.use("/api/auth/forgot-password", passwordRecoveryLimiter);
 app.use("/api/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/auth/verify-email", verificationLimiter);
 app.use("/api/auth", authLimiter, require("./routes/auth"));
