@@ -24,7 +24,7 @@ function validationMiddleware(fn) {
 
 router.post("/signup", validationMiddleware(validators.signup), asyncHandler(authController.signup));
 router.post("/login", validationMiddleware(validators.login), asyncHandler(authController.login));
-router.post("/logout", asyncHandler(authController.logout));
+router.post("/logout", requireAuth, asyncHandler(authController.logout));
 router.get("/me", requireAuth, asyncHandler(authController.me));
 router.post("/verify-email", validationMiddleware(validators.verifyEmail), asyncHandler(authController.verifyEmail));
 router.post("/forgot-password", validationMiddleware(validators.forgotPassword), asyncHandler(authController.forgotPassword));
