@@ -1,5 +1,5 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
+const { hashPassword } = require("../utils/password");
 
 const { pool } = require("../db");
 const { getRoleByName } = require("../repositories/roleRepository");
@@ -45,6 +45,8 @@ router.post(
             const rawPassword = String(password || "");
             const normalizedRole = String(role || "member").trim().toLowerCase();
             const normalizedStatus = String(status || "active").trim().toLowerCase();
+
+            if (phone !== undefined && String(phone).trim().length > 30) errors.phone = "Phone must not exceed 30 characters.";
 
             /* =====================================================
                VALIDATION
@@ -413,7 +415,7 @@ router.put("/:id", requireAuth, requirePermission("members.update"), async (req,
         let passwordHash = null;
 
         if (password !== undefined && password !== "") {
-            passwordHash = await bcrypt.hash(password, 12);
+            passwordHash = await hashPassword(password);
         }
 
         if (passwordHash) {
