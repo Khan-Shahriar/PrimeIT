@@ -154,6 +154,18 @@ const passwordRecoveryLimiter = rateLimit({
     }
 });
 
+const sensitiveAccountLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+        success: false,
+        message: "Too many account security requests. Please try again later.",
+        errors: []
+    }
+});
+
 const verificationLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 5,
@@ -195,6 +207,8 @@ app.use("/admin", express.static(path.join(process.cwd(), "admin"), staticOption
 app.use("/api/v1/auth/forgot-password", passwordRecoveryLimiter);
 app.use("/api/v1/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/v1/auth/verify-email", verificationLimiter);
+app.use("/api/v1/auth/me/password", sensitiveAccountLimiter);
+app.use("/api/v1/auth/me/photo", sensitiveAccountLimiter);
 app.use("/api/v1/auth", authLimiter);
 
 app.use("/api/v1", apiLimiter, apiRoutes);
@@ -209,6 +223,8 @@ app.get("/api/health", getHealth);
 app.use("/api", apiLimiter);\napp.use("/api/auth/forgot-password", passwordRecoveryLimiter);
 app.use("/api/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/auth/verify-email", verificationLimiter);
+app.use("/api/auth/me/password", sensitiveAccountLimiter);
+app.use("/api/auth/me/photo", sensitiveAccountLimiter);
 app.use("/api/auth", authLimiter, require("./routes/auth"));
 app.use("/api/members", require("./routes/members"));
 app.use("/api/roles", require("./routes/roles"));
