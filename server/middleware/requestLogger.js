@@ -5,7 +5,7 @@ function requestLogger(req, res, next) {
         const durationMs = Number(process.hrtime.bigint() - startedAt) / 1e6;
         console.log("HTTP request", {
             method: req.method,
-            path: req.originalUrl,
+            path: req.path,
             status: res.statusCode,
             durationMs: Math.round(durationMs * 100) / 100
         });
