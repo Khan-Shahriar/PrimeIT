@@ -17,6 +17,23 @@ function createStoredName(format) {
     return `gallery-${crypto.randomUUID()}.${extensionForFormat(format)}`;
 }
 
+function resolveOriginalPath(filename) {
+    const safeName = String(filename || "");
+    if (!safeName || path.basename(safeName) !== safeName) {
+        throw new Error("Invalid gallery filename.");
+    }
+
+    const resolvedRoot = path.resolve(ORIGINALS);
+    const resolvedPath = path.resolve(resolvedRoot, safeName);
+    const relative = path.relative(resolvedRoot, resolvedPath);
+
+    if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) {
+        throw new Error("Invalid gallery filename.");
+    }
+
+    return resolvedPath;
+}
+
 function publicUrl(filename) {
     return `/media/gallery/${encodeURIComponent(filename)}`;
 }
@@ -24,17 +41,21 @@ function publicUrl(filename) {
 async function saveOriginal(buffer, format) {
     await ensureStorage();
     const filename = createStoredName(format);
-    const filePath = path.join(ORIGINALS, filename);
+    const filePath = resolveOriginalPath(filename);
     await fs.writeFile(filePath, buffer, { flag: "wx", mode: 0o640 });
     return { filename, filePath, url: publicUrl(filename) };
 }
 
 async function deleteFile(filename) {
     if (!filename) return;
-    const safeName = path.basename(filename);
-    if (safeName !== filename) return;
-    await fs.rm(path.join(ORIGINALS, safeName), { force: true });
+    let filePath;
+    try {
+        filePath = resolveOriginalPath(filename);
+    } catch {
+        return;
+    }
+    await fs.rm(filePath, { force: true });
 }
 
 
-module.exports = { ROOT, ORIGINALS, ensureStorage, saveOriginal, deleteFile, publicUrl };
+module.exports = { ROOT, ORIGINALS, ensureStorage, saveOriginal, deleteFile, publicUrl, resolveOriginalPath };
