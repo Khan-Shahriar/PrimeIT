@@ -28,6 +28,7 @@ The existing `/api/*` endpoints are retained as compatibility aliases while the 
 4. Run syntax checks: `npm run check`
 5. Start the server: `npm run dev`
 6. Verify the API: `npm run test:health`
+7. Run the security static audit: `npm run security:check`
 
 ## Backend structure
 
