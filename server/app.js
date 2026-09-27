@@ -23,7 +23,28 @@ app.disable("x-powered-by");
 
 app.use(
     helmet({
-        crossOriginResourcePolicy: false
+        crossOriginResourcePolicy: false,
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                baseUri: ["'self'"],
+                formAction: ["'self'"],
+                frameAncestors: ["'none'"],
+                objectSrc: ["'none'"],
+                scriptSrc: ["'self'"],
+                scriptSrcAttr: ["'none'"],
+                styleSrc: ["'self'"],
+                imgSrc: ["'self'", "data:", "blob:"],
+                fontSrc: ["'self'", "data:"],
+                connectSrc: ["'self'"],
+                mediaSrc: ["'self'", "blob:"],
+                workerSrc: ["'self'", "blob:"],
+                manifestSrc: ["'self'"],
+                frameSrc: ["'none'"],
+                childSrc: ["'self'", "blob:"],
+                upgradeInsecureRequests: []
+            }
+        }
     })
 );
 
