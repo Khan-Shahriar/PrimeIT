@@ -15,7 +15,7 @@ function getConfig() {
         isProduction: nodeEnv === "production",
         port: parsePort(process.env.PORT || DEFAULT_PORT),
         clientOrigin: process.env.CLIENT_ORIGIN?.trim() || "",
-        bodyLimit: process.env.API_BODY_LIMIT?.trim() || "1mb",
+        bodyLimit,\n        apiRateLimitMax,\n        maxRequestTargetLength,
         gallery: {
             uploadDir: process.env.GALLERY_UPLOAD_DIR?.trim() || path.join(process.cwd(), "uploads", "gallery"),
             maxImageSize: Number(process.env.MAX_IMAGE_SIZE || 10 * 1024 * 1024),
