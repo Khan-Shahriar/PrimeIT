@@ -182,7 +182,8 @@ const staticOptions = {
     fallthrough: true
 };
 
-app.use("/media/gallery", require("./routes/galleryMedia"));
+const mediaLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 600, standardHeaders: true, legacyHeaders: false });
+app.use("/media/gallery", mediaLimiter, require("./routes/galleryMedia"));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads"), staticOptions));
 app.use("/assets", express.static(path.join(process.cwd(), "assets"), staticOptions));
 app.use("/css", express.static(path.join(process.cwd(), "css"), staticOptions));
