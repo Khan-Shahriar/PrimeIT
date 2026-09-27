@@ -37,4 +37,4 @@ async function updatePassword(userId, passwordHash) {
     await pool.query("UPDATE users SET password_hash = ?, auth_token_version = COALESCE(auth_token_version, 0) + 1 WHERE id = ?", [passwordHash, userId]);
 }
 
-module.exports = { findUserByEmail, findUserById, getUserForAuth, createUser, updateVerification, findVerificationUser, consumeVerification, updatePassword };
+async function invalidateTokens(userId) {\n    await pool.query("UPDATE users SET auth_token_version = COALESCE(auth_token_version, 0) + 1 WHERE id = ?", [userId]);\n}\n\nmodule.exports = { findUserByEmail, findUserById, getUserForAuth, createUser, updateVerification, findVerificationUser, consumeVerification, updatePassword , invalidateTokens};
