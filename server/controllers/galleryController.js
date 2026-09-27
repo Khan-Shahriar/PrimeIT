@@ -1,13 +1,23 @@
 const galleryService = require("../services/galleryService");
 
 async function listPublic(req, res) {
-    const items = await galleryService.list({ admin: false });
-    return res.json({ success: true, data: items });
+    const limit = Number(req.query.limit ?? 50);
+    const offset = Number(req.query.offset ?? 0);
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100 || !Number.isInteger(offset) || offset < 0 || offset > 1000000) {
+        return res.status(400).json({ success: false, message: "Invalid pagination parameters" });
+    }
+    const result = await galleryService.list({ admin: false, limit, offset });
+    return res.json({ success: true, data: result.items, pagination: { limit, offset, total: result.total } });
 }
 
 async function listAdmin(req, res) {
-    const items = await galleryService.list({ admin: true });
-    return res.json({ success: true, data: items });
+    const limit = Number(req.query.limit ?? 50);
+    const offset = Number(req.query.offset ?? 0);
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100 || !Number.isInteger(offset) || offset < 0 || offset > 1000000) {
+        return res.status(400).json({ success: false, message: "Invalid pagination parameters" });
+    }
+    const result = await galleryService.list({ admin: true, limit, offset });
+    return res.json({ success: true, data: result.items, pagination: { limit, offset, total: result.total } });
 }
 
 async function getOne(req, res) {
