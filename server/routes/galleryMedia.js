@@ -1,11 +1,10 @@
 const express = require("express");
-const path = require("path");
 const fs = require("fs");
 const { getUserForAuth } = require("../repositories/authRepository");
 const { verifyAccessToken } = require("../utils/jwt");
 const { COOKIE_NAME } = require("../utils/authCookie");
 const galleryRepository = require("../repositories/galleryRepository");
-const { ORIGINALS } = require("../services/galleryStorageService");
+const { resolveOriginalPath } = require("../services/galleryStorageService");
 
 const router = express.Router();
 
@@ -49,7 +48,13 @@ router.get("/:filename", async (req, res, next) => {
             return res.status(404).end();
         }
 
-        const filePath = path.join(ORIGINALS, filename);
+        let filePath;
+        try {
+            filePath = resolveOriginalPath(filename);
+        } catch {
+            return res.status(404).end();
+        }
+
         if (!fs.existsSync(filePath)) return res.status(404).end();
 
         return res.sendFile(filePath, {
