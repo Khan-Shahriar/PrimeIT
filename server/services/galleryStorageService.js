@@ -37,4 +37,4 @@ async function deleteFile(filename) {
 }
 
 
-module.exports = { ROOT, ORIGINALS, ensureStorage, saveOriginal, replaceOriginal, deleteFile, publicUrl };
+module.exports = { ROOT, ORIGINALS, ensureStorage, saveOriginal, deleteFile, publicUrl };
