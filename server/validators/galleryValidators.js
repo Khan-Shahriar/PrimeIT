@@ -64,7 +64,12 @@ function validateImageBuffer(buffer, suppliedMime = "") {
     let width = 0;
     let height = 0;
 
-    if (buffer.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))) {
+    if (
+        buffer.length >= 33 &&
+        buffer.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) &&
+        buffer.readUInt32BE(8) === 13 &&
+        buffer.subarray(12, 16).toString("ascii") === "IHDR"
+    ) {
         detected = "png";
         width = buffer.readUInt32BE(16);
         height = buffer.readUInt32BE(20);
@@ -98,7 +103,12 @@ function validateImageBuffer(buffer, suppliedMime = "") {
         return { valid: false, message: "The image dimensions could not be validated." };
     }
 
-    if (width > MAX_WIDTH || height > MAX_HEIGHT || width * height > MAX_PIXELS) {
+    if (
+        width > MAX_WIDTH ||
+        height > MAX_HEIGHT ||
+        !Number.isSafeInteger(width * height) ||
+        width * height > MAX_PIXELS
+    ) {
         return { valid: false, message: "The image dimensions are too large." };
     }
 
@@ -152,7 +162,7 @@ function readWebpDimensions(buffer) {
         const b0 = buffer[21], b1 = buffer[22], b2 = buffer[23], b3 = buffer[24];
         return {
             width: 1 + (((b2 & 0x3f) << 8) | b1),
-            height: 1 + (((b3 & 0xf0) << 6) | b2)
+            height: 1 + (((b3 & 0xf0) << 4) | (b2 >> 2))
         };
     }
     return null;
