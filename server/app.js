@@ -21,6 +21,14 @@ const app = express();
 
 app.disable("x-powered-by");
 
+app.use((req, res, next) => {
+    const method = String(req.method || "").toUpperCase();
+    if (["TRACE", "TRACK", "CONNECT", "DEBUG"].includes(method)) {
+        return res.status(405).set("Allow", "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS").end();
+    }
+    next();
+});
+
 app.use(
     helmet({
         crossOriginResourcePolicy: false,
