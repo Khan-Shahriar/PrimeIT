@@ -531,6 +531,14 @@ router.get(
     requirePermission("members.view"),
     async (req, res) => {
         try {
+            const limitValue = Number(req.query.limit ?? 50);
+            const offsetValue = Number(req.query.offset ?? 0);
+            if (!Number.isInteger(limitValue) || limitValue < 1 || limitValue > 100 ||
+                !Number.isInteger(offsetValue) || offsetValue < 0 || offsetValue > 1000000) {
+                return res.status(400).json({ success: false, message: "Invalid pagination parameters" });
+            }
+
+            const [[countRow]] = await pool.query("SELECT COUNT(*) AS total FROM users");
             const [users] = await pool.query(
                 `SELECT
                     id,
@@ -544,12 +552,19 @@ router.get(
                     created_at,
                     updated_at
                  FROM users
-                 ORDER BY created_at DESC`
+                 ORDER BY created_at DESC
+                 LIMIT ? OFFSET ?`,
+                [limitValue, offsetValue]
             );
 
             return res.json({
                 success: true,
-                members: users
+                members: users,
+                pagination: {
+                    limit: limitValue,
+                    offset: offsetValue,
+                    total: Number(countRow.total)
+                }
             });
 
         } catch (error) {
