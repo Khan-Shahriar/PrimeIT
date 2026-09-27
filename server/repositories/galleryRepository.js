@@ -22,10 +22,16 @@ const SELECT_FIELDS = `
     g.uploaded_by AS uploadedBy
 `;
 
-async function list({ admin = false } = {}) {
+async function list({ admin = false, limit = 50, offset = 0 } = {}) {
     const where = admin ? "" : "WHERE g.status = 'Published'";
-    const [rows] = await pool.query(`SELECT ${SELECT_FIELDS} FROM gallery_media g ${where} ORDER BY g.is_featured DESC, COALESCE(g.published_at, g.uploaded_at) DESC, g.id DESC`);
-    return rows;
+    const [rows] = await pool.query(
+        `SELECT ${SELECT_FIELDS} FROM gallery_media g ${where}
+         ORDER BY g.is_featured DESC, COALESCE(g.published_at, g.uploaded_at) DESC, g.id DESC
+         LIMIT ? OFFSET ?`,
+        [limit, offset]
+    );
+    const [[countRow]] = await pool.query(`SELECT COUNT(*) AS total FROM gallery_media g ${where}`);
+    return { items: rows, total: Number(countRow.total) };
 }
 
 async function findByStoredFilename(filename) {
