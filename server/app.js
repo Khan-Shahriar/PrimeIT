@@ -220,7 +220,8 @@ app.get("/api/health", getHealth);
  * Legacy API aliases are retained so the existing PrimeIt frontend
  * continues to work while the canonical API moves to /api/v1.
  */
-app.use("/api", apiLimiter);\napp.use("/api/auth/forgot-password", passwordRecoveryLimiter);
+app.use("/api", apiLimiter);
+app.use("/api/auth/forgot-password", passwordRecoveryLimiter);
 app.use("/api/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/auth/verify-email", verificationLimiter);
 app.use("/api/auth/me/password", sensitiveAccountLimiter);
