@@ -1,7 +1,9 @@
 const express = require("express");
 const { pool } = require("../db");
 const { requireAuth } = require("../middleware/auth");
-const profileUpload = require("../middleware/profileUpload");
+const { profileUpload } = require("../middleware/profileUpload");
+const { validateImageBuffer } = require("../validators/galleryValidators");
+const { saveProfile, deleteProfile } = require("../services/profileStorageService");
 const { clearAuthCookie } = require("../utils/authCookie");
 const asyncHandler = require("../middleware/asyncHandler");
 const validate = require("../middleware/validate");
@@ -56,7 +58,7 @@ router.put("/me", requireAuth, asyncHandler(async (req, res) => {
 router.post("/me/photo", requireAuth, (req, res, next) => {
     profileUpload.single("profile_photo")(req, res, error => {
         if (error) {
-            return res.status(400).json({
+            return res.status(error.code === "LIMIT_FILE_SIZE" ? 413 : 400).json({
                 success: false,
                 message: error.code === "LIMIT_FILE_SIZE"
                     ? "Profile photo must be 2 MB or smaller."
@@ -67,9 +69,23 @@ router.post("/me/photo", requireAuth, (req, res, next) => {
     });
 }, asyncHandler(async (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: "Profile photo is required" });
-    const photoPath = "/uploads/profiles/" + req.file.filename;
-    await pool.query("UPDATE users SET profile_photo = ? WHERE id = ?", [photoPath, req.user.id]);
-    return res.json({ success: true, message: "Profile photo uploaded successfully", profile_photo: photoPath });
+
+    const image = validateImageBuffer(req.file.buffer, req.file.mimetype);
+    if (!image.valid) return res.status(400).json({ success: false, message: image.message });
+
+    const stored = await saveProfile(req.file.buffer, image.format, req.user.id);
+    const [users] = await pool.query("SELECT profile_photo FROM users WHERE id = ? LIMIT 1", [req.user.id]);
+    const previousPhoto = users[0]?.profile_photo || null;
+
+    try {
+        await pool.query("UPDATE users SET profile_photo = ? WHERE id = ?", [stored.url, req.user.id]);
+        await deleteProfile(previousPhoto);
+    } catch (error) {
+        await deleteProfile(stored.filename);
+        throw error;
+    }
+
+    return res.json({ success: true, message: "Profile photo uploaded successfully", profile_photo: stored.url });
 }));
 
 router.put("/me/password", requireAuth, asyncHandler(async (req, res) => {
