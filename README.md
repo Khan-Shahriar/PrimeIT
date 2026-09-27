@@ -72,3 +72,7 @@ Run the additive migration before using gallery management:
 Gallery API endpoints use the canonical `/api/v1/gallery` namespace. Gallery management is protected by the existing Section 28 permissions: `gallery.view`, `gallery.create`, `gallery.update`, `gallery.publish`, and `gallery.archive`.
 
 Uploaded media is intentionally excluded from Git. Do not commit files from `uploads/gallery/`.
+
+## Security
+
+Section 31 security hardening covers authentication/session invalidation, cookie and CSRF defenses, RBAC/privilege controls, request and API rate limits, upload/path validation, static-file protection, safe logging/errors, dependency checks, and automated security checks. See `SECURITY.md` for the production security checklist.
