@@ -6,17 +6,6 @@ const announcementController = require("../controllers/announcementController");
 const router = express.Router();
 
 router.get(
-    "/",
-    requireAuth,
-    requirePermission("announcements.view"),
-    (req, res, next) => {
-        req.announcementAdmin = false;
-        next();
-    },
-    asyncHandler(announcementController.list)
-);
-
-router.get(
     "/admin",
     requireAuth,
     requirePermission("announcements.view"),
@@ -28,9 +17,35 @@ router.get(
 );
 
 router.get(
+    "/admin/:id",
+    requireAuth,
+    requirePermission("announcements.view"),
+    (req, res, next) => {
+        req.announcementAdmin = true;
+        next();
+    },
+    asyncHandler(announcementController.get)
+);
+
+router.get(
+    "/",
+    requireAuth,
+    requirePermission("announcements.view"),
+    (req, res, next) => {
+        req.announcementAdmin = false;
+        next();
+    },
+    asyncHandler(announcementController.list)
+);
+
+router.get(
     "/:id",
     requireAuth,
     requirePermission("announcements.view"),
+    (req, res, next) => {
+        req.announcementAdmin = false;
+        next();
+    },
     asyncHandler(announcementController.get)
 );
 
