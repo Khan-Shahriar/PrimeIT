@@ -147,3 +147,8 @@ The Member Management frontend now uses the authenticated `/api/v1/members` REST
 Office Information now has an authenticated REST backend backed by MySQL, with typed records for office details, working hours, departments, important contacts, policies, and resources. Member reads use `GET /api/v1/office-information`; administrator management uses `GET /api/v1/office-information/admin` plus protected create/update/archive operations. The existing member and administrator Office Information pages now consume the API without replacing their UI.
 
 The public Contact form now submits validated inquiries to `POST /api/v1/contact`. Contact inquiries are stored in MySQL, protected by a public submission rate limit, and can be reviewed/updated through protected administrator API endpoints using `contact_inquiries.view` and `contact_inquiries.update` permissions. Run `sql/section-38-office-contact.sql` before using these features.
+
+
+## Section 39 — Final QA & Production Sign-off
+
+PrimeIt is now in final QA rather than feature development. The full regression checklist is documented in `docs/SECTION-39-FINAL-QA.md`. Automated syntax, security, frontend, health, authentication, and RBAC checks must pass before browser regression. Production sign-off remains pending until the browser checklist and end-to-end verification are completed successfully.
