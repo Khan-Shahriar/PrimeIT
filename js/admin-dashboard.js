@@ -1,207 +1,70 @@
 (() => {
   "use strict";
+  const state={loaded:false};
+  const $=(s,r=document)=>r.querySelector(s);
 
-  const dashboard = {
-    state: {
-      status: "ready",
-      data: null,
-      logoutRequested: false
-    },
-
-    // The 2026 holiday values are the project-defined calendar data.
-    // Later API/database integration should replace this source of truth.
-    knownHolidays: [
-      { name: "New Year", date: "2026-01-01" },
-      { name: "Memorial Day", date: "2026-05-25" },
-      { name: "Independence Day", date: "2026-07-04" },
-      { name: "Labor Day", date: "2026-09-07" },
-      { name: "Thanksgiving", date: "2026-11-26" },
-      { name: "Christmas", date: "2026-12-25" }
-    ],
-
-    init() {
-      this.cacheElements();
-      this.bindNavigation();
-      this.bindLogout();
-      this.renderCurrentDate();
-      this.renderUpcomingHolidays();
-      this.prepareDataStates();
-    },
-
-    cacheElements() {
-      this.sidebar = document.querySelector("#admin-sidebar");
-      this.sidebarToggle = document.querySelector("[data-sidebar-toggle]");
-      this.sidebarClose = document.querySelector("[data-sidebar-close]");
-      this.logoutButton = document.querySelector("[data-logout]");
-      this.dashboardStatus = document.querySelector("[data-dashboard-status]");
-      this.message = document.querySelector("[data-dashboard-message]");
-    },
-
-    bindNavigation() {
-      if (!this.sidebar || !this.sidebarToggle) return;
-
-      this.sidebarToggle.addEventListener("click", () => {
-        const isOpen = this.sidebar.classList.toggle("open");
-        this.sidebarToggle.setAttribute("aria-expanded", String(isOpen));
-        this.sidebarToggle.setAttribute(
-          "aria-label",
-          isOpen ? "Close admin navigation" : "Open admin navigation"
-        );
-        document.body.classList.toggle("sidebar-open", isOpen);
-        if (this.sidebarClose) this.sidebarClose.hidden = !isOpen;
-      });
-
-      this.sidebarClose?.addEventListener("click", () => this.closeSidebar());
-
-      this.sidebar.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => this.closeSidebar());
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerWidth > 680) this.closeSidebar();
-      });
-    },
-
-    closeSidebar() {
-      if (!this.sidebar) return;
-      this.sidebar.classList.remove("open");
-      this.sidebarToggle?.setAttribute("aria-expanded", "false");
-      this.sidebarToggle?.setAttribute("aria-label", "Open admin navigation");
-      document.body.classList.remove("sidebar-open");
-      if (this.sidebarClose) this.sidebarClose.hidden = true;
-    },
-
-    bindLogout() {
-      // Server-side logout is handled by js/auth-guard.js.
-    },
-
-    renderCurrentDate() {
-      const element = document.querySelector("[data-current-date]");
-      if (!element) return;
-
-      const now = new Date();
-      const formatted = new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      }).format(now);
-
-      element.textContent = formatted;
-      element.dateTime = now.toISOString().slice(0, 10);
-    },
-
-    renderUpcomingHolidays() {
-      const container = document.querySelector("[data-holiday-list]");
-      if (!container) return;
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const upcoming = this.knownHolidays
-        .filter((holiday) => new Date(holiday.date + "T00:00:00") >= today)
-        .slice(0, 3);
-
-      if (!upcoming.length) {
-        container.innerHTML = '<p class="holiday-empty">No upcoming holidays are available.</p>';
-        return;
-      }
-
-      container.replaceChildren(
-        ...upcoming.map((holiday) => {
-          const item = document.createElement("div");
-          item.className = "holiday-item";
-
-          const name = document.createElement("span");
-          name.className = "holiday-name";
-          name.textContent = holiday.name;
-
-          const date = document.createElement("time");
-          date.className = "holiday-date";
-          date.dateTime = holiday.date;
-          date.textContent = this.formatHolidayDate(holiday.date);
-
-          item.append(name, date);
-          return item;
-        })
-      );
-    },
-
-    formatHolidayDate(dateValue) {
-      return new Intl.DateTimeFormat("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      }).format(new Date(dateValue + "T00:00:00"));
-    },
-
-    prepareDataStates() {
-      this.setStatisticsUnavailable();
-      this.setOverviewUnavailable();
-      this.setGalleryUnavailable();
-      this.setStatus("Dashboard data is ready for future REST API integration.");
-    },
-
-    setStatisticsUnavailable() {
-      document.querySelectorAll("[data-stat-card]").forEach((card) => {
-        const value = card.querySelector("[data-stat-value]");
-        const meta = card.querySelector("[data-stat-meta]");
-        if (value) value.textContent = "—";
-        if (meta) meta.textContent = "Data unavailable";
-        card.classList.remove("is-loading");
-      });
-    },
-
-    setOverviewUnavailable() {
-      document.querySelectorAll("[data-overview-value]").forEach((element) => {
-        element.textContent = "—";
-      });
-    },
-
-    setGalleryUnavailable() {
-      const count = document.querySelector("[data-gallery-count]");
-      const state = document.querySelector("[data-gallery-state]");
-      if (count) count.textContent = "—";
-      if (state) state.textContent = "Gallery data is not available yet.";
-    },
-
-    setStatus(message) {
-      if (this.dashboardStatus) this.dashboardStatus.textContent = message;
-    },
-
-    showMessage(message) {
-      if (!this.message) return;
-      this.message.textContent = message;
-      this.message.hidden = false;
-      window.clearTimeout(this.messageTimer);
-      this.messageTimer = window.setTimeout(() => {
-        this.message.hidden = true;
-      }, 4500);
-    },
-
-    // Future API boundary. No endpoint is assumed here.
-    async loadDashboardData(fetcher) {
-      if (typeof fetcher !== "function") {
-        this.setStatus("Dashboard data source is not connected yet.");
-        return null;
-      }
-
-      this.setStatus("Loading dashboard data…");
-
-      try {
-        const data = await fetcher();
-        this.state.data = data;
-        this.state.status = "loaded";
-        this.setStatus("Dashboard data loaded.");
-        return data;
-      } catch {
-        this.state.status = "error";
-        this.setStatus("Dashboard data could not be loaded.");
-        this.showMessage("Dashboard information is temporarily unavailable.");
-        return null;
-      }
-    }
-  };
-
-  document.addEventListener("DOMContentLoaded", () => dashboard.init());
-  window.PrimeItAdminDashboard = dashboard;
+  function setCard(key,value,meta){
+    const card=$('[data-stat-card="'+key+'"]');
+    if(!card)return;
+    const v=card.querySelector("[data-stat-value]"),m=card.querySelector("[data-stat-meta]");
+    if(v)v.textContent=String(value);
+    if(m)m.textContent=meta||"Loaded from API";
+  }
+  function dateText(v){const d=new Date(String(v).length===10?v+"T00:00:00":v);return Number.isNaN(d.getTime())?"—":new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",year:"numeric"}).format(d)}
+  function renderHolidays(items){
+    const box=$("[data-holiday-list]");if(!box)return;
+    const today=new Date();today.setHours(0,0,0,0);
+    const rows=(Array.isArray(items)?items:[]).filter(h=>new Date(String(h.date).slice(0,10)+"T00:00:00")>=today).slice(0,5);
+    setCard("holidays",rows.length,rows.length+" upcoming in current calendar");
+    box.replaceChildren();
+    if(!rows.length){const p=document.createElement("p");p.className="holiday-empty";p.textContent="No upcoming holidays are available.";box.appendChild(p);return}
+    rows.forEach(h=>{const item=document.createElement("div");item.className="holiday-item";const n=document.createElement("span");n.className="holiday-name";n.textContent=h.name||"Company Holiday";const d=document.createElement("time");d.className="holiday-date";d.dateTime=h.date||"";d.textContent=dateText(h.date);item.append(n,d);box.appendChild(item)})
+  }
+  function renderMembers(data){
+    const total=Number(data?.pagination?.total ?? data?.members?.length ?? 0);
+    const members=Array.isArray(data?.members)?data.members:[];
+    const active=members.filter(m=>String(m.status).toLowerCase()==="active").length;
+    setCard("members",total,"Total member accounts");
+    $("[data-overview-value='members]")?.textContent;
+    const a=$("[data-overview-value='active-members']"); if(a)a.textContent=String(active);
+    const n=$("[data-state-note='members']");if(n)n.textContent="Member data loaded from the authenticated member service.";
+  }
+  function renderLeave(data){
+    const pending=Number(data?.stats?.pending ?? data?.stats?.Pending ?? 0);
+    setCard("leave",pending,"Pending requests");
+    const panel=$("[data-state-panel='leave']");
+    if(panel){panel.innerHTML="";const p=document.createElement("p");p.textContent=pending?pending+" pending leave request"+(pending===1?"":"s")+" require review.":"No pending leave requests.";panel.appendChild(p)}
+  }
+  function renderAnnouncements(data){
+    const rows=Array.isArray(data?.announcements)?data.announcements:[];
+    setCard("announcements",Number(data?.pagination?.total ?? rows.length),"Announcement records");
+    const panel=$("[data-state-panel='announcements']");
+    if(panel){panel.innerHTML="";const p=document.createElement("p");p.textContent=rows.length?"Recent announcement data is available.":"No announcements available.";panel.appendChild(p)}
+  }
+  function renderGallery(data){
+    const total=Number(data?.pagination?.total ?? data?.data?.length ?? 0);
+    setCard("gallery",total,"Published gallery items");
+    const c=$("[data-gallery-count]");if(c)c.textContent=String(total);
+    const s=$("[data-gallery-state]");if(s)s.textContent="Gallery data loaded from the public gallery service.";
+  }
+  async function load(){
+    const year=new Date().getFullYear();
+    const results=await Promise.allSettled([
+      PrimeItApi.get("/members?limit=1&offset=0"),
+      PrimeItApi.get("/leave/admin?limit=1&offset=0&year="+year),
+      PrimeItApi.get("/announcements/admin?limit=1&offset=0"),
+      PrimeItApi.get("/gallery?limit=1&offset=0"),
+      PrimeItApi.get("/holidays?year="+year+"&status=Active")
+    ]);
+    const handlers=[renderMembers,renderLeave,renderAnnouncements,renderGallery,(r)=>renderHolidays(r.holidays)];
+    results.forEach((r,i)=>{if(r.status==="fulfilled")handlers[i](r.value)});
+    state.loaded=true;
+    const status=$("[data-dashboard-status]");if(status)status.textContent="Dashboard data loaded from the server.";
+  }
+  function nav(){
+    const sidebar=$("#admin-sidebar"),toggle=$("[data-sidebar-toggle]"),close=$("[data-sidebar-close]");
+    toggle?.addEventListener("click",()=>{const open=sidebar.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open));toggle.setAttribute("aria-label",open?"Close admin navigation":"Open admin navigation");document.body.classList.toggle("sidebar-open",open);if(close)close.hidden=!open});
+    close?.addEventListener("click",()=>{sidebar.classList.remove("open");toggle?.setAttribute("aria-expanded","false");document.body.classList.remove("sidebar-open");if(close)close.hidden=true});
+  }
+  document.addEventListener("DOMContentLoaded",()=>{const d=$("[data-current-date]");if(d){const now=new Date();d.textContent=dateText(now);d.dateTime=now.toISOString().slice(0,10)}nav();load().catch(()=>{})});
 })();
