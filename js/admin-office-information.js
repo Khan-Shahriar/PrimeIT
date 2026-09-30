@@ -355,11 +355,22 @@
         const item = findItem(type, id);
         if (!item) return;
         try {
-            await window.PrimeItApi.delete('/office-information/' + encodeURIComponent(id));
-            await loadOfficeInformation();
-            showToast('Office information record archived.');
+            if (item.status === 'archived') {
+                await window.PrimeItApi.patch('/office-information/' + encodeURIComponent(id), {
+                    recordType: type,
+                    status: (type === 'policy' || type === 'resource') ? 'draft' : 'active',
+                    title: item.title || item.name || null,
+                    data: Object.fromEntries(Object.entries(item).filter(([key]) => key !== 'id' && key !== 'status'))
+                });
+                await loadOfficeInformation();
+                showToast('Office information record restored.');
+            } else {
+                await window.PrimeItApi.delete('/office-information/' + encodeURIComponent(id));
+                await loadOfficeInformation();
+                showToast('Office information record archived.');
+            }
         } catch (error) {
-            showToast(error?.message || 'Unable to archive this record.');
+            showToast(error?.message || 'Unable to update this record.');
         }
     }
 
