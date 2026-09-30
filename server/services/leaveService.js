@@ -5,6 +5,13 @@ const LEAVE_TYPES = new Set(["holiday", "casual", "sick"]);
 const STATUSES = new Set(["Pending", "Approved", "Rejected", "Cancelled"]);
 const MAX_DAYS = 31;
 
+function getYear(value) {
+    const date = new Date(value);
+    const year = date.getUTCFullYear();
+    if (!Number.isInteger(year) || year < 2000 || year > 2100) throw makeError("Invalid leave request date.", 400);
+    return year;
+}
+
 function makeError(message, statusCode = 400, errors = null) {
     const error = new Error(message);
     error.statusCode = statusCode;
@@ -133,10 +140,11 @@ async function reviewRequest(reviewerId, requestId, decision, reviewerComment = 
         if (request.status !== "Pending") throw makeError("Only pending leave requests can be reviewed.", 409);
 
         if (normalizedDecision === "approve") {
-            const year = Number(String(request.startDate).slice(0, 4));
+            const year = getYear(request.startDate);
             await leaveRepository.ensureBalances(request.userId, year, connection);
-            const balance = await leaveRepository.getBalance(request.userId, request.leaveType, year, connection);
-            if (!balance || Number(request.duration) > balance.remaining) {
+            const balance = await leaveRepository.getBalance(request.userId, request.leaveType, year, connection, id);
+            const remainingForApproval = balance ? balance.remaining + Number(request.duration) : 0;
+            if (!balance || Number(request.duration) > remainingForApproval) {
                 throw makeError("The requested leave no longer fits the member's remaining balance.", 409);
             }
         }
