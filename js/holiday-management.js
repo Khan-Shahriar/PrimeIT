@@ -55,11 +55,19 @@
   };
 
   const api = {
-    // Future REST adapter boundary. Final endpoints are intentionally not defined in Section 19.
-    async listHolidays() { throw new Error("API_NOT_CONNECTED"); },
-    async createHoliday(payload) { void payload; throw new Error("API_NOT_CONNECTED"); },
-    async updateHoliday(id, payload) { void id; void payload; throw new Error("API_NOT_CONNECTED"); },
-    async removeHoliday(id) { void id; throw new Error("API_NOT_CONNECTED"); }
+    async listHolidays() {
+      const response = await PrimeItApi.get("/holidays");
+      return response?.holidays || [];
+    },
+    async createHoliday(payload) {
+      return PrimeItApi.post("/holidays", payload);
+    },
+    async updateHoliday(id, payload) {
+      return PrimeItApi.patch("/holidays/" + encodeURIComponent(id), payload);
+    },
+    async removeHoliday(id) {
+      return PrimeItApi.delete("/holidays/" + encodeURIComponent(id));
+    }
   };
 
   const TYPES = new Set(["Public Holiday","Company Holiday","Optional Holiday","Other"]);
@@ -441,8 +449,9 @@
 
     try {
       await api.removeHoliday(state.pendingRemove.id);
-      els.confirmState.textContent = "The backend must confirm this operation before the holiday is removed.";
-      showToast("Holiday removal is not connected to the backend yet.");
+      closeModals();
+      showToast("Holiday removed successfully.");
+      await loadData();
     } catch (error) {
       if (error?.message === "API_NOT_CONNECTED") {
         els.confirmState.textContent = "REST API integration is required before removal can be completed. No local record was changed.";
