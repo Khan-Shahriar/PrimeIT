@@ -111,6 +111,10 @@ async function listMemberRequests(userId, options) {
     return leaveRepository.listForUser(userId, options);
 }
 
+async function countMemberRequests(userId) {
+    return leaveRepository.countForUser(userId);
+}
+
 async function getMemberBalance(userId, year = new Date().getFullYear()) {
     return leaveRepository.getBalancesForUser(userId, Number(year));
 }
@@ -178,6 +182,7 @@ async function getAdminData(options = {}) {
 module.exports = {
     createRequest,
     listMemberRequests,
+    countMemberRequests,
     getMemberBalance,
     cancelOwnRequest,
     reviewRequest,
