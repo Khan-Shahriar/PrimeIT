@@ -107,7 +107,7 @@
 
           <div class="state-panel state-error" id="balance-error" hidden role="alert">
             <strong>Unable to load your leave balance.</strong>
-            <p>Please try again. Your balance will be retrieved from the authenticated account when API integration is enabled.</p>
+            <p>Please try again. Your balance is retrieved from the authenticated member account.</p>
             <button class="btn btn-secondary btn-sm" type="button" data-action="retry-balance">Try again</button>
           </div>
         </section>
@@ -123,7 +123,7 @@
 
           <div class="card form-card">
             <div class="notice" id="request-api-notice">
-              Leave requests are not submitted yet. This interface is prepared for the future PrimeIt REST API.
+              Leave requests are submitted securely through the PrimeIt REST API. Server-side validation and authorization remain authoritative.
             </div>
 
             <form id="leave-request-form" novalidate>
@@ -196,7 +196,7 @@
             <div>
               <span class="section-label">History</span>
               <h2 id="leave-history-title">My Leave Requests</h2>
-              <p class="section-description">Only requests belonging to the authenticated member should be returned by the future API.</p>
+              <p class="section-description">Only requests belonging to the authenticated member are returned by the leave service.</p>
             </div>
           </div>
 
@@ -207,7 +207,7 @@
 
           <div class="state-panel state-empty" id="history-empty">
             <strong>No leave requests yet.</strong>
-            <p>Your submitted requests will appear here once they are returned by the leave service.</p>
+            <p>Your submitted requests are loaded from the leave service.</p>
           </div>
 
           <div class="state-panel state-error" id="history-error" hidden role="alert">
@@ -289,7 +289,7 @@
       <button class="modal-close" type="button" data-action="close-cancel-modal" aria-label="Close cancellation confirmation">×</button>
       <span class="modal-label">Request action</span>
       <h2 id="cancel-modal-title">Cancel this leave request?</h2>
-      <p id="cancel-modal-description">This action will be sent to the future leave service for validation. The frontend will not mark the request cancelled by itself.</p>
+      <p id="cancel-modal-description">This action is validated and completed by the leave service. The frontend updates only after server confirmation.</p>
       <div class="modal-request-summary" id="cancel-request-summary"></div>
       <div class="modal-actions">
         <button class="btn btn-secondary" type="button" data-action="close-cancel-modal">Keep Request</button>
