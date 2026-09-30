@@ -46,7 +46,7 @@
         <div>
           <p class="eyebrow">Administrative review</p>
           <h1 id="page-title">Leave Management</h1>
-          <p>Review member leave requests and prepare approval decisions for the future leave service.</p>
+          <p>Review member leave requests and submit approval or rejection decisions through the leave service.</p>
         </div>
         <button class="btn btn-secondary" type="button" data-action="refresh">Refresh</button>
       </header>
@@ -57,7 +57,7 @@
         <article class="kpi-card"><span>Pending Requests</span><strong data-stat="pending">—</strong><small data-stat-meta="pending">Unavailable</small></article>
         <article class="kpi-card"><span>Approved Requests</span><strong data-stat="approved">—</strong><small data-stat-meta="approved">Unavailable</small></article>
         <article class="kpi-card"><span>Rejected Requests</span><strong data-stat="rejected">—</strong><small data-stat-meta="rejected">Unavailable</small></article>
-        <p class="sr-status" role="status" aria-live="polite" data-page-status>Leave data is ready for future REST API integration.</p>
+        <p class="sr-status" role="status" aria-live="polite" data-page-status>Leave data is connected to the PrimeIt REST API.</p>
       </section>
 
       <section class="card filter-card" aria-labelledby="filters-title">
@@ -84,7 +84,7 @@
           <div><p class="section-kicker">Requests</p><h2 id="requests-title">Leave Requests</h2><p class="section-description" data-result-summary>No request data available.</p></div>
         </div>
         <div class="state-panel loading-state" data-state="loading" hidden role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span><span>Loading leave requests…</span></div>
-        <div class="state-panel empty-state" data-state="empty"><strong>No leave requests available.</strong><p>Requests will appear here when the future REST API supplies administrative leave data. No production requests are fabricated on this page.</p></div>
+        <div class="state-panel empty-state" data-state="empty"><strong>No leave requests available.</strong><p>Requests are loaded from the administrative leave service. No local production data is fabricated on this page.</p></div>
         <div class="state-panel error-state" data-state="error" hidden role="alert"><strong>Unable to load leave requests.</strong><p data-error-message>Please try again later.</p><button class="btn btn-secondary btn-sm" type="button" data-action="retry">Try again</button></div>
         <div class="table-scroll" data-request-table hidden>
           <table>
@@ -99,7 +99,7 @@
       <div class="management-grid">
         <section class="card" aria-labelledby="balance-title">
           <div class="section-heading"><div><p class="section-kicker">Administrative overview</p><h2 id="balance-title">Leave Balances</h2></div></div>
-          <div class="state-panel compact" data-balance-state><strong>Balance data unavailable.</strong><p>Member leave balances will be supplied by the backend. The frontend will not calculate authoritative balances.</p></div>
+          <div class="state-panel compact" data-balance-state><strong>Balance data unavailable.</strong><p>Member leave balances are supplied by the backend. The frontend does not calculate authoritative balances.</p></div>
           <div class="balance-table-wrap" data-balance-table hidden><table><caption class="sr-only">Member leave balances</caption><thead><tr><th scope="col">Member</th><th scope="col">Leave type</th><th scope="col">Used</th><th scope="col">Remaining</th></tr></thead><tbody data-balance-body></tbody></table></div>
         </section>
 
@@ -113,7 +113,7 @@
             <div class="holiday-item"><strong>Thanksgiving</strong><time datetime="2026-11-26">November 26, 2026</time></div>
             <div class="holiday-item"><strong>Christmas</strong><time datetime="2026-12-25">December 25, 2026</time></div>
           </div>
-          <p class="state-note">These dates are contextual only. Final holiday data will be authoritative from the Holiday Management/backend service.</p>
+          <p class="state-note">These dates are contextual only. Holiday Management will provide authoritative calendar data in its dedicated integration section.</p>
         </section>
       </div>
     </section>
