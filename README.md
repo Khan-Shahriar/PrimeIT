@@ -118,9 +118,15 @@ Canonical endpoints:
 
 Holiday authorization uses the existing granular permissions:
 
-- `holidays.view`
-- `holidays.create`
-- `holidays.update`
-- `holidays.delete`
+- `holiday.create`
+- `holiday.update`
+- `holiday.delete`
+
+Holiday calendar reads (`GET /api/v1/holidays` and `GET /api/v1/holidays/:id`) require authentication; write operations remain protected by the granular holiday permissions.
 
 The migration includes the established 2026 holiday baseline and is additive/idempotent for the holiday records it creates.
+
+
+## Section 36 — Leave & Holiday Calendar Integration
+
+Leave Management now consumes the authoritative Holiday Management API for the member and administrator calendar views. Static holiday data has been removed from those views. Active holidays are loaded for the current calendar year through authenticated calendar reads, while creating, updating, and deleting holidays remains restricted to the existing holiday permissions. Leave balance and leave-request calculations remain server-authoritative and are not silently changed by the calendar display integration.
