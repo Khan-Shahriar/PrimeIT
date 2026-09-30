@@ -1,8 +1,10 @@
 const express=require("express");
+const rateLimit=require("express-rate-limit");
 const {requireAuth,requirePermission}=require("../middleware/auth");
 const controller=require("../controllers/contactController");
 const router=express.Router();
-router.post("/",controller.submit);
+const publicContactLimiter=rateLimit({windowMs:15*60*1000,max:10,standardHeaders:true,legacyHeaders:false,message:{success:false,message:"Too many contact submissions. Please try again later."}});
+router.post("/",publicContactLimiter,controller.submit);
 router.get("/",requireAuth,requirePermission("contact_inquiries.view"),controller.list);
 router.patch("/:id/status",requireAuth,requirePermission("contact_inquiries.update"),controller.updateStatus);
 module.exports=router;
