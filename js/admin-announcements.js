@@ -4,7 +4,6 @@
   const STATUS = Object.freeze({
     DRAFT: 'Draft',
     PUBLISHED: 'Published',
-    UNPUBLISHED: 'Unpublished',
     ARCHIVED: 'Archived'
   });
 
@@ -287,7 +286,7 @@
     const classes = {
       [STATUS.PUBLISHED]: 'success',
       [STATUS.DRAFT]: 'warning',
-      [STATUS.UNPUBLISHED]: 'gray',
+      [STATUS.DRAFT]: 'gray',
       [STATUS.ARCHIVED]: 'danger'
     };
     return `<span class="badge ${classes[status] || 'gray'}">${escapeHtml(status)}</span>`;
@@ -585,9 +584,9 @@
 
     const labels = {
       publish: ['Publish announcement?', `Publish “${item.title}”? It will be marked Published in the current frontend state.`, 'Publish'],
-      unpublish: ['Unpublish announcement?', `Unpublish “${item.title}”? It will be marked Unpublished in the current frontend state.`, 'Unpublish'],
-      archive: ['Archive announcement?', `Archive “${item.title}”? Archived records will remain available to the management interface until the server defines retention behavior.`, 'Archive'],
-      delete: ['Delete announcement?', `Delete “${item.title}”? This is a destructive action. The frontend will only update its temporary in-memory state until a backend is connected.`, 'Delete']
+      unpublish: ['Unpublish announcement?', `Unpublish “${item.title}”? It will be returned to Draft.`, 'Unpublish'],
+      archive: ['Archive announcement?', `Archive “${item.title}”? Archived records will remain available to the management interface.`, 'Archive'],
+      delete: ['Delete announcement?', `Delete “${item.title}”? This is a destructive action. This action permanently removes the announcement.`, 'Delete']
     };
 
     const [title, description, button] = labels[action] || ['Confirm action', 'Confirm this announcement action.', 'Confirm'];
@@ -600,45 +599,42 @@
     openModal('confirm', trigger);
   }
 
-  function applyLocalStatusChange(action) {
-    const index = state.announcements.findIndex(item => item.id === state.selectedId);
-    if (index < 0) return;
-
-    if (action === 'delete') {
-      state.announcements.splice(index, 1);
-    } else {
-      const nextStatus = {
-        publish: STATUS.PUBLISHED,
-        unpublish: STATUS.UNPUBLISHED,
-        archive: STATUS.ARCHIVED
-      }[action];
-
-      if (nextStatus) {
-        state.announcements[index].status = nextStatus;
-        if (nextStatus === STATUS.PUBLISHED && !state.announcements[index].publishedAt) {
-          state.announcements[index].publishedAt = new Date().toISOString();
-        }
-        state.announcements[index].updatedAt = new Date().toISOString();
-      }
+  async function performAnnouncementAction(action, id) {
+    if (action === 'publish') {
+      return PrimeItApi.post(`/announcements/${encodeURIComponent(id)}/publish`);
     }
-
-    applyFilters();
+    if (action === 'unpublish') {
+      return PrimeItApi.post(`/announcements/${encodeURIComponent(id)}/unpublish`);
+    }
+    if (action === 'archive') {
+      return PrimeItApi.post(`/announcements/${encodeURIComponent(id)}/archive`);
+    }
+    if (action === 'delete') {
+      return PrimeItApi.delete(`/announcements/${encodeURIComponent(id)}`);
+    }
+    throw new Error('Unsupported announcement action.');
   }
 
-  function confirmAction() {
+  async function confirmAction() {
     const action = state.confirmAction;
-    if (!action) return;
+    const id = state.selectedId;
+    if (!action || !id) return;
 
     elements.confirm.button.disabled = true;
-    elements.confirm.state.textContent = 'Updating frontend state…';
+    elements.confirm.state.textContent = 'Saving…';
 
-    window.setTimeout(() => {
-      applyLocalStatusChange(action);
+    try {
+      await performAnnouncementAction(action, id);
+      await initialize();
+      elements.confirm.state.textContent = 'Announcement updated successfully.';
+      showToast('Announcement updated successfully.');
+      window.setTimeout(closeModal, 500);
+    } catch (error) {
+      elements.confirm.state.textContent = error?.message || 'Unable to complete the action.';
+      showToast(error?.message || 'Unable to complete the action.');
+    } finally {
       elements.confirm.button.disabled = false;
-      elements.confirm.state.textContent = 'Updated in current frontend state. No backend request was made.';
-      showToast('Frontend state updated; backend integration is still pending.');
-      window.setTimeout(closeModal, 700);
-    }, 250);
+    }
   }
 
   function serializeForm() {
@@ -646,23 +642,20 @@
     const intent = formData.get('intent') === 'publish' ? STATUS.PUBLISHED : STATUS.DRAFT;
 
     return {
-      id: elements.form.id.value || cryptoRandomId(),
+      id: elements.form.id.value || '',
       title: elements.form.title.value.trim(),
       summary: elements.form.summary.value.trim(),
       content: elements.form.content.value,
       category: elements.form.category.value,
-      author: '',
       audience: elements.form.audience.value,
-      publishedAt: elements.form.publishedAt.value ? new Date(elements.form.publishedAt.value).toISOString() : '',
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
+      publishedAt: elements.form.publishedAt.value ? new Date(elements.form.publishedAt.value).toISOString() : null,
       status: elements.form.status.value || intent,
       isPinned: elements.form.pinned.checked,
       isImportant: elements.form.important.checked
     };
   }
 
-  function saveForm(event) {
+  async function saveForm(event) {
     event.preventDefault();
 
     const intent = event.submitter?.value === 'publish' ? 'publish' : 'draft';
@@ -677,34 +670,38 @@
       payload.publishedAt = new Date().toISOString();
     }
 
-    const existingIndex = state.announcements.findIndex(item => item.id === payload.id);
-    const existing = existingIndex >= 0 ? state.announcements[existingIndex] : null;
-
-    payload.createdAt = existing?.createdAt || payload.createdAt;
-    payload.author = existing?.author || '';
-
-    const normalized = normalizeAnnouncement(payload);
-    if (!normalized) {
-      elements.form.error.textContent = 'Unable to prepare the announcement data.';
-      return;
-    }
-
     elements.form.element.querySelectorAll('button').forEach(button => { button.disabled = true; });
-    elements.form.state.textContent = 'Preparing announcement…';
+    elements.form.state.textContent = 'Saving…';
 
-    window.setTimeout(() => {
-      if (existingIndex >= 0) state.announcements[existingIndex] = normalized;
-      else state.announcements.unshift(normalized);
+    try {
+      const id = elements.form.id.value.trim();
 
-      updateFilterOptions();
-      applyFilters();
+      if (id) {
+        await PrimeItApi.patch(`/announcements/${encodeURIComponent(id)}`, payload);
+      } else {
+        delete payload.id;
+        await PrimeItApi.post("/announcements", payload);
+      }
+
+      await initialize();
+      elements.form.state.textContent = 'Announcement saved successfully.';
+      showToast('Announcement saved successfully.');
+      window.setTimeout(closeModal, 500);
+    } catch (error) {
+      const validationErrors = PrimeItApi.getValidationErrors(error);
+      if (validationErrors.length) {
+        validationErrors.forEach(item => {
+          if (item?.field === 'title') setFormError('announcement-title', item.message);
+          if (item?.field === 'category') setFormError('announcement-category', item.message);
+          if (item?.field === 'content') setFormError('announcement-content', item.message);
+        });
+      }
+      elements.form.error.textContent = error?.message || 'Unable to save the announcement.';
+      elements.form.state.textContent = 'The announcement was not saved.';
+      showToast(error?.message || 'Unable to save the announcement.');
+    } finally {
       elements.form.element.querySelectorAll('button').forEach(button => { button.disabled = false; });
-      elements.form.state.textContent = 'Prepared in current frontend state. No backend request was made.';
-      showToast(intent === 'publish'
-        ? 'Announcement prepared for publishing; backend integration is pending.'
-        : 'Announcement saved as a local draft; backend integration is pending.');
-      window.setTimeout(closeModal, 700);
-    }, 250);
+    }
   }
 
   function resetFilters() {
@@ -863,25 +860,10 @@
     setupFilters();
   }
 
-  /*
-   * REST API boundary:
-   * Keep network operations isolated here. Do not add guessed production
-   * endpoints until the backend contract is finalized.
-   *
-   * Expected conceptual operations:
-   * GET collection
-   * GET one announcement
-   * POST announcement
-   * PUT/PATCH announcement
-   * PATCH publication state
-   * PATCH important/pinned state
-   * DELETE/archive announcement
-   *
-   * Authentication will later rely on server-issued HTTP-only cookies.
-   * No JWT, role, permission, or authorization state is read from browser storage.
-   */
+  /* REST API operations use the shared HTTP-only-cookie API client. */
   async function loadAnnouncements() {
-    return [];
+    const response = await PrimeItApi.get("/announcements/admin");
+    return Array.isArray(response?.announcements) ? response.announcements : [];
   }
 
   async function initialize() {
@@ -895,7 +877,7 @@
       state.error = null;
       updateFilterOptions();
       applyFilters();
-      elements.pageStatus.textContent = 'Announcement data is ready for future REST API integration.';
+      elements.pageStatus.textContent = 'Announcement data is synced with the server.';
     } catch (error) {
       renderError(error);
       elements.pageStatus.textContent = 'Announcement data could not be loaded.';
