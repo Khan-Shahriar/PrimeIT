@@ -133,7 +133,7 @@ async function getAllBalances(year, connection = pool) {
         `SELECT
             u.id AS userId,
             u.full_name AS memberName,
-            lb.leave_type AS leaveType,
+            types.leave_type AS leaveType,
             lb.allowance,
             lb.adjustment,
             COALESCE(SUM(CASE WHEN lr.status = 'Approved' THEN lr.days ELSE 0 END), 0) AS approvedUsed,
@@ -153,7 +153,7 @@ async function getAllBalances(year, connection = pool) {
           AND lr.leave_type = types.leave_type
           AND YEAR(lr.start_date) = ?
          WHERE u.status = 'active'
-         GROUP BY u.id, u.full_name, lb.leave_type, lb.allowance, lb.adjustment, types.leave_type
+         GROUP BY u.id, u.full_name, types.leave_type, lb.allowance, lb.adjustment
          ORDER BY u.full_name ASC, types.leave_type ASC`,
         [year, year]
     );
