@@ -84,7 +84,7 @@ async function findActiveOverlap(userId, startDate, endDate, connection = pool) 
     return rows[0] || null;
 }
 
-async function getBalance(userId, leaveType, year, connection = pool) {
+async function getBalance(userId, leaveType, year, connection = pool, excludeRequestId = null) {
     const [[row]] = await connection.query(
         `SELECT
             lb.leave_type AS leaveType,
@@ -98,11 +98,12 @@ async function getBalance(userId, leaveType, year, connection = pool) {
            ON lr.user_id = lb.user_id
           AND lr.leave_type = lb.leave_type
           AND YEAR(lr.start_date) = lb.year
+          AND (? IS NULL OR lr.id <> ?)
          WHERE lb.user_id = ?
            AND lb.leave_type = ?
            AND lb.year = ?
          GROUP BY lb.id, lb.leave_type, lb.year, lb.allowance, lb.adjustment`,
-        [userId, leaveType, year]
+        [excludeRequestId, excludeRequestId, userId, leaveType, year]
     );
     if (!row) return null;
     const total = Number(row.allowance) + Number(row.adjustment);
@@ -224,13 +225,14 @@ async function getStats(year, connection = pool) {
     };
 }
 
-async function listAdmin({ limit = 100, offset = 0, status = "", leaveType = "", department = "" } = {}, connection = pool) {
+async function listAdmin({ limit = 100, offset = 0, status = "", leaveType = "", department = "", year = new Date().getFullYear() } = {}, connection = pool) {
     const conditions = [];
     const values = [];
 
     if (status) { conditions.push("lr.status = ?"); values.push(status); }
     if (leaveType) { conditions.push("lr.leave_type = ?"); values.push(leaveType); }
     if (department) { conditions.push("u.department = ?"); values.push(department); }
+    if (Number.isInteger(Number(year))) { conditions.push("YEAR(lr.start_date) = ?"); values.push(Number(year)); }
 
     const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
     const [rows] = await connection.query(
