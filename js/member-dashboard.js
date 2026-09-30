@@ -104,8 +104,8 @@
       PrimeItApi.get("/holidays?year="+year+"&status=Active")
     ]);
     if (balance.status==="fulfilled") {
-      const rows=Array.isArray(balance.value.balance)?balance.value.balance:[];
-      rows.forEach(row=>setBalance(String(row.leaveType||row.type||"").toLowerCase(),row));
+      const balances=balance.value?.balance && typeof balance.value.balance==="object" ? balance.value.balance : {};
+      Object.entries(balances).forEach(([type,row])=>setBalance(String(type).toLowerCase(),row));
     }
     if (announcements.status==="fulfilled") renderAnnouncements(announcements.value.announcements);
     if (holidays.status==="fulfilled") renderHolidays(holidays.value.holidays);
