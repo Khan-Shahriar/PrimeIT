@@ -18,6 +18,41 @@ function formatDateRange(s,e){const a=formatDate(s),b=formatDate(e);return s&&e&
 function renderHistory(requests){leaveState.history=Array.isArray(requests)?requests:[];setHistoryState(leaveState.history.length?'ready':'empty');const body=document.querySelector('#leave-history-body');body.replaceChildren();leaveState.history.forEach(function(r){const row=document.createElement('tr'),cells=[];let el=document.createElement('td');el.textContent=leaveTypeLabels[r.leaveType]||r.leaveType||'—';cells.push(el);el=document.createElement('td');el.textContent=formatDateRange(r.startDate,r.endDate);cells.push(el);el=document.createElement('td');el.textContent=Number.isFinite(Number(r.duration))?String(r.duration):'—';cells.push(el);el=document.createElement('td');el.className='reason-cell';el.textContent=r.reason||'—';cells.push(el);el=document.createElement('td');el.textContent=formatDate(r.submittedAt);cells.push(el);el=document.createElement('td');const badge=document.createElement('span'),status=String(r.status||'').toLowerCase();badge.className='status-badge status-'+(statusLabels[status]?status:'cancelled');badge.textContent=statusLabels[status]||'Unknown';el.appendChild(badge);cells.push(el);el=document.createElement('td');el.className='action-cell';if(status==='pending'){const b=document.createElement('button');b.type='button';b.className='btn btn-danger btn-sm';b.textContent='Cancel';b.addEventListener('click',function(){openCancelModal(r)});el.appendChild(b)}else el.textContent='—';cells.push(el);cells.forEach(function(c){row.appendChild(c)});body.appendChild(row)})}
 function openCancelModal(r){leaveState.selectedRequestId=r.requestId||r.id;leaveState.lastFocusedElement=document.activeElement;cancelRequestSummary.textContent=(leaveTypeLabels[r.leaveType]||'Leave')+' · '+formatDateRange(r.startDate,r.endDate);cancelModalState.textContent='';cancelModalState.className='modal-state';confirmCancelButton.disabled=false;cancelModal.hidden=false;confirmCancelButton.focus()}
 function closeCancelModal(){cancelModal.hidden=true;leaveState.selectedRequestId=null;if(leaveState.lastFocusedElement&&typeof leaveState.lastFocusedElement.focus==='function')leaveState.lastFocusedElement.focus()}
+function getCalendarYear(){return new Date().getFullYear()} 
+function formatHolidayDate(value){
+if(!value)return'—';
+const d=new Date(String(value).length===10?value+'T00:00:00':value);
+return Number.isNaN(d.getTime())?'—':new Intl.DateTimeFormat('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(d)
+}
+function renderHolidays(holidays){
+const list=document.querySelector('#holiday-list'),empty=document.querySelector('#holiday-empty'),error=document.querySelector('#holiday-error');
+if(!list)return;
+if(empty)empty.hidden=true;
+if(error)error.hidden=true;
+list.replaceChildren();
+const items=Array.isArray(holidays)?holidays:[];
+if(!items.length){if(empty)empty.hidden=false;return}
+items.forEach(function(h){
+const article=document.createElement('article');article.className='holiday-item';
+const wrap=document.createElement('div'),name=document.createElement('strong'),type=document.createElement('span'),time=document.createElement('time');
+name.textContent=h.name||'Company Holiday';
+type.textContent=h.type||'Holiday';
+time.dateTime=String(h.date||'');time.textContent=formatHolidayDate(h.date);
+wrap.append(name,type);article.append(wrap,time);list.appendChild(article)
+})
+}
+async function loadHolidays(){
+const empty=document.querySelector('#holiday-empty'),error=document.querySelector('#holiday-error'),list=document.querySelector('#holiday-list');
+if(empty)empty.hidden=true;if(error)error.hidden=true;
+try{
+const year=getCalendarYear();
+const response=await PrimeItApi.get('/holidays?year='+encodeURIComponent(year)+'&status=Active');
+renderHolidays(response.holidays)
+}catch(e){
+if(list)list.replaceChildren();
+if(error)error.hidden=false;
+showToast(e.message||'Unable to load holiday information.')
+}}
 async function loadBalance(){setBalanceLoading(true);const panel=document.querySelector('#balance-error');if(panel)panel.hidden=true;try{const response=await PrimeItApi.get('/leave/balance');renderBalance(response.balance)}catch(error){setBalanceLoading(false);if(panel)panel.hidden=false;showToast(error.message||'Unable to load leave balance.')}}
 async function loadHistory(){setHistoryState('loading');try{const response=await PrimeItApi.get('/leave?limit=100&offset=0');renderHistory(response.requests)}catch(error){setHistoryState('error');showToast(error.message||'Unable to load leave history.')}}
 async function submitLeaveRequest(){if(leaveState.busy||!validateForm())return;leaveState.busy=true;submitButton.disabled=true;setFormState('Submitting leave request…','info');try{const response=await PrimeItApi.post('/leave',{leaveType:leaveType.value,startDate:startDate.value,endDate:endDate.value,reason:reason.value.trim()});form.reset();resetFormUi();setFormState(response.message||'Leave request submitted successfully.','success');showToast('Leave request submitted.');await Promise.all([loadBalance(),loadHistory()])}catch(error){setFormState(error.message||'Unable to submit the leave request.','error');showToast(error.message||'Unable to submit leave request.')}finally{leaveState.busy=false;submitButton.disabled=false}}
@@ -25,5 +60,5 @@ async function cancelSelectedRequest(){if(leaveState.busy||!leaveState.selectedR
 function setupForm(){[leaveType,startDate,endDate,reason].forEach(function(field){field&&field.addEventListener('input',function(){const id=field===leaveType?'leave-type-error':field===startDate?'start-date-error':field===endDate?'end-date-error':'leave-reason-error';setFieldError(field,id,'');if(field!==reason)calculateRequestedDays()});field&&field.addEventListener('change',function(){if(field!==reason)calculateRequestedDays()})});reason&&reason.addEventListener('input',updateReasonCount);form&&form.addEventListener('submit',function(e){e.preventDefault();submitLeaveRequest()});resetButton&&resetButton.addEventListener('click',function(){setTimeout(resetFormUi,0)})}
 function setupCancelModal(){document.querySelectorAll('[data-action="close-cancel-modal"]').forEach(function(b){b.addEventListener('click',closeCancelModal)});cancelModal&&cancelModal.addEventListener('click',function(e){if(e.target===cancelModal)closeCancelModal()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!cancelModal.hidden)closeCancelModal()});confirmCancelButton&&confirmCancelButton.addEventListener('click',cancelSelectedRequest)}
 function setupMobileNavigation(){const toggle=document.querySelector('.mobile-toggle');toggle&&toggle.addEventListener('click',function(){const open=sidebar.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu')});sidebar&&sidebar.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){sidebar.classList.remove('open');toggle&&toggle.setAttribute('aria-expanded','false')})})}
-function setupRetryControls(){document.querySelector('[data-action="retry-balance"]')?.addEventListener('click',loadBalance);document.querySelector('[data-action="retry-history"]')?.addEventListener('click',loadHistory)}
-function initialize(){setupForm();setupCancelModal();setupMobileNavigation();setupRetryControls();updateReasonCount();setBalanceLoading(true);setHistoryState('loading');loadBalance();loadHistory()}initialize();
+function setupRetryControls(){document.querySelector('[data-action="retry-balance"]')?.addEventListener('click',loadBalance);document.querySelector('[data-action="retry-history"]')?.addEventListener('click',loadHistory);document.querySelector('[data-action="retry-holidays"]')?.addEventListener('click',loadHolidays)}
+function initialize(){setupForm();setupCancelModal();setupMobileNavigation();setupRetryControls();updateReasonCount();setBalanceLoading(true);setHistoryState('loading');loadBalance();loadHistory();loadHolidays()}initialize();
