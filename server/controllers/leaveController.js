@@ -58,14 +58,24 @@ async function listAdmin(req, res) {
     });
 }
 
-async function review(req, res) {
+async function approve(req, res) {
     const request = await leaveService.reviewRequest(
         req.user.id,
         req.params.id,
-        req.body?.decision,
+        "approve",
         req.body?.reviewerComment
     );
-    return res.json({ success: true, message: "Leave request reviewed successfully.", request });
+    return res.json({ success: true, message: "Leave request approved successfully.", request });
 }
 
-module.exports = { listMine, getBalance, create, cancel, listAdmin, review };
+async function reject(req, res) {
+    const request = await leaveService.reviewRequest(
+        req.user.id,
+        req.params.id,
+        "reject",
+        req.body?.reviewerComment
+    );
+    return res.json({ success: true, message: "Leave request rejected successfully.", request });
+}
+
+module.exports = { listMine, getBalance, create, cancel, listAdmin, approve, reject };
