@@ -135,3 +135,8 @@ Leave Management now consumes the authoritative Holiday Management API for the m
 ## Section 37 — Dashboard API Integration
 
 Member and administrator dashboards now consume the existing authenticated REST APIs instead of relying on placeholder dashboard data. Member dashboard data includes the authenticated member's leave balances, published announcements, and active company holidays. Administrator dashboard metrics consume the existing member, leave, announcement, gallery, and holiday endpoints. Each dashboard uses independent API requests so an unavailable optional data source does not fabricate or replace data from the other sources.
+
+
+## Section 9 — Member Management Integration
+
+The Member Management frontend now uses the authenticated `/api/v1/members` REST API for live member records. Create, update, activate, and deactivate operations remain server-authoritative and permission-protected. The frontend preserves the existing UI and does not fabricate production member data when the API is unavailable.
