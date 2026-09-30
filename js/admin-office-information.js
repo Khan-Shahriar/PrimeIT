@@ -351,13 +351,16 @@
             type === 'resource' ? state.resources : state.hours;
     }
 
-    function toggleArchive(type, id) {
+    async function toggleArchive(type, id) {
         const item = findItem(type, id);
         if (!item) return;
-        if (type === 'department' || type === 'contact') item.status = item.status === 'archived' ? 'active' : 'archived';
-        else item.status = item.status === 'archived' ? 'draft' : 'archived';
-        renderAll();
-        showToast('Draft state updated for this page session. No backend data was changed.');
+        try {
+            await window.PrimeItApi.delete('/office-information/' + encodeURIComponent(id));
+            await loadOfficeInformation();
+            showToast('Office information record archived.');
+        } catch (error) {
+            showToast(error?.message || 'Unable to archive this record.');
+        }
     }
 
     function field(def) {
@@ -454,7 +457,7 @@
         const isEdit = Boolean(id) || type === 'office';
         elements.modalLabel.textContent = labels[type] || 'Office Information';
         elements.modalTitle.textContent = isEdit ? 'Edit ' + labels[type] : 'Add ' + labels[type];
-        elements.modalDescription.textContent = 'Changes are kept only in this page session until the authenticated REST API is connected.';
+        elements.modalDescription.textContent = 'Changes are saved through the authenticated Office Information REST API.';
         elements.modalFields.replaceChildren(...getFields(type, item).map(field));
         elements.formMessage.hidden = true;
         elements.modal.hidden = false;
@@ -524,7 +527,7 @@
         return '';
     }
 
-    function saveForm(event) {
+    async function saveForm(event) {
         event.preventDefault();
         const type = state.modalType;
         const data = readForm();
@@ -534,24 +537,23 @@
             elements.formMessage.hidden = false;
             return;
         }
-
-        if (type === 'office') {
-            state.office = {...data, updatedAt: 'Pending backend persistence'};
-        } else {
-            const collection = collectionFor(type);
-            if (state.editingId) {
-                const item = findItem(type, state.editingId);
-                if (item) Object.assign(item, data);
-            } else {
-                data.id = uid(type);
-                if (type === 'policy' || type === 'resource') data.status = data.status || 'draft';
-                collection.push(data);
-            }
+        elements.modalSave.disabled = true;
+        try {
+            const status = data.status || ((type === 'policy' || type === 'resource') ? 'draft' : 'active');
+            const payload = { recordType: type, status, sortOrder: Number(data.sortOrder || 0), title: data.title || data.name || null, data };
+            const response = state.editingId
+                ? await window.PrimeItApi.patch('/office-information/' + encodeURIComponent(state.editingId), payload)
+                : await window.PrimeItApi.post('/office-information', payload);
+            if (!response?.success) throw new Error('Unable to save office information.');
+            closeModal();
+            await loadOfficeInformation();
+            showToast(state.editingId ? 'Office information updated.' : 'Office information created.');
+        } catch (error) {
+            elements.formMessage.textContent = error?.message || 'Unable to save office information.';
+            elements.formMessage.hidden = false;
+        } finally {
+            elements.modalSave.disabled = false;
         }
-
-        closeModal();
-        renderAll();
-        showStatus('warning', 'Frontend draft updated', 'The change is only held in memory for this page session. No backend request or database write was performed.');
     }
 
     function setupFilters() {
@@ -624,12 +626,19 @@
         showStatus('info', 'Loading office information', 'Waiting for approved office data.');
         try {
             let data = null;
-            if (typeof window.PrimeItOfficeInformationProvider === 'function') {
-                data = await window.PrimeItOfficeInformationProvider();
-            } else if (window.PrimeItOfficeInformationData && typeof window.PrimeItOfficeInformationData === 'object') {
-                data = window.PrimeItOfficeInformationData;
-            }
+            data = await window.PrimeItApi.get('/office-information/admin');
 
+            if (data && data.records) {
+                const records = data.records;
+                data = {
+                    office: records.office?.find(x => x.status !== 'archived') ? { ...records.office.find(x => x.status !== 'archived').data, id: records.office.find(x => x.status !== 'archived').id, status: records.office.find(x => x.status !== 'archived').status } : null,
+                    workingHours: (records.hours || []).map(x => ({...x.data, id:x.id, status:x.status})),
+                    departments: (records.department || []).map(x => ({...x.data, id:x.id, status:x.status})),
+                    importantContacts: (records.contact || []).map(x => ({...x.data, id:x.id, status:x.status})),
+                    policies: (records.policy || []).map(x => ({...x.data, id:x.id, status:x.status})),
+                    resources: (records.resource || []).map(x => ({...x.data, id:x.id, status:x.status}))
+                };
+            }
             const normalized = normalizeIncomingData(data);
             if (!normalized) {
                 state.office = null;
