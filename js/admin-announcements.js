@@ -122,8 +122,8 @@
       updatedAt: normalizeDateValue(raw.updatedAt),
       createdAt: normalizeDateValue(raw.createdAt),
       status,
-      isPinned: raw.isPinned === true,
-      isImportant: raw.isImportant === true
+      isPinned: raw.isPinned === true || raw.isPinned === 1,
+      isImportant: raw.isImportant === true || raw.isImportant === 1
     };
   }
 
@@ -286,7 +286,6 @@
     const classes = {
       [STATUS.PUBLISHED]: 'success',
       [STATUS.DRAFT]: 'warning',
-      [STATUS.DRAFT]: 'gray',
       [STATUS.ARCHIVED]: 'danger'
     };
     return `<span class="badge ${classes[status] || 'gray'}">${escapeHtml(status)}</span>`;
