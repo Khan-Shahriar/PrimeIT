@@ -1,0 +1,10 @@
+const express=require("express");
+const {requireAuth,requirePermission}=require("../middleware/auth");
+const controller=require("../controllers/officeInformationController");
+const router=express.Router();
+router.get("/",requireAuth,controller.list);
+router.get("/admin",requireAuth,requirePermission("office_information.view"),controller.adminList);
+router.post("/",requireAuth,requirePermission("office_information.create"),controller.create);
+router.patch("/:id",requireAuth,requirePermission("office_information.update"),controller.update);
+router.delete("/:id",requireAuth,requirePermission("office_information.delete"),controller.archive);
+module.exports=router;
