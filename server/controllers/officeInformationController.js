@@ -1,0 +1,7 @@
+const service=require("../services/officeInformationService");
+async function list(req,res){return res.json({success:true,...await service.listForMember()});}
+async function adminList(req,res){return res.json({success:true,records:await service.listAdmin()});}
+async function create(req,res){const r=await service.create(req.body||{},req.user.id);if(r.errors)return res.status(400).json({success:false,message:"Please correct the validation errors",errors:r.errors});return res.status(201).json({success:true,record:r.record});}
+async function update(req,res){const id=Number(req.params.id);if(!Number.isInteger(id)||id<=0)return res.status(400).json({success:false,message:"Invalid record ID"});const r=await service.update(id,req.body||{},req.user.id);if(r.notFound)return res.status(404).json({success:false,message:"Office information record not found"});if(r.errors)return res.status(400).json({success:false,message:"Please correct the validation errors",errors:r.errors});return res.json({success:true,record:r.record});}
+async function archive(req,res){const id=Number(req.params.id);if(!Number.isInteger(id)||id<=0)return res.status(400).json({success:false,message:"Invalid record ID"});const r=await service.archive(id,req.user.id);if(!r.archived)return res.status(404).json({success:false,message:"Office information record not found"});return res.json({success:true,message:"Office information record archived"});}
+module.exports={list,adminList,create,update,archive};
