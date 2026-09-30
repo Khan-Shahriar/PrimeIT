@@ -25,6 +25,8 @@
     fullName: document.querySelector('#full-name'),
     email: document.querySelector('#email'),
     phone: document.querySelector('#phone'),
+    company: document.querySelector('#company'),
+    inquiryType: document.querySelector('#inquiry-type'),
     subject: document.querySelector('#subject'),
     message: document.querySelector('#message')
   };
@@ -150,7 +152,30 @@
       return;
     }
 
-    showStatus('Your inquiry passed frontend validation. Backend submission is not connected yet, so no message was sent or stored.', 'info');
+    const submitButton = document.querySelector('#contact-submit');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending…';
+    try {
+      if (!window.PrimeItApi) throw new Error('Contact service is unavailable.');
+      await window.PrimeItApi.post('/contact', {
+        fullName: fields.fullName.value.trim(),
+        email: fields.email.value.trim(),
+        phone: fields.phone.value.trim(),
+        company: fields.company?.value.trim() || '',
+        inquiryType: fields.inquiryType?.value || 'general',
+        subject: fields.subject.value.trim(),
+        message: fields.message.value.trim()
+      });
+      showStatus('Your inquiry was submitted successfully. We will get back to you as appropriate.', 'success');
+      form.reset();
+      clearErrors();
+      updateMessageCount();
+    } catch (error) {
+      showStatus(error?.message || 'Unable to submit your inquiry. Please try again.', 'error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.innerHTML = 'Send Inquiry <span aria-hidden="true">→</span>';
+    }
   });
 
   resetButton?.addEventListener('click', () => {
