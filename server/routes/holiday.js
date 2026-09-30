@@ -1,0 +1,11 @@
+const express=require("express");
+const {requireAuth,requirePermission}=require("../middleware/auth");
+const asyncHandler=require("../middleware/asyncHandler");
+const controller=require("../controllers/holidayController");
+const router=express.Router();
+router.get("/",requireAuth,requirePermission("holiday.view"),asyncHandler(controller.list));
+router.get("/:id",requireAuth,requirePermission("holiday.view"),asyncHandler(controller.get));
+router.post("/",requireAuth,requirePermission("holiday.create"),asyncHandler(controller.create));
+router.patch("/:id",requireAuth,requirePermission("holiday.update"),asyncHandler(controller.update));
+router.delete("/:id",requireAuth,requirePermission("holiday.delete"),asyncHandler(controller.remove));
+module.exports=router;
