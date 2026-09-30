@@ -7,6 +7,8 @@ const userRoleRoutes = require("./userRoles");
 const announcementRoutes = require("./announcements");
 const leaveRoutes = require("./leave");
 const holidayRoutes = require("./holiday");
+const officeInformationRoutes = require("./officeInformation");
+const contactRoutes = require("./contact");
 
 const router = express.Router();
 
@@ -18,6 +20,8 @@ router.use("/users", userRoleRoutes);
 router.use("/announcements", announcementRoutes);
 router.use("/leave", leaveRoutes);
 router.use("/holidays", holidayRoutes);
+router.use("/office-information", officeInformationRoutes);
+router.use("/contact", contactRoutes);
 router.use("/gallery", require("./gallery"));
 
 module.exports = router;
