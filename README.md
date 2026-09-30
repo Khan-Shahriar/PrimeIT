@@ -74,6 +74,27 @@ Gallery API endpoints use the canonical `/api/v1/gallery` namespace. Gallery man
 
 Uploaded media is intentionally excluded from Git. Do not commit files from `uploads/gallery/`.
 
+
+## Section 34 — Leave Management Backend
+
+Leave management now has a transactional backend for member leave requests, yearly balances, cancellation, and administrator approval/rejection.
+
+Run the additive migration before using leave management:
+
+`sql/section-34-leave.sql`
+
+Canonical endpoints:
+
+- `GET /api/v1/leave`
+- `GET /api/v1/leave/balance`
+- `POST /api/v1/leave`
+- `POST /api/v1/leave/:id/cancel`
+- `GET /api/v1/leave/admin`
+- `POST /api/v1/leave/:id/approve`
+- `POST /api/v1/leave/:id/reject`
+
+Leave authorization uses the existing granular permissions: `leave.view`, `leave.create`, `leave.cancel`, `leave.approve`, and `leave.reject`.
+
 ## Security
 
 Section 31 security hardening covers authentication/session invalidation, cookie and CSRF defenses, RBAC/privilege controls, request and API rate limits, upload/path validation, static-file protection, safe logging/errors, dependency checks, and automated security checks. See `SECURITY.md` for the production security checklist.
