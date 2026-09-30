@@ -68,7 +68,7 @@
           <div>
             <p class="eyebrow">People &amp; accounts</p>
             <h1 id="page-title">Member Management</h1>
-            <p>Review PrimeIt members and prepare member account changes for the connected administration API.</p>
+            <p>Review PrimeIt members and manage member accounts through the connected administration API.</p>
           </div>
           <button class="btn btn-primary" id="add-member-btn" type="button">
             <span aria-hidden="true">+</span>
@@ -76,7 +76,7 @@
           </button>
         </header>
 
-        <p class="sr-status" id="page-status" role="status" aria-live="polite" aria-atomic="true">Member data is ready for future API integration.</p>
+        <p class="sr-status" id="page-status" role="status" aria-live="polite" aria-atomic="true">Member management is connected to the server.</p>
 
         <section class="stats-grid" aria-labelledby="member-stats-title">
           <h2 class="sr-only" id="member-stats-title">Member statistics</h2>
@@ -107,7 +107,7 @@
             <div>
               <p class="section-kicker">Directory</p>
               <h2 id="member-list-title">Members</h2>
-              <p>Search and filter the member directory when live data is available.</p>
+              <p>Search and filter live member records from the server.</p>
             </div>
             <div class="result-count" id="result-count" aria-live="polite">No member data</div>
           </div>
@@ -174,7 +174,7 @@
             <div class="state-panel" id="list-state" data-state="unavailable">
               <div class="state-icon" aria-hidden="true">M</div>
               <h3 id="list-state-title">Member data unavailable</h3>
-              <p id="list-state-message">Connect the Member Management REST API to load real members. No production member records are being fabricated in the frontend.</p>
+              <p id="list-state-message">The Member Management API did not return data. No production member records are fabricated in the frontend.</p>
               <button class="btn btn-secondary" id="retry-members" type="button">Retry data source</button>
             </div>
           </div>
