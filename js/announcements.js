@@ -60,7 +60,7 @@
       author: typeof item.author === 'string' ? item.author.trim() : '',
       publishedAt: item.publishedAt || '',
       updatedAt: item.updatedAt || '',
-      isPinned: item.isPinned === true,
+      isPinned: item.isPinned === true || item.isPinned === 1,
       status: typeof item.status === 'string' ? item.status.trim().toLowerCase() : ''
     };
   }
