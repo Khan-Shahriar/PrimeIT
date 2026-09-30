@@ -6,6 +6,7 @@ const roleRoutes = require("./roles");
 const userRoleRoutes = require("./userRoles");
 const announcementRoutes = require("./announcements");
 const leaveRoutes = require("./leave");
+const holidayRoutes = require("./holiday");
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.use("/roles", roleRoutes);
 router.use("/users", userRoleRoutes);
 router.use("/announcements", announcementRoutes);
 router.use("/leave", leaveRoutes);
+router.use("/holidays", holidayRoutes);
 router.use("/gallery", require("./gallery"));
 
 module.exports = router;
