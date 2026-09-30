@@ -140,7 +140,7 @@
 
   fields.message.addEventListener('input', updateMessageCount);
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     status.hidden = true;
     clearErrors();
