@@ -98,3 +98,29 @@ Leave authorization uses the existing granular permissions: `leave.view`, `leave
 ## Security
 
 Section 31 security hardening covers authentication/session invalidation, cookie and CSRF defenses, RBAC/privilege controls, request and API rate limits, upload/path validation, static-file protection, safe logging/errors, dependency checks, and automated security checks. See `SECURITY.md` for the production security checklist.
+
+
+## Section 35 — Holiday Management Backend
+
+Holiday management now has a protected REST API for listing, viewing, creating, updating, and deleting holidays.
+
+Run the additive migration before using holiday management:
+
+`sql/section-35-holidays.sql`
+
+Canonical endpoints:
+
+- `GET /api/v1/holidays`
+- `GET /api/v1/holidays/:id`
+- `POST /api/v1/holidays`
+- `PATCH /api/v1/holidays/:id`
+- `DELETE /api/v1/holidays/:id`
+
+Holiday authorization uses the existing granular permissions:
+
+- `holidays.view`
+- `holidays.create`
+- `holidays.update`
+- `holidays.delete`
+
+The migration includes the established 2026 holiday baseline and is additive/idempotent for the holiday records it creates.
