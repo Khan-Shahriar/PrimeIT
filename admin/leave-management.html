@@ -105,7 +105,7 @@
 
         <section class="card" aria-labelledby="calendar-title">
           <div class="section-heading"><div><p class="section-kicker">Calendar context</p><h2 id="calendar-title">2026 Holidays</h2></div><a class="text-link" href="holiday-management.html">Manage holidays <span aria-hidden="true">→</span></a></div>
-          <div class="holiday-list" aria-live="polite">
+          <div class="holiday-list" id="admin-holiday-list" aria-live="polite">
             <div class="holiday-item"><strong>New Year</strong><time datetime="2026-01-01">January 1, 2026</time></div>
             <div class="holiday-item"><strong>Memorial Day</strong><time datetime="2026-05-25">May 25, 2026</time></div>
             <div class="holiday-item"><strong>Independence Day</strong><time datetime="2026-07-04">July 4, 2026</time></div>
@@ -113,7 +113,7 @@
             <div class="holiday-item"><strong>Thanksgiving</strong><time datetime="2026-11-26">November 26, 2026</time></div>
             <div class="holiday-item"><strong>Christmas</strong><time datetime="2026-12-25">December 25, 2026</time></div>
           </div>
-          <p class="state-note">These dates are contextual only. Holiday Management will provide authoritative calendar data in its dedicated integration section.</p>
+          <p class="state-note" data-holiday-note>Holiday dates are loaded from the authoritative Holiday Management API.</p>
         </section>
       </div>
     </section>
