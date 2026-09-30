@@ -406,13 +406,8 @@
   }
 
   async function loadAnnouncements() {
-    // API integration boundary:
-    // The future authenticated REST request belongs here. It must use the
-    // server-issued HTTP-only authentication cookie and must never read/store JWTs.
-    //
-    // Do not add a guessed endpoint or fake response here until the backend
-    // contract is finalized.
-    return [];
+    const response = await PrimeItApi.get("/announcements");
+    return Array.isArray(response?.announcements) ? response.announcements : [];
   }
 
   async function initialize() {
@@ -434,7 +429,7 @@
       state.loading = false;
       state.error = error instanceof Error ? error : new Error('Unable to load announcements.');
       elements.count.textContent = '—';
-      renderStatus('error', 'Unable to load announcements', 'Please try again.', true);
+      renderStatus('error', 'Unable to load announcements', state.error.message || 'Please try again.', true);
     }
   }
 
