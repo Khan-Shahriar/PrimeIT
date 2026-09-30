@@ -25,7 +25,7 @@
     const members=Array.isArray(data?.members)?data.members:[];
     const active=members.filter(m=>String(m.status).toLowerCase()==="active").length;
     setCard("members",total,"Total member accounts");
-    $("[data-overview-value='members]")?.textContent;
+    const memberValue=$("[data-overview-value='members']"); if(memberValue)memberValue.textContent=String(total);
     const a=$("[data-overview-value='active-members']"); if(a)a.textContent=String(active);
     const n=$("[data-state-note='members']");if(n)n.textContent="Member data loaded from the authenticated member service.";
   }
