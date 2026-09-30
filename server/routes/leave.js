@@ -20,6 +20,7 @@ router.get("/admin", requireAuth, requirePermission("leave.view"), asyncHandler(
 
 router.post("/", leaveWriteLimiter, requireAuth, requirePermission("leave.create"), asyncHandler(leaveController.create));
 router.post("/:id/cancel", leaveWriteLimiter, requireAuth, requirePermission("leave.cancel"), asyncHandler(leaveController.cancel));
-router.post("/:id/review", leaveWriteLimiter, requireAuth, asyncHandler(leaveController.review));
+router.post("/:id/approve", leaveWriteLimiter, requireAuth, requirePermission("leave.approve"), asyncHandler(leaveController.approve));
+router.post("/:id/reject", leaveWriteLimiter, requireAuth, requirePermission("leave.reject"), asyncHandler(leaveController.reject));
 
 module.exports = router;
