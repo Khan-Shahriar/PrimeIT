@@ -418,14 +418,22 @@
     try {
       if (state.editing) await api.updateHoliday(els.formId.value, payload);
       else await api.createHoliday(payload);
-      els.formState.textContent = "The backend must confirm this operation before local holiday data changes.";
-      showToast("Holiday action is not connected to the backend yet.");
+      closeModals();
+      showToast(state.editing ? "Holiday updated successfully." : "Holiday created successfully.");
+      await loadData();
     } catch (error) {
       if (error?.message === "API_NOT_CONNECTED") {
         els.formState.textContent = "REST API integration is required before this action can be completed. No local record was changed.";
         return;
       }
-      els.formServerError.textContent = "The holiday service rejected or could not complete the operation. No local record was changed.";
+      const validationErrors = PrimeItApi.getValidationErrors(error);
+      els.formServerError.textContent = error?.message || "The holiday service could not complete the operation.";
+      if (validationErrors && typeof validationErrors === "object" && !Array.isArray(validationErrors)) {
+        Object.entries(validationErrors).forEach(([key, message]) => {
+          const target = document.getElementById("form-" + key + "-error");
+          if (target) target.textContent = String(message);
+        });
+      }
       els.formState.textContent = "Operation failed.";
     } finally {
       state.busy = false;
