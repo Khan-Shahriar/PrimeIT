@@ -15,7 +15,7 @@ async function listMine(req, res) {
     const { limit, offset } = pagination(req.query);
     const [requests, total] = await Promise.all([
         leaveService.listMemberRequests(req.user.id, { limit, offset }),
-        leaveService.listMemberRequests(req.user.id, { limit: 1, offset: 0 }).then(() => null)
+        leaveService.countMemberRequests(req.user.id)
     ]);
     return res.json({ success: true, requests, pagination: { limit, offset, total: total ?? requests.length } });
 }
