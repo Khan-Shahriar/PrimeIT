@@ -1,6 +1,6 @@
 /* PrimeIt — Admin Member Management
  * Section 17 frontend implementation.
- * Backend/authentication/authorization remain future integration boundaries.
+ * Uses the authenticated Member Management REST API; authorization remains server-authoritative.
  */
 
 (function () {
@@ -81,7 +81,7 @@
 
   const apiAdapter = {
     async listMembers() {
-      return window.PrimeItApi.get("/members");
+      return window.PrimeItApi.get("/members?limit=100&offset=0");
     },
     async createMember(payload) {
       const fullName = [payload.first_name, payload.last_name].filter(Boolean).join(" ").trim();
