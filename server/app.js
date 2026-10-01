@@ -210,7 +210,6 @@ app.use("/api/v1/auth/verify-email", verificationLimiter);
 app.use("/api/v1/auth/me/password", sensitiveAccountLimiter);
 app.use("/api/v1/auth/me/photo", sensitiveAccountLimiter);
 app.use("/api/v1/auth/login", loginLimiter);
-app.use("/api/v1/auth", (req, res, next) => next());
 
 app.use("/api/v1", apiLimiter, apiRoutes);
 
