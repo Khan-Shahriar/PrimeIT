@@ -63,7 +63,7 @@ p{margin:0}
 .role-item{width:100%;border:1px solid transparent;background:transparent;text-align:left;padding:13px;border-radius:12px;color:#596274;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .role-item:hover{background:#f7f8fc}
 .role-item.active{background:var(--soft);color:var(--blue2);border-color:#dbe3ff}
-.role-item-main{min-width:0}
+.role-item-main{min-width:0;max-width:100%;overflow:hidden}
 .role-name{font-weight:800;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .role-description{display:block;font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .role-item-side{display:flex;align-items:center;gap:6px;flex:none}
