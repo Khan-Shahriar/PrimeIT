@@ -10,7 +10,7 @@
 
 <body class="app-body">
     <div class="app-shell">
-        <aside class="sidebar">
+        <aside class="sidebar" id="admin-sidebar">
             <a class="logo" href="admin-dashboard.html">
                 <span class="logo-mark" aria-hidden="true"><span>P</span></span>
                 <span class="logo-text">PrimeIt</span>
@@ -38,11 +38,10 @@
 
         <main class="main">
             <header class="app-topbar">
-                <button class="mobile-toggle" type="button" aria-label="Open admin navigation" aria-expanded="false">☰</button>
+                <button class="mobile-toggle" id="mobile-nav-toggle" type="button"
+                    aria-label="Open admin navigation" aria-expanded="false">☰</button>
 
-                <div class="search">
-                    <input type="search" placeholder="Search..." aria-label="Search">
-                </div>
+                <div class="topbar-title">Role &amp; Permissions</div>
 
                 <div class="user-chip">
                     <span>Administrator</span>
@@ -53,55 +52,168 @@
             <section class="content">
                 <div class="breadcrumb" aria-label="Breadcrumb">Admin Panel / Role &amp; Permissions</div>
 
-                <div class="content-header">
+                <header class="page-header">
                     <div>
+                        <span class="eyebrow">Access Control</span>
                         <h1>Role &amp; Permissions</h1>
-                        <p>Control access using granular roles and permissions.</p>
+                        <p class="muted">Control access using granular roles and permissions.</p>
+                    </div>
+                </header>
+
+                <div class="kpi-grid" aria-label="Role statistics">
+                    <div class="kpi">
+                        <span class="label">Total Roles</span>
+                        <strong id="stat-total">0</strong>
+                        <small>All configured roles</small>
+                    </div>
+                    <div class="kpi">
+                        <span class="label">System Roles</span>
+                        <strong id="stat-system">0</strong>
+                        <small>Protected roles</small>
+                    </div>
+                    <div class="kpi">
+                        <span class="label">Custom Roles</span>
+                        <strong id="stat-custom">0</strong>
+                        <small>Organization-defined roles</small>
+                    </div>
+                    <div class="kpi">
+                        <span class="label">Active Roles</span>
+                        <strong id="stat-active">0</strong>
+                        <small>Currently active</small>
                     </div>
                 </div>
 
-                <div class="role-layout">
-                    <div class="role-list" aria-label="Roles">
-                        <button class="role-item active" type="button" data-role-name="ceo" aria-pressed="true">CEO</button>
-                        <button class="role-item" type="button" data-role-name="developer" aria-pressed="false">Developer</button>
-                        <button class="role-item" type="button" data-role-name="admin" aria-pressed="false">Admin</button>
-                        <button class="role-item" type="button" data-role-name="hr" aria-pressed="false">HR</button>
-                        <button class="role-item" type="button" data-role-name="marketing_manager" aria-pressed="false">Marketing Manager</button>
-                        <button class="role-item" type="button" data-role-name="office_manager" aria-pressed="false">Office Manager</button>
-
-                        <button class="btn btn-primary create-role-button" type="button">+ Create Role</button>
+                <div class="toolbar" aria-label="Role filters">
+                    <div class="search-field">
+                        <label class="sr-only" for="role-search">Search roles</label>
+                        <input id="role-search" type="search" placeholder="Search roles..." autocomplete="off">
                     </div>
+                    <div class="filter-field">
+                        <label class="sr-only" for="role-type-filter">Role type</label>
+                        <select id="role-type-filter">
+                            <option value="">All types</option>
+                            <option value="system">System</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="filter-field">
+                        <label class="sr-only" for="role-status-filter">Role status</label>
+                        <select id="role-status-filter">
+                            <option value="">All statuses</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="archived">Archived</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" id="clear-filters" type="button">Clear Filters</button>
+                </div>
 
-                    <div class="card">
-                        <div class="content-header">
+                <div id="roles-state" class="state-panel loading" hidden></div>
+
+                <div class="role-management-layout">
+                    <section class="card role-list-card" aria-labelledby="roles-heading">
+                        <div class="section-title-row">
                             <div>
-                                <h2 id="selected-role-name">Select a role</h2>
-                                <p id="selected-role-description">Select a role to view its permissions.</p>
+                                <h2 id="roles-heading">Roles</h2>
+                                <p>Select a role to manage its permissions.</p>
+                            </div>
+                            <span class="result-count" id="role-result-count">0 roles</span>
+                        </div>
+
+                        <div class="role-list" id="role-list" aria-label="Roles"></div>
+
+                        <button class="btn btn-primary create-role-button" id="create-role-button"
+                            type="button">+ Create Role</button>
+                    </section>
+
+                    <section class="card role-details-card" aria-labelledby="selected-role-name">
+                        <div class="details-empty" id="details-empty">
+                            <div>
+                                <div class="empty-icon" aria-hidden="true">✓</div>
+                                <h2>Select a role</h2>
+                                <p class="muted">Select a role from the list to view its permissions.</p>
+                            </div>
+                        </div>
+
+                        <div id="details-content" hidden>
+                            <div class="details-header">
+                                <div>
+                                    <div class="title-with-badges">
+                                        <h2 id="selected-role-name">Role</h2>
+                                        <span class="badge neutral" id="selected-role-type">Role</span>
+                                        <span class="badge neutral" id="selected-role-status">Active</span>
+                                    </div>
+                                    <p class="muted" id="selected-role-description">No description provided.</p>
+                                </div>
+
+                                <div class="details-actions">
+                                    <button class="btn btn-secondary" id="view-members-button" type="button">View Members</button>
+                                    <button class="btn btn-secondary" id="edit-role-button" type="button">Edit Role</button>
+                                    <button class="btn btn-danger" id="archive-role-button" type="button">Archive</button>
+                                </div>
                             </div>
 
-                            <button class="btn btn-primary" id="save-permissions-btn" type="button">
-                                Save Changes
-                            </button>
-                        </div>
+                            <dl class="role-meta">
+                                <div>
+                                    <dt>Permissions</dt>
+                                    <dd id="selected-permission-count">—</dd>
+                                </div>
+                                <div>
+                                    <dt>Members</dt>
+                                    <dd id="selected-member-count">—</dd>
+                                </div>
+                                <div>
+                                    <dt>Created</dt>
+                                    <dd id="selected-created-at">—</dd>
+                                </div>
+                                <div>
+                                    <dt>Updated</dt>
+                                    <dd id="selected-updated-at">—</dd>
+                                </div>
+                            </dl>
 
-                        <div class="permission-grid" id="permission-grid" aria-live="polite">
-                            <div class="head">Permission</div>
-                            <div class="head">Status</div>
-                        </div>
+                            <div class="permission-section">
+                                <div class="section-title-row">
+                                    <div>
+                                        <h3>Permissions</h3>
+                                        <p>Assign the permissions that this role can use.</p>
+                                    </div>
+                                    <div class="permission-actions">
+                                        <button class="text-button" id="select-all-permissions" type="button">Select all</button>
+                                        <button class="text-button" id="clear-all-permissions" type="button">Clear all</button>
+                                    </div>
+                                </div>
 
-                        <div class="notice">
-                            CEO and Developer have full access. Admin, HR, and custom roles receive only explicitly assigned
-                            permissions. Backend authorization remains the source of truth.
+                                <div id="permission-state" class="inline-state" hidden></div>
+                                <div class="permission-catalog" id="permission-catalog"></div>
+                                <div class="permission-summary" id="permission-summary">0 permissions assigned</div>
+
+                                <div class="security-note">
+                                    <strong>Security</strong>
+                                    <span>CEO and Developer have full access. Other roles use explicitly assigned permissions.
+                                        Backend authorization remains the source of truth.</span>
+                                </div>
+                            </div>
+
+                            <div class="details-footer">
+                                <span class="muted">Permission changes are saved to the server.</span>
+                                <button class="btn btn-primary" id="save-permissions-button" type="button">
+                                    Save Changes
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </section>
         </main>
-    </div><script src="../js/api.js"></script>
+    </div>
 
+    <div id="modal-root"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+    <script src="../js/api.js"></script>
     <script src="../js/role-permissions.js"></script>
-  <script src="../js/auth-guard.js"></script>
+    <script src="../js/auth-guard.js"></script>
 </body>
 
 </html>
