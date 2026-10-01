@@ -620,6 +620,11 @@ button:disabled { cursor: not-allowed; opacity: .62; }
   backdrop-filter: blur(2px);
 }
 
+.dialog[hidden],
+.modal-backdrop[hidden] {
+  display: none !important;
+}
+
 .dialog {
   position: fixed;
   inset: 0;
