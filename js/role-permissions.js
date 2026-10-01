@@ -215,16 +215,6 @@
       list.appendChild(button);
     });
 
-    const createRow = document.createElement("div");
-    createRow.className = "role-create-row";
-    const create = document.createElement("button");
-    create.type = "button";
-    create.className = "btn btn-primary";
-    create.style.width = "100%";
-    create.textContent = "+ Create Role";
-    create.addEventListener("click", openCreateRoleModal);
-    createRow.appendChild(create);
-    list.appendChild(createRow);
   }
 
   function selectRole(role) {
