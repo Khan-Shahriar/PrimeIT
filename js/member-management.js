@@ -279,6 +279,7 @@
   function renderList() {
     if (!state.dataAvailable) {
       elements.tableBody.innerHTML = "";
+      elements.tableShell?.classList.remove("has-data");
       elements.listState.hidden = false;
       elements.listState.dataset.state = "unavailable";
       elements.loading.hidden = true;
@@ -288,6 +289,7 @@
     }
 
     elements.listState.hidden = state.filteredMembers.length !== 0;
+    elements.tableShell?.classList.toggle("has-data", state.filteredMembers.length > 0);
 
     if (!state.filteredMembers.length) {
       elements.listState.dataset.state = "empty";
@@ -311,6 +313,7 @@
     const pageMembers = state.filteredMembers.slice(start, start + state.pageSize);
 
     elements.tableBody.innerHTML = pageMembers.map(renderMemberRow).join("");
+    elements.tableShell?.classList.add("has-data");
 
     elements.resultCount.textContent = state.filteredMembers.length + " result" + (state.filteredMembers.length === 1 ? "" : "s");
     elements.pagination.hidden = totalPages <= 1;
@@ -364,7 +367,14 @@
 
     try {
       const response = await apiAdapter.listMembers();
-      const records = Array.isArray(response) ? response : (response && Array.isArray(response.members) ? response.members : []);
+      const normalizedResponse = window.PrimeItApi.unwrap(response);
+      const records = Array.isArray(normalizedResponse)
+        ? normalizedResponse
+        : (normalizedResponse && Array.isArray(normalizedResponse.members)
+          ? normalizedResponse.members
+          : (normalizedResponse?.data && Array.isArray(normalizedResponse.data.members)
+            ? normalizedResponse.data.members
+            : []));
       state.members = records.map(normalizeMember).filter(Boolean);
       state.dataAvailable = true;
       populateFilterOptions();
