@@ -130,14 +130,14 @@ function requestTargetLimit(req, res, next) {
 app.use(requestTargetLimit);
 app.use(csrfProtection);
 
-const authLimiter = rateLimit({
+const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 20,
     standardHeaders: true,
     legacyHeaders: false,
     message: {
         success: false,
-        message: "Too many authentication attempts. Please try again later.",
+        message: "Too many login attempts. Please try again later.",
         errors: []
     }
 });
@@ -209,7 +209,8 @@ app.use("/api/v1/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/v1/auth/verify-email", verificationLimiter);
 app.use("/api/v1/auth/me/password", sensitiveAccountLimiter);
 app.use("/api/v1/auth/me/photo", sensitiveAccountLimiter);
-app.use("/api/v1/auth", authLimiter);
+app.use("/api/v1/auth/login", loginLimiter);
+app.use("/api/v1/auth", (req, res, next) => next());
 
 app.use("/api/v1", apiLimiter, apiRoutes);
 
@@ -226,7 +227,8 @@ app.use("/api/auth/reset-password", passwordRecoveryLimiter);
 app.use("/api/auth/verify-email", verificationLimiter);
 app.use("/api/auth/me/password", sensitiveAccountLimiter);
 app.use("/api/auth/me/photo", sensitiveAccountLimiter);
-app.use("/api/auth", authLimiter, require("./routes/auth"));
+app.use("/api/auth/login", loginLimiter);
+app.use("/api/auth", require("./routes/auth"));
 app.use("/api/members", require("./routes/members"));
 app.use("/api/roles", require("./routes/roles"));
 
