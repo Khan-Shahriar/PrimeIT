@@ -54,7 +54,7 @@ p{margin:0}
 .search-field input,.filter-field select{width:100%;height:44px;border:1px solid #d9deea;border-radius:11px;background:#fff;color:var(--ink);padding:0 13px;outline:none}
 .search-field input:focus,.filter-field select:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.09)}
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 10px 35px rgba(11,16,32,.04)}
-.role-management-layout{display:grid;grid-template-columns:minmax(280px,350px) minmax(0,1fr);gap:18px;align-items:start}
+.role-management-layout{display:grid;grid-template-columns:minmax(380px,440px) minmax(0,1fr);gap:18px;align-items:start}
 .role-list-card,.role-details-card{padding:22px}
 .section-title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
 .section-title-row p{font-size:13px;color:var(--muted)}
