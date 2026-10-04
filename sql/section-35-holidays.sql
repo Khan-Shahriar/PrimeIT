@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS holidays (
+﻿CREATE TABLE IF NOT EXISTS holidays (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(120) NOT NULL,
     holiday_date DATE NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS holidays (
     holiday_type ENUM('Public Holiday','Company Holiday','Optional Holiday','Other') NOT NULL DEFAULT 'Public Holiday',
     recurring BOOLEAN NOT NULL DEFAULT FALSE,
     status ENUM('Active','Inactive') NOT NULL DEFAULT 'Active',
-    created_by BIGINT UNSIGNED NULL,
+    created_by INT UNSIGNED NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
@@ -40,3 +40,4 @@ WHERE NOT EXISTS (SELECT 1 FROM holidays WHERE holiday_date='2026-11-26' AND nam
 INSERT INTO holidays (name, holiday_date, description, holiday_type, recurring, status)
 SELECT 'Christmas', '2026-12-25', 'Christmas holiday', 'Public Holiday', FALSE, 'Active'
 WHERE NOT EXISTS (SELECT 1 FROM holidays WHERE holiday_date='2026-12-25' AND name='Christmas');
+
