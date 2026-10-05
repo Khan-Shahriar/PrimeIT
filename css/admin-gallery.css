@@ -16,18 +16,6 @@ img{max-width:100%;display:block}
 .skip-link{position:fixed;top:8px;left:8px;z-index:500;padding:10px 14px;background:#10162A;color:#fff;border-radius:9px;transform:translateY(-150%);transition:transform .2s}
 .skip-link:focus{transform:none}
 .app-body{min-height:100vh}
-.app-shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
-.sidebar{position:sticky;top:0;height:100vh;background:#fff;border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;z-index:100}
-.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.04em}
-.logo-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--purple));display:grid;place-items:center;color:#fff;box-shadow:0 8px 20px rgba(79,70,229,.25)}
-.logo-mark span{font-size:18px}
-.side-label{margin:28px 10px 5px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
-.side-nav{display:grid;gap:5px;margin-top:8px;overflow:auto}
-.nav-link{padding:11px 12px;border-radius:11px;border:0;background:transparent;color:#596274;font-size:14px;font-weight:650;display:block;text-align:left}
-.nav-link:hover{background:#F5F7FB;color:var(--ink)}
-.nav-link.active{background:linear-gradient(90deg,#EEF2FF,#F6F0FF);color:var(--blue2);font-weight:800}
-.nav-button{width:100%}
-.side-bottom{margin-top:auto;padding-top:18px;border-top:1px solid var(--line)}
 .main{min-width:0}
 .app-topbar{height:76px;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:30}
 .topbar-left{display:flex;align-items:center;gap:14px}
@@ -139,16 +127,7 @@ textarea{min-height:120px;resize:vertical}
   .filter-grid .field:first-child{grid-column:1/-1}
   .gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:900px){
-  .app-shell{grid-template-columns:78px 1fr}
-  .sidebar{padding:18px 12px}
-  .sidebar .side-label,.logo-text{display:none}
-  .nav-link{text-align:center;font-size:0}
-  .nav-link::before{content:"•";font-size:20px}
-  .side-bottom .nav-link{font-size:0}
-  .side-bottom .nav-link::before{content:"•"}
-  .mobile-toggle{display:block}
-}
+
 @media(max-width:680px){
   .app-shell{display:block}
   .sidebar{position:fixed;left:-270px;width:250px;transition:left .22s ease}
