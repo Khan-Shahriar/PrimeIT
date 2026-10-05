@@ -12,30 +12,32 @@
 <body class="app-body">
     <div class="app-shell">
         <aside class="sidebar" id="admin-sidebar">
-            <a class="logo" href="admin-dashboard.html">
+            <a class="logo" href="admin-dashboard.html" aria-label="PrimeIt Admin Dashboard">
                 <span class="logo-mark" aria-hidden="true"><span>P</span></span>
                 <span class="logo-text">PrimeIt</span>
             </a>
 
-            <div class="side-label admin-panel-label">Admin Panel</div>
+            <p class="side-label">Admin Panel</p>
 
             <nav class="side-nav" aria-label="Admin navigation">
                 <a class="nav-link" href="admin-dashboard.html">Dashboard</a>
-                <a class="nav-link" href="member-management.html">Members</a>
+                <a class="nav-link" href="member-management.html">Member Management</a>
                 <a class="nav-link" href="leave-management.html">Leave Management</a>
-                <a class="nav-link" href="holiday-management.html">Holidays</a>
+                <a class="nav-link" href="holiday-management.html">Holiday Management</a>
                 <a class="nav-link" href="admin-announcements.html">Announcements</a>
                 <a class="nav-link" href="admin-office-information.html">Office Information</a>
                 <a class="nav-link" href="admin-gallery.html">Gallery</a>
-                <a class="nav-link active" href="role-permissions.html" aria-current="page">Roles &amp; Permissions</a>
+                <a class="nav-link active" href="role-permissions.html" aria-current="page">Role &amp; Permissions</a>
                 <a class="nav-link" href="admin-profile.html">Admin Profile</a>
             </nav>
 
             <div class="side-bottom">
-                <a class="nav-link" href="../public/index.html">↩ <span class="side-label">Back to Website</span></a>
-                <a class="nav-link" href="admin-login.html">⇥ <span class="side-label">Logout</span></a>
+                <a class="nav-link" href="../public/index.html">Back to Website</a>
+                <button class="nav-link nav-button" type="button" data-logout>Logout</button>
             </div>
         </aside>
+
+        <div class="sidebar-backdrop" data-sidebar-close hidden></div>
 
         <main class="main">
             <header class="app-topbar">
