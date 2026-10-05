@@ -1,0 +1,72 @@
+/* PrimeIt Admin Shared UI — Dashboard is the visual source of truth. */
+:root{
+  --admin-blue:#2563EB;--admin-blue2:#4F46E5;--admin-purple:#7C3AED;
+  --admin-ink:#151A2D;--admin-muted:#667085;--admin-line:#E7EAF2;
+  --admin-bg:#F7F9FC;--admin-white:#FFF;--admin-soft:#EEF2FF;
+  --admin-radius:18px;--admin-shadow:0 18px 50px rgba(11,16,32,.08)
+}
+html{scroll-behavior:smooth}
+body.app-body{margin:0;background:var(--admin-bg);color:var(--admin-ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+.app-body *{box-sizing:border-box}
+.app-body a{color:inherit;text-decoration:none}
+.app-body button,.app-body input,.app-body textarea,.app-body select{font:inherit}
+.app-body button{cursor:pointer}
+.app-body button:focus-visible,.app-body a:focus-visible,.app-body input:focus-visible,.app-body select:focus-visible,.app-body textarea:focus-visible{outline:3px solid rgba(37,99,235,.35);outline-offset:2px}
+.app-shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:#fff;border-right:1px solid var(--admin-line);padding:22px 16px;display:flex;flex-direction:column;z-index:100}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.04em}
+.logo-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--admin-blue),var(--admin-purple));display:grid;place-items:center;color:#fff;box-shadow:0 8px 20px rgba(79,70,229,.25);flex:0 0 auto}
+.logo-mark span{font-size:18px}
+.logo-text{font-size:22px;font-weight:900;line-height:1;letter-spacing:-.04em;color:var(--admin-ink)}
+.side-label{margin:28px 10px 7px;color:#98A2B3;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.side-nav{display:grid;gap:5px;overflow:auto}
+.nav-link{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:11px;color:#596274;font-size:14px;font-weight:650;display:block;width:100%}
+.nav-link:hover{background:#F5F7FB;color:var(--admin-ink)}
+.nav-link.active{background:linear-gradient(90deg,#EEF2FF,#F6F0FF);color:var(--admin-blue2);font-weight:800}
+.nav-button{font:inherit}
+.side-bottom{margin-top:auto;padding-top:18px;border-top:1px solid var(--admin-line);display:grid;gap:5px}
+.main{min-width:0}
+.app-topbar{height:76px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--admin-line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:30}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.search-placeholder,.topbar-context{font-size:13px;font-weight:700;color:var(--admin-muted)}
+.mobile-toggle{display:none;border:0;background:#F4F6FA;border-radius:10px;padding:9px 11px;color:var(--admin-ink)}
+.user-chip{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:750}
+.user-context{display:grid;text-align:right;line-height:1.25}
+.user-name{font-weight:800}
+.user-role{font-size:11px;color:var(--admin-muted);font-weight:600}
+.user-avatar{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--admin-blue),var(--admin-purple));color:#fff;display:grid;place-items:center;font-size:13px;flex:0 0 auto}
+.sidebar-backdrop{position:fixed;inset:0;background:rgba(11,16,32,.35);z-index:90}
+.content{padding:30px;max-width:1600px;margin:0 auto}
+.breadcrumb{font-size:13px;color:var(--admin-muted);margin-bottom:12px}
+.content-header{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}
+.eyebrow,.section-kicker{margin:0 0 7px;color:var(--admin-blue2);font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+.content-header h1{font-size:clamp(32px,4vw,46px);line-height:1.05;letter-spacing:-.045em;margin:0}
+.content-header>div:first-child>p:last-child{color:var(--admin-muted);margin:8px 0 0}
+.card,.management-card,.profile-sidebar .card,.profile-main .card{background:#fff;border:1px solid var(--admin-line);border-radius:18px}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;transition:.2s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+.btn-primary{background:var(--admin-blue2);color:#fff}
+.btn-primary:hover{filter:brightness(.96);transform:translateY(-1px)}
+.btn-secondary{background:#fff;color:var(--admin-ink);border:1px solid var(--admin-line)}
+.btn-secondary:hover{background:#F8F9FC}
+@media(max-width:980px){
+ .app-shell{grid-template-columns:78px minmax(0,1fr)}
+ .sidebar{padding:18px 12px}
+ .logo-text,.sidebar>.side-label{display:none}
+ .nav-link{font-size:0;text-align:center}
+ .nav-link::before{content:"•";font-size:20px}
+ .side-bottom .nav-link{font-size:0}
+}
+@media(max-width:680px){
+ .app-shell{display:block}
+ .sidebar{position:fixed;left:-270px;width:250px;transition:left .22s ease;box-shadow:18px 0 40px rgba(11,16,32,.12)}
+ .sidebar.open{left:0}
+ .sidebar .side-label,.logo-text{display:inline}
+ .nav-link{font-size:14px;text-align:left}
+ .nav-link::before{display:none}
+ .mobile-toggle{display:inline-grid;place-items:center}
+ .app-topbar{height:68px;padding:0 15px}
+ .search-placeholder,.topbar-context{display:none}
+ .user-context{display:none}
+ .content{padding:20px 15px}
+ .content-header{align-items:flex-start;flex-direction:column}
+}
