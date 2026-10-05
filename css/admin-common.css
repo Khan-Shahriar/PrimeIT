@@ -14,7 +14,7 @@ body.app-body{margin:0;background:var(--admin-bg);color:var(--admin-ink);font-fa
 .app-body button:focus-visible,.app-body a:focus-visible,.app-body input:focus-visible,.app-body select:focus-visible,.app-body textarea:focus-visible{outline:3px solid rgba(37,99,235,.35);outline-offset:2px}
 .app-shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
 .sidebar{position:sticky;top:0;height:100vh;background:#fff;border-right:1px solid var(--admin-line);padding:22px 16px;display:flex;flex-direction:column;z-index:100}
-.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.04em}
+.logo{display:flex;align-items:center;gap:10px;padding:0;font-weight:900;font-size:22px;letter-spacing:-.04em}
 .logo-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--admin-blue),var(--admin-purple));display:grid;place-items:center;color:#fff;box-shadow:0 8px 20px rgba(79,70,229,.25);flex:0 0 auto}
 .logo-mark span{font-size:18px}
 .logo-text{font-size:22px;font-weight:900;line-height:1;letter-spacing:-.04em;color:var(--admin-ink)}
