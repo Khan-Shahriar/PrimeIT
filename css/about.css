@@ -1121,3 +1121,11 @@ tr:last-child td {
   opacity: 1;
   transform: none
 }
+
+/* Shared PrimeIt brand mark: keep the logo consistent across panels and public pages. */
+.logo-mark{overflow:hidden}
+.logo-mark>span{display:grid;place-items:center;width:100%;height:100%;font-size:0!important;line-height:0}
+.logo-mark>span::before{content:"";display:block;width:25px;height:25px;background:url("../assets/logo/primeit-mark.svg") center/contain no-repeat}
+.logo:hover .logo-mark{transform:translateY(-1px);box-shadow:0 10px 24px rgba(79,70,229,.32)}
+.logo-mark{transition:transform .2s ease,box-shadow .2s ease}
+@media(prefers-reduced-motion:reduce){.logo-mark{transition:none}.logo:hover .logo-mark{transform:none}}
