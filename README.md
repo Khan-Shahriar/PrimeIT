@@ -152,3 +152,7 @@ The public Contact form now submits validated inquiries to `POST /api/v1/contact
 ## Section 39 — Final QA & Production Sign-off
 
 PrimeIt is now in final QA rather than feature development. The full regression checklist is documented in `docs/SECTION-39-FINAL-QA.md`. Automated syntax, security, frontend, health, authentication, and RBAC checks must pass before browser regression. Production sign-off remains pending until the browser checklist and end-to-end verification are completed successfully.
+
+## Browser Favicon
+
+The PrimeIt browser-tab icon is defined in `public/favicon.svg` and uses the existing letter-P mark. Public pages reference it as `favicon.svg`; admin and member pages reference it as `../public/favicon.svg`.
