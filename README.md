@@ -152,10 +152,3 @@ The public Contact form now submits validated inquiries to `POST /api/v1/contact
 ## Section 39 — Final QA & Production Sign-off
 
 PrimeIt is now in final QA rather than feature development. The full regression checklist is documented in `docs/SECTION-39-FINAL-QA.md`. Automated syntax, security, frontend, health, authentication, and RBAC checks must pass before browser regression. Production sign-off remains pending until the browser checklist and end-to-end verification are completed successfully.
-
-## Shared PrimeIt Brand Mark
-
-- Shared vector brand asset: `assets/logo/primeit-mark.svg`.
-- The mark uses the existing PrimeIt blue-to-purple logo container and a white geometric monogram with a subtle violet accent.
-- Shared logo styling is applied through the relevant public, member, and admin page stylesheets, including reduced-motion support.
-- Keep the logo mark and wordmark consistent across public navigation, member/admin panels, and authentication screens. Do not replace the current application structure or page functionality as part of branding changes.
