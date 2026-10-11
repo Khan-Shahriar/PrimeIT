@@ -21,9 +21,10 @@ a{color:inherit;text-decoration:none}
 .mobile-toggle{display:none;border:0;background:#f4f6fa;border-radius:10px;padding:9px}
 .content{padding:30px;max-width:1600px}
 .breadcrumb{font-size:13px;color:var(--muted);margin-bottom:10px}
-.page-header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px}
-.eyebrow{display:inline-flex;padding:6px 9px;border-radius:999px;background:var(--soft);color:var(--blue);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
-h1{font-size:clamp(30px,4vw,44px);line-height:1.08;letter-spacing:-.045em;margin:10px 0 8px}
+.page-header{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}
+.eyebrow{margin:0 0 7px;color:var(--blue2);font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+.page-header h1{font-size:clamp(32px,4vw,46px);line-height:1.05;letter-spacing:-.045em;margin:0}
+.page-header>div:first-child>p:last-child{color:var(--muted);margin:8px 0 0}
 h2{font-size:22px;line-height:1.2;letter-spacing:-.025em;margin:0 0 5px}
 h3{font-size:17px;margin:0 0 4px}
 p{margin:0}
