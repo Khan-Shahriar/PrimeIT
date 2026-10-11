@@ -117,7 +117,7 @@
         </section>
 
         <div class="dashboard-grid dashboard-grid-primary">
-          <section class="card" aria-labelledby="leave-title">
+<section class="card" aria-labelledby="leave-title">
             <div class="card-heading">
               <div>
                 <p class="section-kicker">Review queue</p>
@@ -132,7 +132,7 @@
             </div>
           </section>
 
-          <section class="card" aria-labelledby="members-title">
+<section class="card" aria-labelledby="members-title">
             <div class="card-heading">
               <div>
                 <p class="section-kicker">People</p>
@@ -152,10 +152,24 @@
             </div>
             <div class="state-note" data-state-note="members">Member data is not available yet.</div>
           </section>
+
+<section class="card" aria-labelledby="activity-title">
+            <div class="card-heading">
+              <div>
+                <p class="section-kicker">System activity</p>
+                <h2 id="activity-title">Recent activity</h2>
+              </div>
+            </div>
+            <div class="state-panel compact" data-state-panel="activity">
+              <div class="state-icon" aria-hidden="true">•</div>
+              <h3>No recent activity available</h3>
+              <p>Activity records will be rendered from a future backend data source.</p>
+            </div>
+          </section>
         </div>
 
         <div class="dashboard-grid dashboard-grid-secondary">
-          <section class="card" aria-labelledby="announcements-title">
+<section class="card" aria-labelledby="announcements-title">
             <div class="card-heading">
               <div>
                 <p class="section-kicker">Communication</p>
@@ -170,7 +184,7 @@
             </div>
           </section>
 
-          <section class="card" aria-labelledby="gallery-title">
+<section class="card" aria-labelledby="gallery-title">
             <div class="card-heading">
               <div>
                 <p class="section-kicker">Media</p>
@@ -187,10 +201,8 @@
               </div>
             </div>
           </section>
-        </div>
 
-        <div class="dashboard-grid dashboard-grid-secondary">
-          <section class="card" aria-labelledby="holiday-title">
+<section class="card" aria-labelledby="holiday-title">
             <div class="card-heading">
               <div>
                 <p class="section-kicker">Calendar</p>
@@ -200,22 +212,7 @@
             </div>
             <div class="holiday-list" data-holiday-list aria-live="polite"></div>
           </section>
-
-          <section class="card" aria-labelledby="activity-title">
-            <div class="card-heading">
-              <div>
-                <p class="section-kicker">System activity</p>
-                <h2 id="activity-title">Recent activity</h2>
-              </div>
-            </div>
-            <div class="state-panel compact" data-state-panel="activity">
-              <div class="state-icon" aria-hidden="true">•</div>
-              <h3>No recent activity available</h3>
-              <p>Activity records will be rendered from a future backend data source.</p>
-            </div>
-          </section>
         </div>
-
 
         <div class="dashboard-message" role="status" aria-live="polite" data-dashboard-message hidden></div>
       </section>
