@@ -70,3 +70,129 @@ body.app-body{margin:0;background:var(--admin-bg);color:var(--admin-ink);font-fa
  .content{padding:20px 15px}
  .content-header{align-items:flex-start;flex-direction:column}
 }
+
+/* Cross-page visual alignment — keep Admin Panel pages consistent with the dashboard. */
+.app-body .content{
+  width:min(1600px,100%);
+  max-width:1600px;
+  margin:0 auto;
+  padding:30px;
+}
+.app-body .content-header,
+.app-body .page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  margin-bottom:24px;
+}
+.app-body .content-header h1,
+.app-body .page-header h1{
+  font-size:clamp(32px,4vw,46px);
+  line-height:1.05;
+  letter-spacing:-.045em;
+  margin:0;
+}
+.app-body .section-heading,
+.app-body .section-title-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+  margin-bottom:14px;
+}
+.app-body .section-heading h2,
+.app-body .section-title-row h2{
+  font-size:18px;
+  line-height:1.2;
+  letter-spacing:-.025em;
+  margin:0;
+}
+.app-body .card,
+.app-body .management-card,
+.app-body .filter-card,
+.app-body .list-card,
+.app-body .resource-card,
+.app-body .hours-card,
+.app-body .overview-card,
+.app-body .status-card,
+.app-body .role-list-card,
+.app-body .role-details-card,
+.app-body .stat-card,
+.app-body .kpi-card,
+.app-body .gallery-admin-card,
+.app-body .profile-sidebar .card,
+.app-body .profile-main .card{
+  border:1px solid var(--admin-line);
+  border-radius:18px;
+  box-shadow:0 5px 16px rgba(11,16,32,.05);
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.app-body .card:hover,
+.app-body .management-card:hover,
+.app-body .filter-card:hover,
+.app-body .list-card:hover,
+.app-body .resource-card:hover,
+.app-body .hours-card:hover,
+.app-body .overview-card:hover,
+.app-body .status-card:hover,
+.app-body .role-list-card:hover,
+.app-body .role-details-card:hover,
+.app-body .stat-card:hover,
+.app-body .kpi-card:hover,
+.app-body .gallery-admin-card:hover,
+.app-body .profile-sidebar .card:hover,
+.app-body .profile-main .card:hover{
+  border-color:#D5DDF0;
+  box-shadow:0 14px 30px rgba(11,16,32,.11);
+  transform:translateY(-4px);
+}
+.app-body .text-link{
+  display:inline-block;
+  border-radius:7px;
+  padding:3px 6px;
+  margin:-3px -6px;
+  transition:box-shadow .2s ease,background-color .2s ease,transform .2s ease;
+}
+.app-body .text-link:hover{
+  text-decoration:none;
+  background:#fff;
+  box-shadow:0 5px 14px rgba(37,99,235,.16);
+  transform:translateY(-1px);
+}
+@media(max-width:680px){
+  .app-body .content{padding:20px 15px}
+  .app-body .content-header,
+  .app-body .page-header{align-items:flex-start;flex-direction:column}
+  .app-body .card,
+  .app-body .management-card,
+  .app-body .filter-card,
+  .app-body .list-card,
+  .app-body .resource-card,
+  .app-body .hours-card,
+  .app-body .overview-card,
+  .app-body .status-card,
+  .app-body .role-list-card,
+  .app-body .role-details-card,
+  .app-body .profile-sidebar .card,
+  .app-body .profile-main .card{padding:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .app-body .card,
+  .app-body .management-card,
+  .app-body .filter-card,
+  .app-body .list-card,
+  .app-body .resource-card,
+  .app-body .hours-card,
+  .app-body .overview-card,
+  .app-body .status-card,
+  .app-body .role-list-card,
+  .app-body .role-details-card,
+  .app-body .stat-card,
+  .app-body .kpi-card,
+  .app-body .gallery-admin-card,
+  .app-body .profile-sidebar .card,
+  .app-body .profile-main .card,
+  .app-body .text-link{transition:none;transform:none}
+}
+
