@@ -996,6 +996,8 @@
     elements.role.value = "";
     elements.status.value = "";
     elements.clearSearch.hidden = true;
+    renderDepartmentDropdown();
+    auxiliaryDropdownRenderers.forEach(function (renderDropdown) { renderDropdown(); });
 
     applyFilters();
   }
