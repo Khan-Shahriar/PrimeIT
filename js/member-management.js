@@ -235,6 +235,124 @@
     setStat("pending", String(pending), "Invited or pending records");
   }
 
+  let departmentDropdown = null;
+
+  function renderDepartmentDropdown() {
+    if (!departmentDropdown) return;
+
+    const select = elements.department;
+    const button = departmentDropdown.querySelector(".department-dropdown-trigger");
+    const menu = departmentDropdown.querySelector(".department-dropdown-menu");
+    const selectedOption = select.options[select.selectedIndex];
+
+    button.textContent = selectedOption ? selectedOption.textContent : "All Departments";
+    button.setAttribute("aria-label", "Filter by department: " + button.textContent);
+    menu.innerHTML = "";
+
+    Array.from(select.options).forEach(function (option, index) {
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "department-dropdown-option";
+      item.id = "department-option-" + index;
+      item.setAttribute("role", "option");
+      item.setAttribute("aria-selected", String(option.value === select.value));
+      item.dataset.value = option.value;
+      item.textContent = option.textContent;
+      if (option.value === select.value) item.classList.add("is-selected");
+      item.addEventListener("click", function () {
+        select.value = option.value;
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+        renderDepartmentDropdown();
+        closeDepartmentDropdown();
+        button.focus();
+      });
+      menu.appendChild(item);
+    });
+  }
+
+  function closeDepartmentDropdown() {
+    if (!departmentDropdown) return;
+    const button = departmentDropdown.querySelector(".department-dropdown-trigger");
+    const menu = departmentDropdown.querySelector(".department-dropdown-menu");
+    departmentDropdown.classList.remove("is-open");
+    button.setAttribute("aria-expanded", "false");
+    menu.hidden = true;
+  }
+
+  function setupDepartmentDropdown() {
+    const select = elements.department;
+    if (!select || departmentDropdown) return;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "department-dropdown";
+    wrapper.innerHTML =
+      '<button type="button" class="department-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">All Departments</button>' +
+      '<div class="department-dropdown-menu" role="listbox" aria-label="Departments" hidden></div>';
+
+    select.classList.add("department-select-native");
+    select.setAttribute("aria-hidden", "true");
+    select.tabIndex = -1;
+    select.parentNode.insertBefore(wrapper, select);
+    wrapper.insertBefore(select, wrapper.firstChild);
+    departmentDropdown = wrapper;
+
+    const button = wrapper.querySelector(".department-dropdown-trigger");
+    const menu = wrapper.querySelector(".department-dropdown-menu");
+
+    button.addEventListener("click", function () {
+      const opening = !wrapper.classList.contains("is-open");
+      document.querySelectorAll(".department-dropdown.is-open").forEach(function (openDropdown) {
+        openDropdown.classList.remove("is-open");
+        openDropdown.querySelector(".department-dropdown-trigger").setAttribute("aria-expanded", "false");
+        openDropdown.querySelector(".department-dropdown-menu").hidden = true;
+      });
+      wrapper.classList.toggle("is-open", opening);
+      button.setAttribute("aria-expanded", String(opening));
+      menu.hidden = !opening;
+      if (opening) {
+        const selected = menu.querySelector('[aria-selected="true"]');
+        if (selected) selected.focus();
+      }
+    });
+
+    wrapper.addEventListener("keydown", function (event) {
+      const options = Array.from(menu.querySelectorAll(".department-dropdown-option"));
+      const currentIndex = options.indexOf(document.activeElement);
+
+      if (event.key === "Escape") {
+        closeDepartmentDropdown();
+        button.focus();
+      } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        if (!wrapper.classList.contains("is-open")) {
+          button.click();
+          return;
+        }
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        const nextIndex = currentIndex < 0
+          ? 0
+          : (currentIndex + step + options.length) % options.length;
+        options[nextIndex]?.focus();
+      } else if (event.key === "Home" && options.length) {
+        event.preventDefault();
+        options[0].focus();
+      } else if (event.key === "End" && options.length) {
+        event.preventDefault();
+        options[options.length - 1].focus();
+      } else if ((event.key === "Enter" || event.key === " ") && document.activeElement === button) {
+        event.preventDefault();
+        button.click();
+      }
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!wrapper.contains(event.target)) closeDepartmentDropdown();
+    });
+
+    select.addEventListener("change", renderDepartmentDropdown);
+    renderDepartmentDropdown();
+  }
+
   function populateFilterOptions() {
     const departments = Array.from(new Set(state.members.map(function (member) {
       return member.department;
@@ -259,6 +377,7 @@
 
     elements.department.value = departments.includes(currentDepartment) ? currentDepartment : "";
     elements.role.value = roles.includes(currentRole) ? currentRole : "";
+    renderDepartmentDropdown();
   }
 
   function applyFilters() {
@@ -907,6 +1026,7 @@
   function initialize() {
     renderUnavailableStats();
     setupSidebar();
+    setupDepartmentDropdown();
     setupEvents();
     loadMembers();
   }
