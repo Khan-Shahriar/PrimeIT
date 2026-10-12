@@ -282,7 +282,17 @@ tr:last-child td{border-bottom:0}
   color:#98A2B3;
   pointer-events:none;
 }
-.members-page .member-search-input-wrap input{padding-left:36px}
+.members-page .member-search-input-wrap input{
+  padding-left:36px;
+  box-shadow:0 3px 10px rgba(15,23,42,.08);
+  transition:box-shadow .2s ease,border-color .2s ease,transform .2s ease;
+}
+.members-page .member-search-input-wrap input:hover{
+  box-shadow:0 5px 14px rgba(15,23,42,.12);
+}
+.members-page .member-search-input-wrap input:focus{
+  box-shadow:0 0 0 4px rgba(37,99,235,.09),0 5px 14px rgba(15,23,42,.10);
+}
 .members-page .member-clear-filters{
   min-height:46px;
   padding:0 13px;
