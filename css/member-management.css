@@ -496,7 +496,7 @@ button:disabled { cursor: not-allowed; opacity: .62; }
 
 .member-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-.member-name { display: block; font-weight: 750; }
+.member-name { display: block; font-size: 14px; font-weight: 750; }
 
 .member-email {
   display: block;
