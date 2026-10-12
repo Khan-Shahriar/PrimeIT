@@ -160,3 +160,7 @@ The PrimeIt browser-tab icon is defined in `public/favicon.svg` and uses the exi
 ## Member Management Filter Dropdowns
 
 The Department, Role, and Status filters use matching custom dropdown menus with rounded corners, soft shadows, blue hover/selected states, and keyboard navigation. The original select controls remain the source of selected values, so existing filtering behavior is preserved.
+
+## Leave Management Review Queue UI
+
+The administrator Leave Management review queue follows the Member Management Directory card pattern: a unified section header, search and filter toolbar, consistent table header and row typography, aligned action buttons, subtle shadows, hover feedback, and responsive filter layout. Existing leave API integration, filter controls, pagination, and approval/rejection actions are preserved.
