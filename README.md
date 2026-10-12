@@ -156,3 +156,7 @@ PrimeIt is now in final QA rather than feature development. The full regression 
 ## Browser Favicon
 
 The PrimeIt browser-tab icon is defined in `public/favicon.svg` and uses the existing letter-P mark. Public pages reference it as `favicon.svg`; admin and member pages reference it as `../public/favicon.svg`.
+
+## Member Management Filter Dropdowns
+
+The Department, Role, and Status filters use matching custom dropdown menus with rounded corners, soft shadows, blue hover/selected states, and keyboard navigation. The original select controls remain the source of selected values, so existing filtering behavior is preserved.
