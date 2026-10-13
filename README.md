@@ -177,3 +177,6 @@ Leave Type and Department now use the same rounded custom dropdown menus as Leav
 All 45 native HTML `<select>` controls across the 12 pages that contain dropdowns now follow the PrimeIt custom dropdown standard. The shared `css/custom-dropdowns.css` and `js/custom-dropdowns.js` assets provide a rounded trigger button using the `department-dropdown-trigger` visual pattern, a curved 12px menu, soft shadows, blue hover and selected states, and keyboard support (Arrow keys, Home/End, Enter/Space, and Escape). The native select remains the form/filter value source so existing page behavior and form submission are preserved. The enhancer updates when options change dynamically and leaves the existing Member Management and Leave Management custom filter dropdowns intact, while also styling their remaining form selects.
 
 Pages covered: Admin Announcements, Gallery, Office Information, Holiday Management, Leave Management, Member Management, Role & Permissions; Member Announcements, Leave Management, Gallery, Members; and Public Contact. Browser-native date pickers and other non-select controls are not changed.
+
+The Leave Management search input has a subtle lift-and-shadow hover animation. Its focused state removes the blue rounded focus halo while retaining a restrained border and shadow change; reduced-motion preferences are respected.
+
