@@ -168,3 +168,6 @@ The administrator Leave Management review queue follows the Member Management Di
 The Leave Status select now matches the Member Management Department dropdown trigger with a custom chevron, rounded 42px control, and matching blue hover/focus styling; native select behavior is preserved.
 
 The Leave Status filter now uses the same rounded custom dropdown menu as the Member Management Department filter, including a 12px menu radius, soft shadow, blue hover/selected states, and keyboard navigation. The native select remains the filtering source of truth.
+
+
+Leave Type and Department now use the same rounded custom dropdown menus as Leave Status and the Member Management filters, including soft shadows, blue hover/selected states, and keyboard navigation. Department options refresh from loaded leave-request data. From date and To date controls use matching rounded borders and hover/focus shadows; the calendar popup itself remains browser-native.
