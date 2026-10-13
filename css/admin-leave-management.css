@@ -498,7 +498,7 @@
 }
 
 #leave-filters #leave-search:hover {
-  border-color: #b8c8e8;
+  border-color: #93b4ff;
   box-shadow: 0 5px 12px rgba(16, 24, 40, .08);
   transform: translateY(-1px);
 }
