@@ -164,3 +164,5 @@ The Department, Role, and Status filters use matching custom dropdown menus with
 ## Leave Management Review Queue UI
 
 The administrator Leave Management review queue follows the Member Management Directory card pattern: a unified section header, search and filter toolbar, matching 42px filter controls with rounded borders and consistent hover/focus shadows, consistent table header and row typography, aligned action buttons, and responsive filter layout. Existing leave API integration, filter controls, pagination, and approval/rejection actions are preserved.
+
+The Leave Status select now matches the Member Management Department dropdown trigger with a custom chevron, rounded 42px control, and matching blue hover/focus styling; native select behavior is preserved.
