@@ -171,3 +171,9 @@ The Leave Status filter now uses the same rounded custom dropdown menu as the Me
 
 
 Leave Type and Department now use the same rounded custom dropdown menus as Leave Status and the Member Management filters, including soft shadows, blue hover/selected states, and keyboard navigation. Department options refresh from loaded leave-request data. From date and To date controls use matching rounded borders and hover/focus shadows; the calendar popup itself remains browser-native.
+
+## Shared Rounded Dropdown Design
+
+All 45 native HTML `<select>` controls across the 12 pages that contain dropdowns now follow the PrimeIt custom dropdown standard. The shared `css/custom-dropdowns.css` and `js/custom-dropdowns.js` assets provide a rounded trigger button using the `department-dropdown-trigger` visual pattern, a curved 12px menu, soft shadows, blue hover and selected states, and keyboard support (Arrow keys, Home/End, Enter/Space, and Escape). The native select remains the form/filter value source so existing page behavior and form submission are preserved. The enhancer updates when options change dynamically and leaves the existing Member Management and Leave Management custom filter dropdowns intact, while also styling their remaining form selects.
+
+Pages covered: Admin Announcements, Gallery, Office Information, Holiday Management, Leave Management, Member Management, Role & Permissions; Member Announcements, Leave Management, Gallery, Members; and Public Contact. Browser-native date pickers and other non-select controls are not changed.
