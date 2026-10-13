@@ -180,3 +180,6 @@ Pages covered: Admin Announcements, Gallery, Office Information, Holiday Managem
 
 The Leave Management search input has a subtle lift-and-shadow hover animation. Its focused state removes the blue rounded focus halo while retaining a restrained border and shadow change; reduced-motion preferences are respected.
 
+## Shared Search Input Design
+
+All 19 HTML `input[type="search"]` fields across 13 admin and member pages now use the shared `css/search-inputs.css` design aligned with Admin Leave Management's `#leave-search`: consistent 42px height, 10px rounded corners, subtle default shadow, blue-tinted border and lift/shadow hover animation, and a solid blue focus border without a blue focus halo. Existing search IDs, names, placeholders, icon padding, filtering logic, and responsive layouts are preserved. Reduced-motion preferences are respected.
