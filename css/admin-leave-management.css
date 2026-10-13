@@ -449,3 +449,42 @@
 .leave-filter-dropdown .department-dropdown-option.is-selected {
   font-weight: 700;
 }
+
+
+/* Keep the Leave Type, Department, and date filter controls visually consistent. */
+#leave-filters #leave-from,
+#leave-filters #leave-to {
+  box-sizing: border-box;
+  min-width: 0;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #151A2D;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, .04);
+  transition: border-color .2s ease, box-shadow .2s ease;
+  color-scheme: light;
+}
+
+#leave-filters #leave-from:hover,
+#leave-filters #leave-to:hover {
+  border-color: #b8c8e8;
+  box-shadow: 0 3px 9px rgba(16, 24, 40, .07);
+}
+
+#leave-filters #leave-from:focus,
+#leave-filters #leave-to:focus,
+#leave-filters #leave-from:focus-visible,
+#leave-filters #leave-to:focus-visible {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .1), 0 3px 9px rgba(16, 24, 40, .06);
+}
+
+#leave-filters input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: .75;
+}
+
+#leave-filters input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
