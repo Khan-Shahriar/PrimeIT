@@ -488,3 +488,36 @@
 #leave-filters input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
+
+/* Leave search field: subtle hover motion without the blue focus halo. */
+#leave-filters #leave-search {
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, .04);
+  transform: translateY(0);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, background-color .2s ease;
+}
+
+#leave-filters #leave-search:hover {
+  border-color: #b8c8e8;
+  box-shadow: 0 5px 12px rgba(16, 24, 40, .08);
+  transform: translateY(-1px);
+}
+
+#leave-filters #leave-search:focus,
+#leave-filters #leave-search:focus-visible {
+  border-color: #b8c8e8;
+  outline: none;
+  box-shadow: 0 3px 9px rgba(16, 24, 40, .06);
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #leave-filters #leave-search {
+    transition: none;
+  }
+
+  #leave-filters #leave-search:hover {
+    transform: none;
+  }
+}
+
