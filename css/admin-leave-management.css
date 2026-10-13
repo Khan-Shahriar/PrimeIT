@@ -505,7 +505,7 @@
 
 #leave-filters #leave-search:focus,
 #leave-filters #leave-search:focus-visible {
-  border-color: #b8c8e8;
+  border-color: #2563eb;
   outline: none;
   box-shadow: 0 3px 9px rgba(16, 24, 40, .06);
   transform: translateY(0);
