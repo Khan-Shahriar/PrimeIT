@@ -1,0 +1,46 @@
+/* PrimeIt shared search-input design — aligned with Admin Leave Management #leave-search. */
+input[type="search"],
+#leave-filters #leave-search,
+.members-page .member-search-input-wrap input {
+  box-sizing: border-box;
+  height: 42px;
+  min-height: 42px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, .04);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, background-color .2s ease;
+}
+
+input[type="search"]:hover,
+#leave-filters #leave-search:hover,
+.members-page .member-search-input-wrap input:hover {
+  border-color: #93b4ff;
+  box-shadow: 0 5px 12px rgba(16, 24, 40, .08);
+  transform: translateY(-1px);
+}
+
+input[type="search"]:focus,
+input[type="search"]:focus-visible,
+#leave-filters #leave-search:focus,
+#leave-filters #leave-search:focus-visible,
+.members-page .member-search-input-wrap input:focus,
+.members-page .member-search-input-wrap input:focus-visible {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 3px 9px rgba(16, 24, 40, .06);
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  input[type="search"],
+  #leave-filters #leave-search,
+  .members-page .member-search-input-wrap input {
+    transition: none;
+  }
+
+  input[type="search"]:hover,
+  #leave-filters #leave-search:hover,
+  .members-page .member-search-input-wrap input:hover {
+    transform: none;
+  }
+}
