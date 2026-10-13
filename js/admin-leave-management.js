@@ -4,6 +4,94 @@
   const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
   const els={sidebar:$("#admin-sidebar"),toggle:$("[data-sidebar-toggle]"),backdrop:$("[data-sidebar-close]"),filters:$("#leave-filters"),search:$("#leave-search"),status:$("#leave-status"),type:$("#leave-type"),department:$("#leave-department"),from:$("#leave-from"),to:$("#leave-to"),dateError:$("#date-filter-error"),table:$("[data-request-table]"),body:$("[data-request-body]"),summary:$("[data-result-summary]"),pagination:$("[data-pagination]"),balanceState:$("[data-balance-state]"),balanceTable:$("[data-balance-table]"),balanceBody:$("[data-balance-body]"),detailsModal:$('[data-modal="details"]'),decisionModal:$('[data-modal="decision"]'),details:$("[data-details]"),decisionTitle:$("#decision-title"),decisionDescription:$("[data-decision-description]"),decisionKicker:$("[data-decision-kicker]"),decisionState:$("[data-decision-state]"),commentField:$("[data-comment-field]"),comment:$("#review-comment"),commentCount:$("[data-comment-count]"),commentError:$("[data-comment-error]"),toast:$("[data-toast]"),pageStatus:$("[data-page-status]")};
   const labels={holiday:"Holiday Leave",casual:"Casual Leave",sick:"Sick Leave"};
+  function setupStyledFilterDropdown(select, accessibleName) {
+    if (!select || select.dataset.customDropdownReady === "true") return;
+    const wrapper = document.createElement("div");
+    wrapper.className = "department-dropdown leave-filter-dropdown";
+    wrapper.innerHTML = '<button type="button" class="department-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false"></button><div class="department-dropdown-menu" role="listbox" hidden></div>';
+    select.classList.add("department-select-native");
+    select.setAttribute("aria-hidden", "true");
+    select.tabIndex = -1;
+    select.parentNode.insertBefore(wrapper, select);
+    wrapper.insertBefore(select, wrapper.firstChild);
+    select.dataset.customDropdownReady = "true";
+    const button = wrapper.querySelector(".department-dropdown-trigger");
+    const menu = wrapper.querySelector(".department-dropdown-menu");
+    menu.setAttribute("aria-label", accessibleName);
+
+    function render() {
+      const selected = select.options[select.selectedIndex];
+      button.textContent = selected ? selected.textContent : "";
+      button.setAttribute("aria-label", accessibleName + ": " + button.textContent);
+      menu.replaceChildren();
+      Array.from(select.options).forEach((option, index) => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "department-dropdown-option";
+        item.id = "leave-" + accessibleName.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-option-" + index;
+        item.setAttribute("role", "option");
+        item.setAttribute("aria-selected", String(option.value === select.value));
+        item.textContent = option.textContent;
+        if (option.value === select.value) item.classList.add("is-selected");
+        item.addEventListener("click", () => {
+          select.value = option.value;
+          select.dispatchEvent(new Event("change", { bubbles: true }));
+          render();
+          close();
+          button.focus();
+        });
+        menu.appendChild(item);
+      });
+    }
+    function close() {
+      wrapper.classList.remove("is-open");
+      button.setAttribute("aria-expanded", "false");
+      menu.hidden = true;
+    }
+    button.addEventListener("click", () => {
+      const opening = !wrapper.classList.contains("is-open");
+      document.querySelectorAll(".leave-filter-dropdown.is-open").forEach(openDropdown => {
+        openDropdown.classList.remove("is-open");
+        openDropdown.querySelector(".department-dropdown-trigger").setAttribute("aria-expanded", "false");
+        openDropdown.querySelector(".department-dropdown-menu").hidden = true;
+      });
+      wrapper.classList.toggle("is-open", opening);
+      button.setAttribute("aria-expanded", String(opening));
+      menu.hidden = !opening;
+      if (opening) menu.querySelector('[aria-selected="true"]')?.focus();
+    });
+    wrapper.addEventListener("keydown", event => {
+      const options = Array.from(menu.querySelectorAll(".department-dropdown-option"));
+      const currentIndex = options.indexOf(document.activeElement);
+      if (event.key === "Escape") {
+        close();
+        button.focus();
+      } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        if (!wrapper.classList.contains("is-open")) {
+          button.click();
+          return;
+        }
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        options[currentIndex < 0 ? 0 : (currentIndex + step + options.length) % options.length]?.focus();
+      } else if (event.key === "Home" && options.length) {
+        event.preventDefault();
+        options[0].focus();
+      } else if (event.key === "End" && options.length) {
+        event.preventDefault();
+        options[options.length - 1].focus();
+      } else if ((event.key === "Enter" || event.key === " ") && document.activeElement === button) {
+        event.preventDefault();
+        button.click();
+      }
+    });
+    document.addEventListener("click", event => {
+      if (!wrapper.contains(event.target)) close();
+    });
+    select.addEventListener("change", render);
+    render();
+    return render;
+  }
   function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
   function formatDate(v){if(!v)return"—";const d=new Date(v+(String(v).length===10?"T00:00:00":""));return Number.isNaN(d.getTime())?"—":new Intl.DateTimeFormat("en",{month:"short",day:"numeric",year:"numeric"}).format(d)}
   function statusClass(s){return({Pending:"status-pending",Approved:"status-approved",Rejected:"status-rejected",Cancelled:"status-cancelled"}[s]||"status-pending")}
@@ -41,9 +129,10 @@ if(note)note.textContent=e.message||"Unable to load holiday calendar.";
 async function loadData(){setState("loading");els.pageStatus.textContent="Loading leave data…";try{const r=await PrimeItApi.get("/leave/admin?limit=100&offset=0");state.requests=Array.isArray(r.requests)?r.requests:[];state.balances=Array.isArray(r.balances)?r.balances:[];populateDepartments();setStats(r.stats);renderBalances();renderRequests();els.pageStatus.textContent="Leave data loaded from the server."}catch(e){state.requests=[];state.balances=[];setStats(null);renderBalances();setState("error",e.message||"Unable to load leave data.");els.pageStatus.textContent="Leave data could not be loaded."}}
   async function submitDecision(){if(state.busy||!state.selectedRequest||!state.decision)return;const comment=els.comment.value.trim();if(comment.length>1000){els.commentError.textContent="Reviewer comment is too long.";return}state.busy=true;const b=$("[data-action='submit-decision']",els.decisionModal);b.disabled=true;els.decisionState.textContent="Submitting decision…";try{const path="/leave/"+encodeURIComponent(state.selectedRequest.requestId)+(state.decision==="approve"?"/approve":"/reject");const r=await PrimeItApi.post(path,{reviewerComment:comment});els.decisionState.textContent=r.message||"Leave request updated.";showToast(r.message||"Leave request updated.");await loadData();setTimeout(closeModals,350)}catch(e){els.decisionState.textContent=e.message||"The leave action could not be completed."}finally{state.busy=false;b.disabled=false}}
   function setSidebar(open){els.sidebar.classList.toggle("open",open);els.toggle?.setAttribute("aria-expanded",String(open));if(els.backdrop)els.backdrop.hidden=!open}
-  document.addEventListener("click",function(e){const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action;if(a==="refresh"||a==="retry"){loadData();if(a==="refresh")loadHolidays();return}if(a==="reset-filters"){els.filters.reset();els.dateError.textContent="";state.page=1;renderRequests();return}if(a==="close-modal"){closeModals();return}if(a==="details"){const x=requestById(b.dataset.requestId);if(x)openDetails(x);return}if(a==="approve"||a==="reject"){if(!state.selectedRequest){const x=requestById(b.dataset.requestId);if(x){state.selectedRequest=x;renderDetails(x)}}openDecision(a);return}if(a==="submit-decision"){submitDecision()}})
+  document.addEventListener("click",function(e){const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action;if(a==="refresh"||a==="retry"){loadData();if(a==="refresh")loadHolidays();return}if(a==="reset-filters"){els.filters.reset();els.status.dispatchEvent(new Event("change",{bubbles:true}));els.dateError.textContent="";state.page=1;renderRequests();return}if(a==="close-modal"){closeModals();return}if(a==="details"){const x=requestById(b.dataset.requestId);if(x)openDetails(x);return}if(a==="approve"||a==="reject"){if(!state.selectedRequest){const x=requestById(b.dataset.requestId);if(x){state.selectedRequest=x;renderDetails(x)}}openDecision(a);return}if(a==="submit-decision"){submitDecision()}})
   els.pagination.addEventListener("click",e=>{const b=e.target.closest("button[data-page]");if(!b||b.disabled)return;const p=Number(b.dataset.page);if(Number.isInteger(p)&&p>=1){state.page=p;renderRequests()}})
   els.filters.addEventListener("input",function(){state.page=1;renderRequests()});els.filters.addEventListener("change",function(){state.page=1;renderRequests()});els.comment.addEventListener("input",function(){els.commentCount.textContent=els.comment.value.length+" / 1000";els.commentError.textContent=""});els.toggle?.addEventListener("click",()=>setSidebar(!els.sidebar.classList.contains("open")));els.backdrop?.addEventListener("click",()=>setSidebar(false));
   $$(".sidebar a").forEach(a=>a.addEventListener("click",()=>setSidebar(false)));document.addEventListener("keydown",e=>{if(e.key==="Escape"&&(!els.detailsModal.hidden||!els.decisionModal.hidden))closeModals();if(e.key==="Escape"&&els.sidebar.classList.contains("open"))setSidebar(false)});
+  setupStyledFilterDropdown(els.status, "Filter by status");
   loadData();loadHolidays();
 })();
