@@ -183,3 +183,9 @@ The Leave Management search input has a subtle lift-and-shadow hover animation. 
 ## Shared Search Input Design
 
 All 17 HTML `input[type="search"]` fields across 13 admin and member pages now use the shared `css/search-inputs.css` design aligned with Admin Leave Management's `#leave-search`: consistent 42px height, 10px rounded corners, subtle default shadow, blue-tinted border and lift/shadow hover animation, and a solid blue focus border without a blue focus halo. Existing search IDs, names, placeholders, icon padding, filtering logic, and responsive layouts are preserved. Reduced-motion preferences are respected.
+
+## Shared Custom Calendar Theme
+
+The shared `css/custom-calendars.css` and `js/custom-calendars.js` provide a rounded, accessible PrimeIt calendar UI for every native date/date-time field identified in the current frontend. The picker uses the existing input as its source of truth, preserves each field's ID/name and min/max constraints, dispatches input/change events for existing filters and forms, supports month navigation, Today/Clear actions, selected/today states, and a time control for `datetime-local`. Styling follows the PrimeIt blue/indigo design language with rounded surfaces, soft shadows, responsive sizing, and reduced-motion support. No third-party calendar library is used.
+
+**Inventory at implementation:** 7 date/date-time inputs across 5 pages — Admin Leave Management (From/To), Member Leave Management (Start/End), Holiday Management (holiday date), Admin Announcements (publish date/time), and Admin Member Management (joining date). These pages load the shared calendar CSS and JavaScript. The Holiday Management page has no separate month-grid calendar view; its calendar reference is descriptive copy, while the holiday list is table-based.
