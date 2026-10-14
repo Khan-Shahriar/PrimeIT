@@ -82,7 +82,22 @@
     } else {
       popover.append(header, weekdayRow, days, footer);
     }
-    wrapper.appendChild(popover);
+    document.body.appendChild(popover);
+
+    function positionPopover() {
+      const rect = trigger.getBoundingClientRect();
+      const width = Math.min(320, window.innerWidth - 32);
+      const estimatedHeight = popover.offsetHeight || 330;
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const top = spaceBelow < estimatedHeight + 12 && rect.top > estimatedHeight + 12
+        ? Math.max(8, rect.top - estimatedHeight - 8)
+        : Math.min(window.innerHeight - estimatedHeight - 8, rect.bottom + 8);
+      const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
+      popover.style.position = "fixed";
+      popover.style.top = top + "px";
+      popover.style.left = left + "px";
+      popover.style.width = width + "px";
+    }
 
     let viewDate = parseDate(input.value) || parseDate(input.min) || new Date();
     viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
@@ -155,6 +170,7 @@
       viewDate = new Date((parseDate(input.value) || parseDate(input.min) || new Date()).getFullYear(), (parseDate(input.value) || parseDate(input.min) || new Date()).getMonth(), 1);
       render();
       popover.hidden = false;
+      positionPopover();
       wrapper.classList.add("is-open");
       trigger.setAttribute("aria-expanded", "true");
       const selectedButton = days.querySelector(".is-selected:not(:disabled)") || days.querySelector(".is-today:not(:disabled)") || days.querySelector("button:not(:disabled)");
