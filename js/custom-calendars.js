@@ -209,7 +209,7 @@
   }
 
   document.addEventListener("click", (event) => {
-    if (!activePicker || activePicker.contains(event.target)) return;
+    if (!activePicker || activePicker.contains(event.target) || activePicker.querySelector(".primeit-calendar-popover")?.contains(event.target)) return;
     activePicker.querySelector(".primeit-date-trigger")?.click();
   });
   document.addEventListener("keydown", (event) => {
