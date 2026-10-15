@@ -1,0 +1,65 @@
+/* PrimeIT member sidebar action buttons */
+.side-bottom > .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  margin: 7px 8px;
+  padding: 10px 12px;
+  border: 1px solid #E7EAF2;
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: #344054;
+  box-shadow: 0 3px 8px rgba(21, 26, 45, 0.06);
+  text-decoration: none;
+  transform: translateY(0);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.side-bottom > .nav-link:first-child {
+  border-color: #DCE7FF;
+  background: #F7FAFF;
+  color: #2563EB;
+}
+
+.side-bottom > .nav-link#member-logout-link,
+.side-bottom > .nav-link[data-action="logout"] {
+  border-color: #E9DDFE;
+  background: #FAF7FF;
+  color: #6D28D9;
+}
+
+.side-bottom > .nav-link:hover {
+  transform: translateY(-2px);
+  border-color: #93B4FF;
+  background: #FFFFFF;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+  text-decoration: none;
+}
+
+.side-bottom > .nav-link#member-logout-link:hover,
+.side-bottom > .nav-link[data-action="logout"]:hover {
+  border-color: #C4A5F8;
+  box-shadow: 0 8px 18px rgba(124, 58, 237, 0.16);
+}
+
+.side-bottom > .nav-link:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(21, 26, 45, 0.08);
+}
+
+.side-bottom > .nav-link:focus-visible {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .side-bottom > .nav-link {
+    transition: none;
+  }
+
+  .side-bottom > .nav-link:hover,
+  .side-bottom > .nav-link:active {
+    transform: none;
+  }
+}
