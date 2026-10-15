@@ -191,3 +191,8 @@ The shared `css/custom-calendars.css` and `js/custom-calendars.js` provide a rou
 **Inventory at implementation:** 7 date/date-time inputs across 5 pages — Admin Leave Management (From/To), Member Leave Management (Start/End), Holiday Management (holiday date), Admin Announcements (publish date/time), and Admin Member Management (joining date). These pages load the shared calendar CSS and JavaScript. The Holiday Management page has no separate month-grid calendar view; its calendar reference is descriptive copy, while the holiday list is table-based.
 
 The date-field grid icon is rendered as an inline SVG instead of a text glyph so it displays consistently across browsers and fonts. The shared fix covers all seven date/date-time fields across the five pages listed above.
+
+
+## Shared PrimeIt Grid Brand Icon
+
+The PrimeIt brand mark uses the same four-square grid SVG across all public, administrator, and member pages. The browser-tab favicon (`public/favicon.svg`) uses the matching grid mark. The shared visual update preserves the existing logo layout, page structure, and behavior.
