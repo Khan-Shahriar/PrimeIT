@@ -40,8 +40,21 @@
     trigger.setAttribute("aria-expanded", "false");
     trigger.setAttribute("aria-label", (input.labels && input.labels[0] ? input.labels[0].textContent.trim() : input.getAttribute("aria-label") || input.name || "Choose date") + " calendar");
     const value = make("span", "primeit-date-value");
-    const icon = make("span", "primeit-date-icon", "▦");
+    const icon = make("span", "primeit-date-icon");
     icon.setAttribute("aria-hidden", "true");
+    const iconSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    iconSvg.setAttribute("viewBox", "0 0 20 20");
+    iconSvg.setAttribute("width", "18");
+    iconSvg.setAttribute("height", "18");
+    iconSvg.setAttribute("fill", "none");
+    iconSvg.setAttribute("stroke", "currentColor");
+    iconSvg.setAttribute("stroke-width", "1.6");
+    iconSvg.setAttribute("stroke-linecap", "round");
+    iconSvg.setAttribute("stroke-linejoin", "round");
+    const iconPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    iconPath.setAttribute("d", "M3.5 5.5h13v11h-13z M3.5 8.5h13 M7 3.5v4 M13 3.5v4 M7 11h1 M10 11h1 M13 11h1 M7 14h1 M10 14h1 M13 14h1");
+    iconSvg.appendChild(iconPath);
+    icon.appendChild(iconSvg);
     trigger.append(value, icon);
     wrapper.appendChild(trigger);
 
