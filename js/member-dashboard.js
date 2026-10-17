@@ -10,6 +10,7 @@
     announcements: document.querySelector("#stat-announcements"),
     holidays: document.querySelector("#stat-upcoming-holidays"),
     casualMeta: document.querySelector("#stat-casual-leave-meta"),
+    casualUsed: document.querySelector("#stat-casual-leave-used"),
     sickMeta: document.querySelector("#stat-sick-leave-meta"),
     announcementList: document.querySelector(".announcement-preview-card .announcement-list"),
     holidayList: document.querySelector(".two-col .list"),
@@ -43,8 +44,9 @@
     const e = type === "casual"
       ? {b:els.casualBalance,r:els.casualRemaining,p:els.casualProgress,s:els.casual,m:els.casualMeta}
       : {b:els.sickBalance,r:els.sickRemaining,p:els.sickProgress,s:els.sick,m:els.sickMeta};
-    if (e.s) e.s.textContent = String(remaining);
-    if (e.m) e.m.textContent = `${used} used / ${total} total`;
+    if (e.s) e.s.textContent = String(type === "casual" ? total : remaining);
+    if (e.m) e.m.textContent = type === "casual" ? "total days" : `${used} used / ${total} total`;
+    if (type === "casual" && els.casualUsed) els.casualUsed.textContent = String(used);
     if (e.b) e.b.textContent = `${used} used / ${total}`;
     if (e.r) e.r.textContent = `${remaining} day${remaining === 1 ? "" : "s"} remaining`;
     if (e.p) { e.p.style.width = pct + "%"; e.p.setAttribute("aria-valuenow", String(Math.round(pct))); }
